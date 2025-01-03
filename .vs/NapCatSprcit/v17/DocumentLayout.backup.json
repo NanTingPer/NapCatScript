@@ -1,0 +1,121 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\CodeRun\\Learning-Notes\\codeor\\Cshps\\QQbotOrWebAPI\\NapCatSprcit\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{1C02B8C2-74F0-4AC0-988F-4E980F266A79}|NapCatSprcit.csproj|d:\\coderun\\learning-notes\\codeor\\cshps\\qqbotorwebapi\\napcatsprcit\\messagesservice\\messagesprocess\\processclass.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1C02B8C2-74F0-4AC0-988F-4E980F266A79}|NapCatSprcit.csproj|solutionrelative:messagesservice\\messagesprocess\\processclass.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1C02B8C2-74F0-4AC0-988F-4E980F266A79}|NapCatSprcit.csproj|d:\\coderun\\learning-notes\\codeor\\cshps\\qqbotorwebapi\\napcatsprcit\\sqliteservice\\service.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1C02B8C2-74F0-4AC0-988F-4E980F266A79}|NapCatSprcit.csproj|solutionrelative:sqliteservice\\service.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1C02B8C2-74F0-4AC0-988F-4E980F266A79}|NapCatSprcit.csproj|d:\\coderun\\learning-notes\\codeor\\cshps\\qqbotorwebapi\\napcatsprcit\\rootmain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1C02B8C2-74F0-4AC0-988F-4E980F266A79}|NapCatSprcit.csproj|solutionrelative:rootmain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1C02B8C2-74F0-4AC0-988F-4E980F266A79}|NapCatSprcit.csproj|d:\\coderun\\learning-notes\\codeor\\cshps\\qqbotorwebapi\\napcatsprcit\\sqliteservice\\datamodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1C02B8C2-74F0-4AC0-988F-4E980F266A79}|NapCatSprcit.csproj|solutionrelative:sqliteservice\\datamodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1C02B8C2-74F0-4AC0-988F-4E980F266A79}|NapCatSprcit.csproj|d:\\coderun\\learning-notes\\codeor\\cshps\\qqbotorwebapi\\napcatsprcit\\publicproperty.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1C02B8C2-74F0-4AC0-988F-4E980F266A79}|NapCatSprcit.csproj|solutionrelative:publicproperty.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 8,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{6324226f-61b6-4f28-92ee-18d4b5fe1e48}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Service.cs",
+              "DocumentMoniker": "D:\\CodeRun\\Learning-Notes\\codeor\\Cshps\\QQbotOrWebAPI\\NapCatSprcit\\SQLiteService\\Service.cs",
+              "RelativeDocumentMoniker": "SQLiteService\\Service.cs",
+              "ToolTip": "D:\\CodeRun\\Learning-Notes\\codeor\\Cshps\\QQbotOrWebAPI\\NapCatSprcit\\SQLiteService\\Service.cs",
+              "RelativeToolTip": "SQLiteService\\Service.cs",
+              "ViewState": "AgIAABoAAAAAAAAAAAAewCYAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-03T08:40:27.352Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "DataModel.cs",
+              "DocumentMoniker": "D:\\CodeRun\\Learning-Notes\\codeor\\Cshps\\QQbotOrWebAPI\\NapCatSprcit\\SQLiteService\\DataModel.cs",
+              "RelativeDocumentMoniker": "SQLiteService\\DataModel.cs",
+              "ToolTip": "D:\\CodeRun\\Learning-Notes\\codeor\\Cshps\\QQbotOrWebAPI\\NapCatSprcit\\SQLiteService\\DataModel.cs",
+              "RelativeToolTip": "SQLiteService\\DataModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-03T08:35:31.834Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "RootMain.cs",
+              "DocumentMoniker": "D:\\CodeRun\\Learning-Notes\\codeor\\Cshps\\QQbotOrWebAPI\\NapCatSprcit\\RootMain.cs",
+              "RelativeDocumentMoniker": "RootMain.cs",
+              "ToolTip": "D:\\CodeRun\\Learning-Notes\\codeor\\Cshps\\QQbotOrWebAPI\\NapCatSprcit\\RootMain.cs",
+              "RelativeToolTip": "RootMain.cs",
+              "ViewState": "AgIAAEwAAAAAAAAAAAAAAFwAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-03T08:35:30.274Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "PublicProperty.cs",
+              "DocumentMoniker": "D:\\CodeRun\\Learning-Notes\\codeor\\Cshps\\QQbotOrWebAPI\\NapCatSprcit\\PublicProperty.cs",
+              "RelativeDocumentMoniker": "PublicProperty.cs",
+              "ToolTip": "D:\\CodeRun\\Learning-Notes\\codeor\\Cshps\\QQbotOrWebAPI\\NapCatSprcit\\PublicProperty.cs",
+              "RelativeToolTip": "PublicProperty.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAADwvxMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-03T08:31:14.183Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ProcessClass.cs",
+              "DocumentMoniker": "D:\\CodeRun\\Learning-Notes\\codeor\\Cshps\\QQbotOrWebAPI\\NapCatSprcit\\MessagesService\\MessagesProcess\\ProcessClass.cs",
+              "RelativeDocumentMoniker": "MessagesService\\MessagesProcess\\ProcessClass.cs",
+              "ToolTip": "D:\\CodeRun\\Learning-Notes\\codeor\\Cshps\\QQbotOrWebAPI\\NapCatSprcit\\MessagesService\\MessagesProcess\\ProcessClass.cs",
+              "RelativeToolTip": "MessagesService\\MessagesProcess\\ProcessClass.cs",
+              "ViewState": "AgIAADAAAAAAAAAAAAAuwAQAAAAXAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-03T08:30:11.114Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

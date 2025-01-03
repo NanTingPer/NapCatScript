@@ -1,0 +1,3 @@
+D:\All\NapCatSprcit\NapCatSprcit.pdb
+D:\All\NapCatSprcit\libe_sqlite3.so
+D:\All\NapCatSprcit\NapCatSprcit
