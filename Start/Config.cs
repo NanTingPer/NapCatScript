@@ -8,6 +8,9 @@ namespace Start
 {
     public static class Config
     {
+        public const string URI = "SocketUri";
+
+
         /// <summary>
         /// 配置文件名
         /// </summary>
@@ -24,6 +27,7 @@ namespace Start
 
         private static void LoadConf()
         {
+            CreateConf(ConfigName);
             AConfig.Clear();
             string allText = File.ReadAllText(CreateConf(ConfigName));
             string[] allconf = allText.Split("\r\n");
@@ -41,7 +45,7 @@ namespace Start
         /// 获取配置值
         /// </summary>
         /// <param name="confName"> 配置名 </param>
-        private static string GetConf(string confName)
+        public static string? GetConf(string confName)
         {
             LoadConf();
             if (AConfig.TryGetValue(confName, out string? confsizer)) {
@@ -58,7 +62,8 @@ namespace Start
         public static void SetConf(string confName, string confValue)
         {
             LoadConf();
-            if (GetConf(confName) == string.Empty) {
+            string? conf = GetConf(confName);
+            if (conf is null || conf == string.Empty) {
                 AConfig.Add(confName, confValue);
                 WriteFile();
             } else {

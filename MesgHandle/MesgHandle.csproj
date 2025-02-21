@@ -9,8 +9,4 @@
     <ProjectReference Include="..\JsonFromat\JsonFromat.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Parses\" />
-  </ItemGroup>
-
 </Project>

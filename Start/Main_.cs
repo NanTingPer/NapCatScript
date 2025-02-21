@@ -1,5 +1,5 @@
 ﻿using System.Net.WebSockets;
-using System.Threading.Tasks;
+using static Start.Config;
 
 namespace Start
 {
@@ -7,36 +7,41 @@ namespace Start
     {
         public static ClientWebSocket Socket { get; } = new ClientWebSocket();
         public static CancellationToken CTokrn { get; } = new CancellationToken();
-        public static string Uri { get; set; } = string.Empty;
+        public static List<string> NoPMesgList { get; } = [];
+        public static bool IsConnection = false;
         static void Main(string[] args)
         {
             string? useUri;
-            do
+            useUri = GetConf(URI);
+            Task.Run(async () =>
             {
-                Console.WriteLine("输入Uri: \t");
-                useUri = Console.ReadLine();
-
-                try {
-                    new Uri(useUri);
-                } catch {
-                    useUri = null;
+                await 建立连接(Socket, useUri ??= "1");
+                while(true) {
+                    await Task.Delay(1);
+                    NoPMesgList.Add(await Socket.ReceiveAsync());
                 }
+            });
 
-            } while (useUri == null);
-            
-            建立连接(Socket, new Uri(useUri)).Wait();
+            while (!IsConnection) {
+                Thread.Sleep(3);
+            }
 
-            Config.SetConf("SocketUri", useUri);
-            Console.WriteLine("Hello, World!");
+            Task.Run(() =>
+            {
+
+            });
+
         }
 
-        private static async Task 建立连接(ClientWebSocket socket, Uri uri)
+        private static async Task 建立连接(ClientWebSocket socket, string uri)
         {
             try {
-                await socket.ConnectAsync(uri, CTokrn);
+                await socket.ConnectAsync(new Uri(uri), CTokrn);
+                IsConnection = true;
             } catch {
-                throw new Exception("建立连接: 请检查URI是否有效，服务器是否正常可访问");
+                throw new Exception("建立连接: 请检查URI是否有效，服务是否正常可访问");
             }
+            SetConf(URI, uri);
         }
     }
 }
