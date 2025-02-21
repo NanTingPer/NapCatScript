@@ -1,9 +1,9 @@
 ﻿namespace MesgHandle
 {
     /// <summary>
-    /// 数据信息
+    /// 数据信息 仅适用于接收消息
     /// </summary>
-    public class MessagesInfo
+    public class MesgInfo
     {
         /// <summary>
         /// 用户ID
@@ -23,7 +23,12 @@
         public override string ToString()
         {
 
-            return UserId + " " + MessageContent + " " + MessageType;
+            return 
+                "------------------------------------------------\r\n" +
+                UserId + "\r\n" + 
+                MessageContent + "\r\n" + 
+                MessageType + "\r\n" +
+                "------------------------------------------------\r\n";
         }
     }
 }
