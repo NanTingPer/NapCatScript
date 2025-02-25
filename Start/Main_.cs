@@ -17,6 +17,7 @@ namespace Start
                 Console.WriteLine("请检查Uri配置");
                 return;
             }
+
             Task.Run(async () =>
             {
                 await 建立连接(Socket, useUri ??= "1");
