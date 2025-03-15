@@ -2,7 +2,7 @@
 using System.IO;
 using System.Text.Json;
 
-namespace JsonFromat
+namespace NapCatScript.JsonFromat
 {
     public static class Utils
     {

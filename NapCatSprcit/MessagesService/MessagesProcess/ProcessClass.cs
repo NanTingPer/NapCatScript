@@ -31,11 +31,9 @@ namespace NapCatSprcit.MessagesService.MessagesProcess
             MessagesInfo? messages = await Task.Run(() =>
             {
                   Utf8JsonReader onlyReader = new Utf8JsonReader(new System.Buffers.ReadOnlySequence<byte>(Encoding.UTF8.GetBytes(NowData)));
-                  JsonDocument? json;
-                  //解析
-                  JsonDocument.TryParseValue(ref onlyReader, out json);
-                  if (json == null)
-                      return null;
+                //解析
+                if (!JsonDocument.TryParseValue(ref onlyReader, out JsonDocument? json))
+                    return null;
 
                   //过滤
                   JsonElement rootEl = json.RootElement;
@@ -83,13 +81,9 @@ namespace NapCatSprcit.MessagesService.MessagesProcess
         /// <returns></returns>
         private static MessagesInfo? GetMessageInfo(JsonElement root)
         {
-            JsonElement user_id;
-            JsonElement message;
-            JsonElement message_type;
-
-            bool user_id_bool = root.TryGetProperty("user_id", out user_id);
-            bool message_bool = root.TryGetProperty("raw_message", out message);
-            bool message_type_bool = root.TryGetProperty("message_type", out message_type);
+            bool user_id_bool = root.TryGetProperty("user_id", out JsonElement user_id);
+            bool message_bool = root.TryGetProperty("raw_message", out JsonElement message);
+            bool message_type_bool = root.TryGetProperty("message_type", out JsonElement message_type);
 
             if (!user_id_bool || !message_bool || !message_type_bool)
                 return null;

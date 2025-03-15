@@ -1,69 +1,78 @@
-﻿using System.Collections.Generic;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+﻿using System.Runtime.InteropServices.JavaScript;
+using System.Text;
 
-namespace JsonFromat.Mesgs
+namespace NapCatScript.JsonFromat.Mesgs;
+/// <summary>
+/// 构建群聊文本消息与私聊文本消息
+/// </summary>
+public class TextMesg
 {
+    private Root MesgObject { get; set; }
+    private JsonDocument MesgJson { get; set; }
+    public string MesgString { get; private set; }
+
     /// <summary>
-    /// 构建群聊文本消息与私聊文本消息
+    /// 构建 使用MessagesJsonObject获取
     /// </summary>
-    public class TextMesg
+    /// <param name="user_id"> 用户id </param>
+    /// <param name="text"> 要发送的消息 </param>
+    public TextMesg(string user_id, MesgTo mestype,string text)
     {
-        public Root MesgObject { get; private set; }
-        public JsonDocument MesgJson { get; private set; }
-
-        /// <summary>
-        /// 构建 使用MessagesJsonObject获取
-        /// </summary>
-        /// <param name="user_id"> 用户id </param>
-        /// <param name="text"> 要发送的消息 </param>
-        public TextMesg(string user_id,string text) 
-        {
-            Data data = new Data(text);
-            Message message = new Message(data);
-            MesgObject = new Root(user_id, new List<Message>() { message });
-            MesgJson = JsonSerializer.SerializeToDocument(MesgObject);
-        }
-
-        public class Root
-        {
-            public Root(string user_id,List<Message> message) 
-            { 
-                User_id = user_id;
-                Message = message;
+        Data data = new Data(text);
+        Message message = new Message(data);
+        MesgObject = new Root(user_id, new List<Message>() { message });
+        MesgJson = JsonSerializer.SerializeToDocument(MesgObject);
+        MesgString = JsonSerializer.Serialize(MesgObject);
+        if (mestype == MesgTo.group) {
+            string[] strings = MesgString.Split("user_id");
+            StringBuilder sbuilder = new StringBuilder();
+            sbuilder.Append(strings[0]);
+            sbuilder.Append("group_id");
+            for (int i = 1; i < strings.Length; i++) {
+                sbuilder.Append(strings[i]);
             }
-
-            [JsonPropertyName("user_id")]
-            public string User_id { get; set; }
-
-            [JsonPropertyName("message")]
-            public List<Message> Message { get; set; }
+            MesgString = sbuilder.ToString();
         }
+    }
 
-        public class Message
+    public class Root
+    {
+        public Root(string user_id, List<Message> message)
         {
-            public Message(Data data,string type = "text") 
-            {
-                Data = data;
-                Type = type;
-            }
-
-            [JsonPropertyName("type")]
-            public string Type { get; set; } = "text";
-
-            [JsonPropertyName("data")]
-            public Data Data { get; set; } = new Data();
+            User_id = user_id;
+            Message = message;
         }
 
-        public class Data
+        [JsonPropertyName("user_id")]
+        public string User_id { get; set; }
+
+        [JsonPropertyName("message")]
+        public List<Message> Message { get; set; }
+    }
+
+    public class Message
+    {
+        public Message(Data data, string type = "text")
         {
-            public Data(string text = "unll") 
-            { 
-                Text = text;
-            }
-
-            [JsonPropertyName("text")]
-            public string Text { get; set; } = "null";
+            Data = data;
+            Type = type;
         }
+
+        [JsonPropertyName("type")]
+        public string Type { get; set; } = "text";
+
+        [JsonPropertyName("data")]
+        public Data Data { get; set; } = new Data();
+    }
+
+    public class Data
+    {
+        public Data(string text = "unll")
+        {
+            Text = text;
+        }
+
+        [JsonPropertyName("text")]
+        public string Text { get; set; } = "null";
     }
 }

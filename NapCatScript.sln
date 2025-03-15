@@ -8,16 +8,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "解决方案项", "解决�
 		NapCatSprcit\NapCatSprcit.csproj = NapCatSprcit\NapCatSprcit.csproj
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsonFromat", "JsonFromat\JsonFromat.csproj", "{7F234DDA-2643-BE9C-8A96-F095EB51EBCD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NapCatScript.JsonFromat", "JsonFromat\NapCatScript.JsonFromat.csproj", "{7F234DDA-2643-BE9C-8A96-F095EB51EBCD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MesgHandle", "MesgHandle\MesgHandle.csproj", "{10AA2AE0-850C-A1D5-436C-7B86C9C9F836}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NapCatScript.MesgHandle", "MesgHandle\NapCatScript.MesgHandle.csproj", "{10AA2AE0-850C-A1D5-436C-7B86C9C9F836}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Start", "Start\Start.csproj", "{CB1CBA22-4D1A-4122-AC0E-EFBAD9B31673}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NapCatScript.Start", "Start\NapCatScript.Start.csproj", "{CB1CBA22-4D1A-4122-AC0E-EFBAD9B31673}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NapCatScript.Tool", "NapCatScript.Tool\NapCatScript.Tool.csproj", "{009C3951-E602-471C-A2F9-6C5BAD3F6E05}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,6 +39,10 @@ Global
 		{CB1CBA22-4D1A-4122-AC0E-EFBAD9B31673}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CB1CBA22-4D1A-4122-AC0E-EFBAD9B31673}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CB1CBA22-4D1A-4122-AC0E-EFBAD9B31673}.Release|Any CPU.Build.0 = Release|Any CPU
+		{009C3951-E602-471C-A2F9-6C5BAD3F6E05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{009C3951-E602-471C-A2F9-6C5BAD3F6E05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{009C3951-E602-471C-A2F9-6C5BAD3F6E05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{009C3951-E602-471C-A2F9-6C5BAD3F6E05}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
