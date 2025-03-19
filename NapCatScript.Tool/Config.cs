@@ -7,7 +7,7 @@ public static class Config
 {
     public static string URI { get;}= "SocketUri";
     public static string HttpURI { get; } = "HttpServerUri";
-
+    public static string DeepSeekKey { get; } = "DeepSeekAPIKey";
     /// <summary>
     /// 配置文件名
     /// </summary>

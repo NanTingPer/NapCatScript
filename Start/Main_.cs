@@ -9,6 +9,8 @@ using static NapCatScript.MesgHandle.Utils;
 using static NapCatScript.Tool.Config;
 using static NapCatScript.Start.FAQ;
 using HUtils = NapCatScript.MesgHandle.Utils;
+using NapCatScript.Start.Handles;
+using NapCatScript.Tool;
 
 namespace NapCatScript.Start;
 
@@ -27,6 +29,7 @@ public class Main_
     public static string HttpUri { get; set; } = "";
     public static ClientWebSocket Socket { get; } = new ClientWebSocket();
     public static CancellationToken CTokrn { get; } = new CancellationToken();
+    public static string DeepSeekKey { get; set; } = "";
     public static List<MesgInfo> NoPMesgList { get; } = [];
     public static bool IsConnection = false;
     public static Random rand = new Random();
@@ -40,6 +43,7 @@ public class Main_
         }
         SocketUri = useUri;
         HttpUri = httpUri;
+        DeepSeekKey = GetConf(Config.DeepSeekKey) ?? "";
         //接收消息 并将有效消息存放到NoPMesgList
         Task.Run(async () =>
         {
@@ -69,6 +73,15 @@ public class Main_
                 NoPMesgList.RemoveAt(0);
                 string mesgContent = mesg.MessageContent;
 
+                if (mesgContent.StartsWith("亭亭")) {
+                    try {
+                        DeepSeekAPI.SendAsync(mesg, httpUri, mesgContent, CTokrn);
+                    }catch (Exception E) {
+                        Console.WriteLine($"DeepSeek错误: {E.Message} \r\n {E.StackTrace}");
+                    }
+                    continue;
+                }
+
                 var co = await FAQI.Get(mesgContent);
                 if(co is not null) {
                     SendTextAsync(mesg, HttpUri, $"{co.Value}\r\n----来自:{co.UserName}", CTokrn);
@@ -93,7 +106,8 @@ public class Main_
                         SendTextAsync(mesg, HttpUri, "好啦好啦，删掉啦", CTokrn);
                         continue;
                     } else if (txtContent.StartsWith("help#")) {
-                        SendTextAsync(mesg, HttpUri, """
+                        SendTextAsync(mesg, HttpUri, 
+                            """
                             对于灾厄Wiki: 
                                 1. 使用"." + 物品名称 可以获得对应物品的wiki页, 例 .震波炸弹
                                 2. 使用".映射#" 可以设置对应物品映射, 例   .映射#神明吞噬者=>神吞
@@ -101,6 +115,7 @@ public class Main_
                             对于FAQ:
                                 1. 使用".FAQ#" 可以创建FAQ     例      .FAQ#灾厄是什么###灾厄是一个模组
                                 2. 使用".删除FAQ#" 可以删除FAQ 例      .删除FAQ#灾厄是什么
+                            
                             """, CTokrn);
                         continue;
                     }

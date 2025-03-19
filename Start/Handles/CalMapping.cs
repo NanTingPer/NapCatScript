@@ -3,7 +3,7 @@ using static NapCatScript.MesgHandle.Utils;
 using static NapCatScript.Tool.SQLiteService;
 using NapCatScript.Tool;
 
-namespace NapCatScript.Start
+namespace NapCatScript.Start.Handles
 {
     public static class CalMapping
     {
@@ -61,7 +61,7 @@ namespace NapCatScript.Start
                     Console.WriteLine("创表失败");
                     return;
                 }
-                await Service.Insert<MapModel>(new MapModel() { Key = mapString[1], oldString = mapString[0] , UserId = mesg.UserId.ToString(), CreateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")});
+                await Service.Insert(new MapModel() { Key = mapString[1], oldString = mapString[0] , UserId = mesg.UserId.ToString(), CreateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")});
                 SendTextAsync(mesg, httpURI, "ok啦，试试？", ct);
 
             } catch(Exception e) {

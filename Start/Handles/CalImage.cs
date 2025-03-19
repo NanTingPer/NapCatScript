@@ -6,7 +6,7 @@ using System.Text;
 using static NapCatScript.Start.Main_;
 using static NapCatScript.MesgHandle.Utils;
 
-namespace NapCatScript.Start
+namespace NapCatScript.Start.Handles
 {
     public static class CalImage
     {
