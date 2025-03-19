@@ -4,19 +4,20 @@ using NapCatScript.MesgHandle;
 using NapCatScript.MesgHandle.Parses;
 using System.Text;
 using static NapCatScript.Start.Main_;
+using static NapCatScript.MesgHandle.Utils;
 
 namespace NapCatScript.Start
 {
-    public static class Send
+    public static class CalImage
     {
-        public static async Task<string> SendCalImage(MesgInfo mesg, string fileName, string filePath, string sendUrl, MesgTo MESGTO)
+        public static async void/*Task<string>*/ SendAsync(MesgInfo mesg, string fileName, string filePath, string sendUrl, MesgTo MESGTO)
         {
             if (string.IsNullOrEmpty(fileName))
                 fileName = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
             if (File.Exists(filePath)) {
-                ImageMesg sendMesg = new ImageMesg(mesg.UserId.ToString(), MESGTO, filePath);
-                await SendMesg.SendAsync(sendUrl, sendMesg.MesgString, null, CTokrn);
-                return "";
+                ImageMesg sendMesg = new ImageMesg(GetUserId(mesg), MESGTO, filePath);
+                await SendMesg.Send(sendUrl, sendMesg.MesgString, null, CTokrn);
+                return;
             }
             Console.WriteLine("未找到文件: " + filePath);
             #region 猜你想找
@@ -38,8 +39,10 @@ namespace NapCatScript.Start
                 }
             }
             AddString(猜你想找, contentNpc, contentItem, 随机.AsEnumerable());
-            TextMesg tmesg = new TextMesg(mesg.UserId.ToString(), MESGTO, 猜你想找.ToString().Substring(0, 猜你想找.Length - 2));
-            return await SendMesg.SendAsync(sendUrl, tmesg.MesgString, null, CTokrn);
+
+            TextMesg tmesg = new TextMesg(GetUserId(mesg), MESGTO, 猜你想找.ToString().Substring(0, 猜你想找.Length - 2));
+            await SendMesg.Send(sendUrl, tmesg.MesgString, null, CTokrn);
+            return;
             #endregion
         }
     }

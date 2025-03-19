@@ -14,5 +14,11 @@ namespace NapCatScript.Tool
 
         [Column("old")]
         public string oldString { get; set; } = "";
+
+        [Column("userid")]
+        public string UserId { get; set; } = "";
+
+        [Column("createtime")]
+        public string CreateTime { get; set; } = "";
     }
 }

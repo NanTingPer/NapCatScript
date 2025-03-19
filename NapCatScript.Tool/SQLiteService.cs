@@ -1,7 +1,5 @@
 ﻿using SQLite;
-using System.ComponentModel.DataAnnotations;
 using System.Reflection;
-using System.Threading.Tasks;
 using Key = System.Reflection.PropertyInfo;
 
 namespace NapCatScript.Tool
@@ -37,7 +35,14 @@ namespace NapCatScript.Tool
             if (keyInfo == null) return;
             var keyValue = keyInfo.GetValue(data);
             if (keyValue is null) return;
-            T oldData = await Get<T>(keyValue.ToString());
+
+            T oldData;
+            try {
+                oldData = await Get<T>(keyValue.ToString());
+            } catch (Exception e) {
+                Console.WriteLine("没有此数据");
+                return;
+            }
 
             PropertyInfo[] pInfos = dataType.GetProperties();
             foreach (var pinfo in pInfos) {
@@ -66,9 +71,9 @@ namespace NapCatScript.Tool
                 var existing = await Connection.FindAsync<T>(keyValue);
                 if (existing == null) {
                     await Connection.InsertAsync(obj);
-                    Console.WriteLine("新记录插入成功");
+                    Console.WriteLine("插入成功");
                 } else {
-                    Console.WriteLine("记录已存在，跳过插入");
+                    Console.WriteLine("已存在");
                 }
             } catch (Exception ex) {
                 Console.WriteLine($"插入失败: {ex.Message}");

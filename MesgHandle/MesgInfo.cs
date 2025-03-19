@@ -10,6 +10,16 @@ public class MesgInfo
     public ulong UserId { get; set; }
 
     /// <summary>
+    /// 群组ID
+    /// </summary>
+    public ulong GroupId { get; set; }
+
+    /// <summary>
+    /// 用户名称
+    /// </summary>
+    public string UserName { get; set; } = "";
+
+    /// <summary>
     /// 消息内容
     /// </summary>
     public string MessageContent { get; set; } = string.Empty;

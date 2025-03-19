@@ -1,7 +1,7 @@
 ﻿namespace NapCatScript.MesgHandle.Parses;
 public static class ReceiveMesg
 {
-    public static async Task<MesgInfo?> ReceiveAsync(this ClientWebSocket socket, CancellationToken CToken)
+    public static async Task<MesgInfo?> Receive(this ClientWebSocket socket, CancellationToken CToken)
     {
         ArraySegment<byte> bytes = new ArraySegment<byte>(new byte[1024 * 4]);  //创建分片数组
         MemoryStream memResult = new MemoryStream();    //创建内存流
@@ -30,19 +30,20 @@ public static class ReceiveMesg
     {
         bool message_type_bool = json.TryGetProperty("message_type", out JsonElement message_type);
         JsonElement user_id = new JsonElement();
-        bool user_id_bool = false;
-        if (message_type_bool) {
-            if(message_type.GetString() != "group")
-                user_id_bool = json.TryGetProperty("user_id", out user_id);
-            else
-                user_id_bool = json.TryGetProperty("group_id", out user_id);
-        }
+
+        bool user_id_bool = json.TryGetProperty("user_id", out user_id);
+        bool group_id_bool = json.TryGetProperty("group_id", out JsonElement group_id);
         bool message_bool = json.TryGetProperty("raw_message", out JsonElement message);
 
         if (!user_id_bool || !message_bool || !message_type_bool)
             return null;
 
-        return new MesgInfo() { MessageContent = message.GetString(), MessageType = message_type.GetString(), UserId = user_id.GetUInt64() };
+        string? user_name = "";
+        if (json.TryGetProperty("sender", out JsonElement sender)) {
+            if (sender.TryGetProperty("nickname", out JsonElement value))
+                user_name = value.GetString();
+        }
+        return new MesgInfo() { MessageContent = message.GetString()!, MessageType = message_type.GetString()!, UserId = user_id.GetUInt64(), GroupId = group_id_bool ? group_id.GetUInt64() : 0, UserName = user_name is null ? "" : user_name };
     }
 
 

@@ -5,7 +5,9 @@ using NapCatScript.MesgHandle.Parses;
 using System.Net.WebSockets;
 using System.Text;
 using static NapCatScript.MesgHandle.Parses.ReceiveMesg;
+using static NapCatScript.MesgHandle.Utils;
 using static NapCatScript.Tool.Config;
+using static NapCatScript.Start.FAQ;
 using HUtils = NapCatScript.MesgHandle.Utils;
 
 namespace NapCatScript.Start;
@@ -19,6 +21,9 @@ public class Main_
     /// 用户配置的Uri，这个决定WebSocket链接
     /// </summary>
     public static string SocketUri { get; private set; } = "";
+    /// <summary>
+    /// 基础请求uri http://127.0.0.1:6666
+    /// </summary>
     public static string HttpUri { get; set; } = "";
     public static ClientWebSocket Socket { get; } = new ClientWebSocket();
     public static CancellationToken CTokrn { get; } = new CancellationToken();
@@ -41,7 +46,7 @@ public class Main_
             await 建立连接(Socket, useUri ??= "1");
             while(true) {
                 await Task.Delay(1);
-                MesgInfo? mesg = await Socket.ReceiveAsync(CTokrn); //收到的消息
+                MesgInfo? mesg = await Socket.Receive(CTokrn); //收到的消息
                 if(mesg is not null) {
                     NoPMesgList.Add(mesg);
                     Console.WriteLine(mesg);
@@ -63,24 +68,53 @@ public class Main_
                 MesgInfo mesg = NoPMesgList.First();
                 NoPMesgList.RemoveAt(0);
                 string mesgContent = mesg.MessageContent;
+
+                var co = await FAQI.Get(mesgContent);
+                if(co is not null) {
+                    SendTextAsync(mesg, HttpUri, $"{co.Value}\r\n----来自:{co.UserName}", CTokrn);
+                    continue;
+                }
+
                 if (mesgContent.Trim().StartsWith('.')) {
-                    string[] mesgs = mesgContent.Split(".");
-                    string txtContent = mesgs[1];//消息内容
+                    //string[] mesgs = mesgContent.Split(".");
+                    string txtContent/* = mesgs[1]*/;//消息内容
+                    txtContent = mesgContent.Trim().Substring(1);
                     if (txtContent.StartsWith("映射#")) {
-                        await CalMapping.Add(mesg, httpUri, txtContent, CTokrn);
+                        CalMapping.AddAsync(mesg, HttpUri, txtContent, CTokrn);
+                        continue;
+                    } else if (txtContent.StartsWith("删除映射#")){
+                        CalMapping.DeleteAsync(mesg,HttpUri, txtContent, CTokrn);
+                        continue;
+                    } else if (txtContent.StartsWith("FAQ#")) {
+                        FAQI.AddAsync(mesg, HttpUri, txtContent, CTokrn);
+                        continue;
+                    } else if (txtContent.StartsWith("删除FAQ#")) {
+                        FAQI.DeleteAsync(txtContent);
+                        SendTextAsync(mesg, HttpUri, "好啦好啦，删掉啦", CTokrn);
+                        continue;
+                    } else if (txtContent.StartsWith("help#")) {
+                        SendTextAsync(mesg, HttpUri, """
+                            对于灾厄Wiki: 
+                                1. 使用"." + 物品名称 可以获得对应物品的wiki页, 例 .震波炸弹
+                                2. 使用".映射#" 可以设置对应物品映射, 例   .映射#神明吞噬者=>神吞
+                                3. 使用".删除映射#" 可以删除对应映射, 例   .删除映射#神吞
+                            对于FAQ:
+                                1. 使用".FAQ#" 可以创建FAQ     例      .FAQ#灾厄是什么###灾厄是一个模组
+                                2. 使用".删除FAQ#" 可以删除FAQ 例      .删除FAQ#灾厄是什么
+                            """, CTokrn);
                         continue;
                     }
 
                     txtContent = await CalMapping.GetMap(txtContent);
                     string filePath = Path.Combine(Environment.CurrentDirectory, "Cal", txtContent + ".png");
                     string sendUrl = HUtils.GetMsgURL(HttpUri, mesg, out MesgTo MESGTO);
-                    await Send.SendCalImage(mesg, txtContent, filePath, sendUrl, MESGTO);
+                    CalImage.SendAsync(mesg, txtContent, filePath, sendUrl, MESGTO);
                 }
             }
         });
 
         while(true) {
-            Thread.Sleep(1000);
+            _ = Console.ReadLine();
         }
 
     }
