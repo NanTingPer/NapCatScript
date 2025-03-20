@@ -3,24 +3,36 @@ public static class ReceiveMesg
 {
     public static async Task<MesgInfo?> Receive(this ClientWebSocket socket, CancellationToken CToken)
     {
-        ArraySegment<byte> bytes = new ArraySegment<byte>(new byte[1024 * 4]);  //创建分片数组
-        MemoryStream memResult = new MemoryStream();    //创建内存流
-        WebSocketReceiveResult result = await socket.ReceiveAsync(bytes, CToken); //使用分片数组存储消息 每次调用。分片数组的内容会被重置
-        do {
-            memResult.Write(bytes.Array, bytes.Offset, result.Count); //写入
-        } while (!result.EndOfMessage);
+        ArraySegment<byte>? bytes = null;
+        MemoryStream? memResult = null;
+        WebSocketReceiveResult? result = null;
+        try {
+            bytes = new ArraySegment<byte>(new byte[1024 * 10]);  //创建分片数组
+            memResult = new MemoryStream();    //创建内存流
+            result = await socket.ReceiveAsync(bytes.Value, CToken); //使用分片数组存储消息 每次调用。分片数组的内容会被重置
+            do {
+                memResult.Write(bytes.Value.Array, bytes.Value.Offset, result.Count); //写入
+            } while (!result.EndOfMessage);
 
-        memResult.Seek(0, SeekOrigin.Begin); //头
-        StreamReader fStream = new StreamReader(memResult, Encoding.UTF8);
-        string mesgString = fStream.ReadToEnd();
-        fStream.Dispose();
-        fStream.Close();
-        memResult.Dispose();
-        memResult.Close();
-        if (ValidData(mesgString, out var json)) {
-            return json?.GetMesgInfo()/*?.ToString()*/;
+            memResult.Seek(0, SeekOrigin.Begin); //头
+            StreamReader fStream = new StreamReader(memResult, Encoding.UTF8);
+            string mesgString = fStream.ReadToEnd();
+            fStream.Dispose();
+            fStream.Close();
+            memResult.Dispose();
+            memResult.Close();
+            if (ValidData(mesgString, out var json)) {
+                return json?.GetMesgInfo()/*?.ToString()*/;
+            }
+            return null;
+        } catch (Exception e) {
+            Console.WriteLine("消息过长!" + e.Message + "\r\n" + e.StackTrace);
+            if(memResult is not null) {
+                memResult.Dispose();
+                memResult.Close();
+            }
+            return null;
         }
-        return null;
     }
 
     /// <summary>
@@ -43,7 +55,7 @@ public static class ReceiveMesg
             if (sender.TryGetProperty("nickname", out JsonElement value))
                 user_name = value.GetString();
         }
-        return new MesgInfo() { MessageContent = message.GetString()!, MessageType = message_type.GetString()!, UserId = user_id.GetUInt64(), GroupId = group_id_bool ? group_id.GetUInt64() : 0, UserName = user_name is null ? "" : user_name };
+        return new MesgInfo() { MessageContent = message.GetString()!, MessageType = message_type.GetString()!, UserId = user_id.GetUInt64().ToString(), GroupId = group_id_bool ? group_id.GetUInt64().ToString() : string.Empty, UserName = user_name is null ? "" : user_name };
     }
 
 

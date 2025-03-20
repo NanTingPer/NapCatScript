@@ -32,9 +32,9 @@ public static class Utils
     /// </summary>
     public static string GetUserId(MesgInfo mesg)
     {
-        if (mesg.GroupId != 0)
-            return mesg.GroupId.ToString();
-        return mesg.UserId.ToString();
+        if (mesg.GroupId != string.Empty)
+            return mesg.GroupId;
+        return mesg.UserId;
     }
 
     /// <summary>

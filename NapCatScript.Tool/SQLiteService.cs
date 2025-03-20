@@ -1,5 +1,6 @@
 ﻿using SQLite;
 using System.Reflection;
+using System.Threading.Tasks;
 using Key = System.Reflection.PropertyInfo;
 
 namespace NapCatScript.Tool
@@ -56,6 +57,12 @@ namespace NapCatScript.Tool
         {
             await CreateTable<T>();
             await Connection.DeleteAsync<T>(key);
+        }
+
+        public async Task<List<T>> GetAll<T>() where T : new()
+        {
+            await CreateTable<T>();
+            return await Connection.Table<T>().ToListAsync();
         }
 
         public async Task Insert<T>(T obj) where T : new()

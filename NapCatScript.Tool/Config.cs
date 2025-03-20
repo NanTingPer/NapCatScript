@@ -5,9 +5,10 @@
 /// </summary>
 public static class Config
 {
-    public static string URI { get;}= "SocketUri";
-    public static string HttpURI { get; } = "HttpServerUri";
-    public static string DeepSeekKey { get; } = "DeepSeekAPIKey";
+    public const string URI = "SocketUri";
+    public const string HttpURI = "HttpServerUri";
+    public const string DeepSeekKey = "DeepSeekAPIKey";
+    public const string RootId = "RootID";
     /// <summary>
     /// 配置文件名
     /// </summary>

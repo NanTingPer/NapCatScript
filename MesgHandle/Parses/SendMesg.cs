@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System.Net;
+using System.Net.Http;
 
 namespace NapCatScript.MesgHandle.Parses;
 public static class SendMesg
@@ -18,6 +19,12 @@ public static class SendMesg
 
         var content = new StringContent(msg, enc, contentType);
         HttpResponseMessage hrm = await httpClient.PostAsync(httpUri, content, ctoken);
+        var code = hrm.StatusCode;
+        int codein = (int)code;
+        if (code == HttpStatusCode.ServiceUnavailable || code == HttpStatusCode.TooManyRequests ||
+            codein == 402 || codein == 503 || codein == 500) { 
+            return "";
+        }
         return await hrm.Content.ReadAsStringAsync(ctoken);
     }
 

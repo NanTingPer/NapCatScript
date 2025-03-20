@@ -27,9 +27,10 @@ public class Main_
     /// 基础请求uri http://127.0.0.1:6666
     /// </summary>
     public static string HttpUri { get; set; } = "";
+    public static string DeepSeekKey { get; set; } = "";
+    public static string RootId { get; set; } = "";
     public static ClientWebSocket Socket { get; } = new ClientWebSocket();
     public static CancellationToken CTokrn { get; } = new CancellationToken();
-    public static string DeepSeekKey { get; set; } = "";
     public static List<MesgInfo> NoPMesgList { get; } = [];
     public static bool IsConnection = false;
     public static Random rand = new Random();
@@ -44,17 +45,23 @@ public class Main_
         SocketUri = useUri;
         HttpUri = httpUri;
         DeepSeekKey = GetConf(Config.DeepSeekKey) ?? "";
+        RootId = GetConf(Config.RootId) ?? "";
         //接收消息 并将有效消息存放到NoPMesgList
         Task.Run(async () =>
         {
             await 建立连接(Socket, useUri ??= "1");
             while(true) {
                 await Task.Delay(1);
-                MesgInfo? mesg = await Socket.Receive(CTokrn); //收到的消息
-                if(mesg is not null) {
-                    NoPMesgList.Add(mesg);
-                    Console.WriteLine(mesg);
+                try {
+                    MesgInfo? mesg = await Socket.Receive(CTokrn); //收到的消息
+                    if (mesg is not null) {
+                        NoPMesgList.Add(mesg);
+                        Console.WriteLine(mesg);
+                    }
+                }catch (Exception e) {
+                    Console.WriteLine($"消息接收发生错误: {e.Message}\r\n {e.StackTrace}" );
                 }
+                
             }
         });
 
@@ -69,6 +76,7 @@ public class Main_
                 await Task.Delay(1);
                 if (NoPMesgList.Count <= 0)
                     continue;
+
                 MesgInfo mesg = NoPMesgList.First();
                 NoPMesgList.RemoveAt(0);
                 string mesgContent = mesg.MessageContent;
@@ -76,14 +84,14 @@ public class Main_
                 if (mesgContent.StartsWith("亭亭")) {
                     try {
                         DeepSeekAPI.SendAsync(mesg, httpUri, mesgContent, CTokrn);
-                    }catch (Exception E) {
+                    } catch (Exception E) {
                         Console.WriteLine($"DeepSeek错误: {E.Message} \r\n {E.StackTrace}");
                     }
                     continue;
                 }
 
                 var co = await FAQI.Get(mesgContent);
-                if(co is not null) {
+                if (co is not null) {
                     SendTextAsync(mesg, HttpUri, $"{co.Value}\r\n----来自:{co.UserName}", CTokrn);
                     continue;
                 }
@@ -95,8 +103,8 @@ public class Main_
                     if (txtContent.StartsWith("映射#")) {
                         CalMapping.AddAsync(mesg, HttpUri, txtContent, CTokrn);
                         continue;
-                    } else if (txtContent.StartsWith("删除映射#")){
-                        CalMapping.DeleteAsync(mesg,HttpUri, txtContent, CTokrn);
+                    } else if (txtContent.StartsWith("删除映射#")) {
+                        CalMapping.DeleteAsync(mesg, HttpUri, txtContent, CTokrn);
                         continue;
                     } else if (txtContent.StartsWith("FAQ#")) {
                         FAQI.AddAsync(mesg, HttpUri, txtContent, CTokrn);
@@ -106,7 +114,7 @@ public class Main_
                         SendTextAsync(mesg, HttpUri, "好啦好啦，删掉啦", CTokrn);
                         continue;
                     } else if (txtContent.StartsWith("help#")) {
-                        SendTextAsync(mesg, HttpUri, 
+                        SendTextAsync(mesg, HttpUri,
                             """
                             对于灾厄Wiki: 
                                 1. 使用"." + 物品名称 可以获得对应物品的wiki页, 例 .震波炸弹

@@ -26,7 +26,7 @@ namespace NapCatScript.Start
                 SendTextAsync(mesg, httpURI, "是不是少了点什么?", ct);
                 return;
             }
-            var faq = new FAQModel() { Key = cons[0], Value = cons[1], CreateTime = DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss"), UserId = mesg.UserId.ToString(), UserName = mesg.UserName };
+            var faq = new FAQModel() { Key = cons[0], Value = cons[1], CreateTime = DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss"), UserId = mesg.UserId, UserName = mesg.UserName };
             try {
                 await Service.Insert<FAQModel>(faq);
             } catch (Exception e) {

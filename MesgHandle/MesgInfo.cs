@@ -7,12 +7,12 @@ public class MesgInfo
     /// <summary>
     /// 用户ID
     /// </summary>
-    public ulong UserId { get; set; }
+    public string UserId { get; set; } = string.Empty;
 
     /// <summary>
     /// 群组ID
     /// </summary>
-    public ulong GroupId { get; set; }
+    public string GroupId { get; set; } = string.Empty;
 
     /// <summary>
     /// 用户名称
