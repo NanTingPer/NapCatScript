@@ -7,7 +7,7 @@ public static class ReceiveMesg
         MemoryStream? memResult = null;
         WebSocketReceiveResult? result = null;
         try {
-            bytes = new ArraySegment<byte>(new byte[1024 * 10]);  //创建分片数组
+            bytes = new ArraySegment<byte>(new byte[1024 * 200]);  //创建分片数组
             memResult = new MemoryStream();    //创建内存流
             result = await socket.ReceiveAsync(bytes.Value, CToken); //使用分片数组存储消息 每次调用。分片数组的内容会被重置
             do {

@@ -1,5 +1,4 @@
 ﻿using NapCatScript.JsonFromat;
-using NapCatScript.JsonFromat.Mesgs;
 using NapCatScript.MesgHandle;
 using NapCatScript.MesgHandle.Parses;
 using System.Net.WebSockets;
@@ -8,6 +7,7 @@ using static NapCatScript.MesgHandle.Parses.ReceiveMesg;
 using static NapCatScript.MesgHandle.Utils;
 using static NapCatScript.Tool.Config;
 using static NapCatScript.Start.FAQ;
+using static NapCatScript.Tool.SQLiteService;
 using HUtils = NapCatScript.MesgHandle.Utils;
 using NapCatScript.Start.Handles;
 using NapCatScript.Tool;
@@ -81,6 +81,8 @@ public class Main_
                 NoPMesgList.RemoveAt(0);
                 string mesgContent = mesg.MessageContent;
 
+                if(!mesgContent.StartsWith("亭亭$亭"))
+                    DeepSeekAPI.AddGroupMesg(mesg); //加入组
                 if (mesgContent.StartsWith("亭亭")) {
                     try {
                         DeepSeekAPI.SendAsync(mesg, httpUri, mesgContent, CTokrn);
