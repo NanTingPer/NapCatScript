@@ -11,6 +11,7 @@ using static NapCatScript.Tool.SQLiteService;
 using HUtils = NapCatScript.MesgHandle.Utils;
 using NapCatScript.Start.Handles;
 using NapCatScript.Tool;
+using System.Text.RegularExpressions;
 
 namespace NapCatScript.Start;
 
@@ -29,6 +30,8 @@ public class Main_
     public static string HttpUri { get; set; } = "";
     public static string DeepSeekKey { get; set; } = "";
     public static string RootId { get; set; } = "";
+    public static string BotId { get; set; } = "";
+    public static string StartString { get; set; } = "";
     public static ClientWebSocket Socket { get; } = new ClientWebSocket();
     public static CancellationToken CTokrn { get; } = new CancellationToken();
     public static List<MesgInfo> NoPMesgList { get; } = [];
@@ -38,6 +41,9 @@ public class Main_
     {
         string? useUri = GetConf(URI);
         string? httpUri = GetConf(HttpURI);
+        BotId = GetConf(BootId) ?? "";
+        StartString = $"[CQ:at,qq={BotId}]";
+        StartString = Regex.Replace(StartString, @"\s", "");
         if (string.IsNullOrEmpty(useUri) || string.IsNullOrEmpty(httpUri)) {
             Console.WriteLine("请检查Uri配置");
             return;
@@ -60,6 +66,7 @@ public class Main_
                     }
                 }catch (Exception e) {
                     Console.WriteLine($"消息接收发生错误: {e.Message}\r\n {e.StackTrace}" );
+                    Log.Erro("消息接收发生错误: ", e.Message, e.StackTrace);
                 }
                 
             }
@@ -80,14 +87,16 @@ public class Main_
                 MesgInfo mesg = NoPMesgList.First();
                 NoPMesgList.RemoveAt(0);
                 string mesgContent = mesg.MessageContent;
-
+                Log.Info(mesg);
+                mesgContent = Regex.Replace(mesgContent, @"\s", "");
                 if(!mesgContent.StartsWith("亭亭$亭"))
                     DeepSeekAPI.AddGroupMesg(mesg); //加入组
-                if (mesgContent.StartsWith("亭亭")) {
+                if (mesgContent.StartsWith(StartString) || mesgContent.StartsWith("亭亭")) {
                     try {
                         DeepSeekAPI.SendAsync(mesg, httpUri, mesgContent, CTokrn);
                     } catch (Exception E) {
                         Console.WriteLine($"DeepSeek错误: {E.Message} \r\n {E.StackTrace}");
+                        Log.Erro(E.Message, E.StackTrace);
                     }
                     continue;
                 }
@@ -165,6 +174,7 @@ public class Main_
         } catch (Exception e){
             Console.WriteLine(e.Message);
             Console.WriteLine("建立连接: 请检查URI是否有效，服务是否正常可访问");
+            Log.Erro(e.Message, e.StackTrace, "建立连接: 请检查URI是否有效，服务是否正常可访问");
             Environment.Exit(0);
         }
         SetConf(URI, uri);

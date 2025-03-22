@@ -9,6 +9,7 @@ public static class Config
     public const string HttpURI = "HttpServerUri";
     public const string DeepSeekKey = "DeepSeekAPIKey";
     public const string RootId = "RootID";
+    public const string BootId = "BootID";
     /// <summary>
     /// 配置文件名
     /// </summary>

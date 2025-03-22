@@ -33,9 +33,9 @@ public class MesgInfo
     {
 
         return
-            "------------------------------------------------\r\n" +
-            UserId + "\r\n" +
-            MessageContent + "\r\n" +
+            "\r\n------------------------------------------------\r\n" +
+            UserId + $": {UserName} :" +
+            MessageContent + " ," +
             MessageType + "\r\n" +
             "------------------------------------------------\r\n";
     }
