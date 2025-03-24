@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static NapCatScript.MesgHandle.Utils;
 using static NapCatScript.Tool.SQLiteService;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace NapCatScript.Start.Handles;
 
@@ -25,9 +26,16 @@ public class DeepSeekAPI
             await InitPrompt();
             init = true;
         }
+
+        string prompt2 = prompt;
+        
+
         string[] temp = content.Split("$");
         Log.Info("消息进入DeepSeekAPI: " + content);
         GoTo @goto = await Command(mesg, temp, httpURI, tk);
+        if (Regex.Replace(content, @"\s", "").StartsWith(Main_.StartString + "总结群消息")) {
+            @goto = GoTo.Con;
+        }
         switch (@goto) {
             case GoTo.None:
                 return;
@@ -37,6 +45,7 @@ public class DeepSeekAPI
                 break;
             case GoTo.Con:
                 content = await GetUpDownContent<DeepSeekGroupModel>(mesg);
+                prompt2 = "现在你是消息总结专家，总结时最好说明谁拉起的话题，最后一条消息是总结要求<[CQ:XXX]总结群消息,YYYYY>其中YYYYY是总结要求。无要求就简略总结";
                 content += $"#####{content}";
                 break;
             default:
@@ -61,6 +70,7 @@ public class DeepSeekAPI
         //          -对群消息进行总结时，回答最大200字。
         //          增加一下能力通过不同昵称进行区分哦,注意理清回复消息的人物, [CQ: reply, id= xxx]这种格式叫CQ码，你不应该直接使用
 
+        
         if (活跃数 > 11) {
             SendTextAsync(mesg, httpURI, "当前活跃数量过多哦，等等吧", tk);
         }
@@ -71,12 +81,12 @@ public class DeepSeekAPI
             {
               "messages": [
                 {
-                  "content": "{{prompt}}\n设定如下:{{standard}}。当前时间:{{DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss")}}",
+                  "content": "{{prompt2}}\n设定如下:{{standard}}。当前时间:{{DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss")}}",
                   "role": "system"
                 },
                 {
                     "role": "user",
-                    "content": "{{content}}"
+                    "content": "{{content.Replace("\"", "")}}"
                 }
               ],
               "model": "deepseek-chat",
@@ -106,6 +116,11 @@ public class DeepSeekAPI
 
         JsonDocument? document = null;
         string sendContent = await MesgHandle.Parses.SendMesg.Send("https://api.deepseek.com/chat/completions", jsonContent, null, Main_.CTokrn, hand);
+        if(sendContent == "Erro") {
+            SendTextAsync(mesg, httpURI, "服务器挂掉惹，等等吧~", tk);
+            活跃数--;
+            return;
+        }
         Utf8JsonReader utf8JsonReader = new Utf8JsonReader(new ReadOnlySpan<byte>(Encoding.UTF8.GetBytes(sendContent)));
         try {
             JsonDocument.TryParseValue(ref utf8JsonReader, out document);
@@ -349,7 +364,7 @@ public class DeepSeekAPI
             }
             long maxKey = mesgs.Max(f => f.Key);
             long minKey = mesgs.Min(f => f.Key);
-            if (maxKey - minKey > 100) {
+            if (maxKey - minKey > 120) {
                 await Service.Delete<DeepSeekGroupModel>(minKey.ToString());
             }
             await Service.Insert<DeepSeekGroupModel>(dsgm);

@@ -39,94 +39,93 @@ public class Main_
     public static Random rand = new Random();
     static void Main(string[] args)
     {
-        string? useUri = GetConf(URI);
-        string? httpUri = GetConf(HttpURI);
-        BotId = GetConf(BootId) ?? "";
-        StartString = $"[CQ:at,qq={BotId}]";
-        StartString = Regex.Replace(StartString, @"\s", "");
-        if (string.IsNullOrEmpty(useUri) || string.IsNullOrEmpty(httpUri)) {
-            Console.WriteLine("请检查Uri配置");
-            return;
-        }
-        SocketUri = useUri;
-        HttpUri = httpUri;
-        DeepSeekKey = GetConf(Config.DeepSeekKey) ?? "";
-        RootId = GetConf(Config.RootId) ?? "";
-        //接收消息 并将有效消息存放到NoPMesgList
-        Task.Run(async () =>
-        {
-            await 建立连接(Socket, useUri ??= "1");
-            while(true) {
-                await Task.Delay(1);
-                try {
-                    MesgInfo? mesg = await Socket.Receive(CTokrn); //收到的消息
-                    if (mesg is not null) {
-                        NoPMesgList.Add(mesg);
-                        Console.WriteLine(mesg);
-                    }
-                }catch (Exception e) {
-                    Console.WriteLine($"消息接收发生错误: {e.Message}\r\n {e.StackTrace}" );
-                    Log.Erro("消息接收发生错误: ", e.Message, e.StackTrace);
-                }
-                
+        try {
+            string? useUri = GetConf(URI);
+            string? httpUri = GetConf(HttpURI);
+            BotId = GetConf(BootId) ?? "";
+            StartString = $"[CQ:at,qq={BotId}]";
+            StartString = Regex.Replace(StartString, @"\s", "");
+            if (string.IsNullOrEmpty(useUri) || string.IsNullOrEmpty(httpUri)) {
+                Console.WriteLine("请检查Uri配置");
+                return;
             }
-        });
-
-        //while (!IsConnection) {
-        //    Thread.Sleep(3);
-        //}
-
-        //发送消息
-        Task.Run(async () =>
-        {
-            while (true) {
-                await Task.Delay(1);
-                if (NoPMesgList.Count <= 0)
-                    continue;
-
-                MesgInfo mesg = NoPMesgList.First();
-                NoPMesgList.RemoveAt(0);
-                string mesgContent = mesg.MessageContent;
-                Log.Info(mesg);
-                mesgContent = Regex.Replace(mesgContent, @"\s", "");
-                if(!mesgContent.StartsWith("亭亭$亭"))
-                    DeepSeekAPI.AddGroupMesg(mesg); //加入组
-                if (mesgContent.StartsWith(StartString) || mesgContent.StartsWith("亭亭")) {
+            SocketUri = useUri;
+            HttpUri = httpUri;
+            DeepSeekKey = GetConf(Config.DeepSeekKey) ?? "";
+            RootId = GetConf(Config.RootId) ?? "";
+            //接收消息 并将有效消息存放到NoPMesgList
+            Task.Run(async () => {
+                await 建立连接(Socket, useUri ??= "1");
+                while (true) {
+                    await Task.Delay(1);
                     try {
-                        DeepSeekAPI.SendAsync(mesg, httpUri, mesgContent, CTokrn);
-                    } catch (Exception E) {
-                        Console.WriteLine($"DeepSeek错误: {E.Message} \r\n {E.StackTrace}");
-                        Log.Erro(E.Message, E.StackTrace);
+                        MesgInfo? mesg = await Socket.Receive(CTokrn); //收到的消息
+                        if (mesg is not null) {
+                            NoPMesgList.Add(mesg);
+                            Console.WriteLine(mesg);
+                        }
+                    } catch (Exception e) {
+                        Console.WriteLine($"消息接收发生错误: {e.Message}\r\n {e.StackTrace}");
+                        Log.Erro("消息接收发生错误: ", e.Message, e.StackTrace);
                     }
-                    continue;
-                }
 
-                var co = await FAQI.Get(mesgContent);
-                if (co is not null) {
-                    SendTextAsync(mesg, HttpUri, $"{co.Value}\r\n----来自:{co.UserName}", CTokrn);
-                    continue;
                 }
+            });
 
-                if (mesgContent.Trim().StartsWith('.')) {
-                    //string[] mesgs = mesgContent.Split(".");
-                    string txtContent/* = mesgs[1]*/;//消息内容
-                    txtContent = mesgContent.Trim().Substring(1);
-                    if (txtContent.StartsWith("映射#")) {
-                        CalMapping.AddAsync(mesg, HttpUri, txtContent, CTokrn);
+            //while (!IsConnection) {
+            //    Thread.Sleep(3);
+            //}
+
+            //发送消息
+            Task.Run(async () => {
+                while (true) {
+                    await Task.Delay(1);
+                    if (NoPMesgList.Count <= 0)
                         continue;
-                    } else if (txtContent.StartsWith("删除映射#")) {
-                        CalMapping.DeleteAsync(mesg, HttpUri, txtContent, CTokrn);
+
+                    MesgInfo mesg = NoPMesgList.First();
+                    NoPMesgList.RemoveAt(0);
+                    string mesgContent = mesg.MessageContent;
+                    Log.Info(mesg);
+                    mesgContent = Regex.Replace(mesgContent, @"\s", "");
+                    if (!mesgContent.StartsWith("亭亭$亭"))
+                        DeepSeekAPI.AddGroupMesg(mesg); //加入组
+                    if (mesgContent.StartsWith(StartString) || mesgContent.StartsWith("亭亭")) {
+                        try {
+                            DeepSeekAPI.SendAsync(mesg, httpUri, mesgContent, CTokrn);
+                        } catch (Exception E) {
+                            Console.WriteLine($"DeepSeek错误: {E.Message} \r\n {E.StackTrace}");
+                            Log.Erro(E.Message, E.StackTrace);
+                        }
                         continue;
-                    } else if (txtContent.StartsWith("FAQ#")) {
-                        FAQI.AddAsync(mesg, HttpUri, txtContent, CTokrn);
+                    }
+
+                    var co = await FAQI.Get(mesgContent);
+                    if (co is not null) {
+                        SendTextAsync(mesg, HttpUri, $"{co.Value}\r\n----来自:{co.UserName}", CTokrn);
                         continue;
-                    } else if (txtContent.StartsWith("删除FAQ#")) {
-                        FAQI.DeleteAsync(txtContent);
-                        SendTextAsync(mesg, HttpUri, "好啦好啦，删掉啦", CTokrn);
-                        continue;
-                    } else if (txtContent.StartsWith("help#")) {
-                        SendTextAsync(mesg, HttpUri,
-                            """
+                    }
+
+                    if (mesgContent.Trim().StartsWith('.')) {
+                        //string[] mesgs = mesgContent.Split(".");
+                        string txtContent/* = mesgs[1]*/;//消息内容
+                        txtContent = mesgContent.Trim().Substring(1);
+                        if (txtContent.StartsWith("映射#")) {
+                            CalMapping.AddAsync(mesg, HttpUri, txtContent, CTokrn);
+                            continue;
+                        } else if (txtContent.StartsWith("删除映射#")) {
+                            CalMapping.DeleteAsync(mesg, HttpUri, txtContent, CTokrn);
+                            continue;
+                        } else if (txtContent.StartsWith("FAQ#")) {
+                            FAQI.AddAsync(mesg, HttpUri, txtContent, CTokrn);
+                            continue;
+                        } else if (txtContent.StartsWith("删除FAQ#")) {
+                            FAQI.DeleteAsync(txtContent);
+                            SendTextAsync(mesg, HttpUri, "好啦好啦，删掉啦", CTokrn);
+                            continue;
+                        } else if (txtContent.StartsWith("help#")) {
+                            SendTextAsync(mesg, HttpUri,
+                                """
                             对于灾厄Wiki: 
                                 1. 使用"." + 物品名称 可以获得对应物品的wiki页, 例 .震波炸弹
                                 2. 使用".映射#" 可以设置对应物品映射, 例   .映射#神明吞噬者=>神吞
@@ -136,19 +135,22 @@ public class Main_
                                 2. 使用".删除FAQ#" 可以删除FAQ 例      .删除FAQ#灾厄是什么
                             
                             """, CTokrn);
-                        continue;
+                            continue;
+                        }
+
+                        txtContent = await CalMapping.GetMap(txtContent);
+                        string filePath = Path.Combine(Environment.CurrentDirectory, "Cal", txtContent + ".png");
+                        string sendUrl = HUtils.GetMsgURL(HttpUri, mesg, out MesgTo MESGTO);
+                        CalImage.SendAsync(mesg, txtContent, filePath, sendUrl, MESGTO);
                     }
-
-                    txtContent = await CalMapping.GetMap(txtContent);
-                    string filePath = Path.Combine(Environment.CurrentDirectory, "Cal", txtContent + ".png");
-                    string sendUrl = HUtils.GetMsgURL(HttpUri, mesg, out MesgTo MESGTO);
-                    CalImage.SendAsync(mesg, txtContent, filePath, sendUrl, MESGTO);
                 }
-            }
-        });
+            });
 
-        while(true) {
-            _ = Console.ReadLine();
+            while (true) {
+                _ = Console.ReadLine();
+            }
+        } catch (Exception e) {
+            Log.Erro(e.Message + "\r\n" + e.StackTrace);
         }
 
     }
