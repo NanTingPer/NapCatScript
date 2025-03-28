@@ -170,6 +170,9 @@ public class DeepSeekAPI
         }
     }
 
+    /// <summary>
+    /// 更新标准
+    /// </summary>
     private static void UpDateStandard(string newStandard)
     {
         //没鉴权 Main_中给了QQID了，mesg里面也有，直接对照就行了
@@ -263,7 +266,7 @@ public class DeepSeekAPI
     }
 
     /// <summary>
-    /// 更新上下文int传入任意值表示不是ai自己说的话
+    /// 更新上下文, int传入任意值表示不是ai自己说的话
     /// </summary>
     private static async Task UpDownContent(string content,MesgInfo mesg, int? b = null)
     {
@@ -297,7 +300,7 @@ public class DeepSeekAPI
     }
 
     /// <summary>
-    /// 获取属于此消息的上下文 
+    /// 获取属于此消息的上下文 (每个群聊与会话有做分离)
     /// </summary>
     private static async Task<string> GetUpDownContent<T>(MesgInfo mesg) where T : DeepSeekModel, new()
     {
@@ -321,6 +324,12 @@ public class DeepSeekAPI
         return sBuilder.ToString();
     }
 
+    /// <summary>
+    /// 删除上下文
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="mesg"></param>
+    /// <returns></returns>
     private static async Task DeleteUpDownContent<T>(MesgInfo mesg) where T : DeepSeekModel, new()
     {
         try {
@@ -383,13 +392,17 @@ public class DeepSeekAPI
         }
     }
 
-
+    /// <summary>
+    /// 删除给定内容的全部空行与空白字符
+    /// </summary>
     private static string RegSpack(string s)
     {
         return Regex.Replace(s, @"\s", "");
     }
 
-
+    /// <summary>
+    /// DeepSeekAPI状态
+    /// </summary>
     public enum GoTo
     {
         /// <summary>

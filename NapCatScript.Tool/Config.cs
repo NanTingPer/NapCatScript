@@ -41,6 +41,10 @@ public static class Config
         AConfig.Add(confName, "");
         WriteFile();
     }
+
+    /// <summary>
+    /// 加载配置项
+    /// </summary>
     private static void LoadConf()
     {
         CreateConfFile(ConfigName);
@@ -89,6 +93,10 @@ public static class Config
         }
     }
 
+    /// <summary>
+    /// 将配置项写入配置文件
+    /// </summary>
+    /// <exception cref="Exception"></exception>
     private static void WriteFile()
     {
         //LoadConf();

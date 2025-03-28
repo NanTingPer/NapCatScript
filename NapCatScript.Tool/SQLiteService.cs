@@ -9,7 +9,7 @@ public class SQLiteService
     private static string DataBasePath = Path.Combine(Environment.CurrentDirectory, "data.db");
     public static SQLiteService Service { get; } = new SQLiteService();
     public SQLiteAsyncConnection Connection;
-    public SQLiteService()
+    private SQLiteService()
     {
         Connection = new SQLiteAsyncConnection(DataBasePath);
     }

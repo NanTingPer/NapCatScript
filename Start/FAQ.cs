@@ -36,7 +36,7 @@ public class FAQ
     }
 
     /// <summary>
-    /// 获取
+    /// 使用内容，从数据库获取此FAQ的答案，如果没有就返回null
     /// </summary>
     public async Task<FAQModel?> Get(string content)
     {
@@ -49,7 +49,7 @@ public class FAQ
     }
 
     /// <summary>
-    /// 删除
+    /// 删除给定内容的FAQ
     /// </summary>
     public async void DeleteAsync(string content)
     {

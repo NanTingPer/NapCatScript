@@ -38,7 +38,7 @@ public static class Utils
     }
 
     /// <summary>
-    /// 发生一个给定的普通文本
+    /// 利用MesgInfo的内容，将文本发送出去
     /// </summary>
     /// <param name="mesg"> 消息引用 </param>
     /// <param name="httpURI"> 目标基础uri 例: http://127.0.0.1:6666 </param>
