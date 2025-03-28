@@ -14,6 +14,10 @@ public class SQLiteService
         Connection = new SQLiteAsyncConnection(DataBasePath);
     }
 
+    /// <summary>
+    /// <para> 使用Key获取值,这个Key是给定类型代表数据库数据的Key </para> 
+    /// <para> 如果给定类型的数据库不存在，会创建，如果不存在返回 default </para>
+    /// </summary>
     public async Task<T?> Get<T>(object key) where T : new()
     {
         await CreateTable<T>();

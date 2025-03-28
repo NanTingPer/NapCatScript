@@ -1,5 +1,4 @@
-﻿using NapCatScript.Tool;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http;
 
 namespace NapCatScript.MesgHandle.Parses;

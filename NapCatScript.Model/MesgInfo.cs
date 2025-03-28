@@ -1,4 +1,4 @@
-﻿namespace NapCatScript.MesgHandle;
+﻿namespace NapCatScript.Model;
 /// <summary>
 /// 数据信息 仅适用于接收消息
 /// </summary>

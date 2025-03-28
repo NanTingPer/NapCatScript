@@ -6,5 +6,6 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\JsonFromat\NapCatScript.JsonFromat.csproj" />
+    <ProjectReference Include="..\NapCatScript.Model\NapCatScript.Model.csproj" />
   </ItemGroup>
 </Project>

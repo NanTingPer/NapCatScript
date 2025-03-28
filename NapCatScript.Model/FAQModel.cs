@@ -1,6 +1,6 @@
 ﻿using SQLite;
 
-namespace NapCatScript.Tool;
+namespace NapCatScript.Model;
 
 public class FAQModel
 {

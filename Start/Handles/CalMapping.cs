@@ -1,7 +1,5 @@
-﻿using NapCatScript.MesgHandle;
-using static NapCatScript.MesgHandle.Utils;
+﻿using static NapCatScript.MesgHandle.Utils;
 using static NapCatScript.Tool.SQLiteService;
-using NapCatScript.Tool;
 
 namespace NapCatScript.Start.Handles
 {

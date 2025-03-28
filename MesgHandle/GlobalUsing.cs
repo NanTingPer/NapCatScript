@@ -7,3 +7,6 @@ global using System.Net.WebSockets;
 global using System.Text;
 global using System.Threading;
 global using System.Threading.Tasks;
+
+global using NapCatScript.Model;
+global using NapCatScript.Tool;

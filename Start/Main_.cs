@@ -1,5 +1,4 @@
 ﻿using NapCatScript.JsonFromat;
-using NapCatScript.MesgHandle;
 using NapCatScript.MesgHandle.Parses;
 using System.Net.WebSockets;
 using System.Text;

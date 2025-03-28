@@ -16,6 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\JsonFromat\NapCatScript.JsonFromat.csproj" />
     <ProjectReference Include="..\MesgHandle\NapCatScript.MesgHandle.csproj" />
+    <ProjectReference Include="..\NapCatScript.Tool\NapCatScript.Tool.csproj" />
   </ItemGroup>
 
 </Project>
