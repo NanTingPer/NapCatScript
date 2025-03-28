@@ -1,13 +1,10 @@
 ﻿using NapCatScript.MesgHandle;
 using NapCatScript.Tool;
-using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using static NapCatScript.MesgHandle.Utils;
 using static NapCatScript.Tool.SQLiteService;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace NapCatScript.Start.Handles;
 

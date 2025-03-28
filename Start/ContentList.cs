@@ -1,10 +1,10 @@
-﻿namespace NapCatScript.Start
+﻿namespace NapCatScript.Start;
+
+public static class ContentList
 {
-    public static class ContentList
-    {
-        private static List<string> itemName =
+    private static List<string> itemName =
 [
-    "魔鬼之庇护",
+"魔鬼之庇护",
 "深渊护身符",
 "深渊潜游装",
 "深渊潜游服",
@@ -2429,21 +2429,21 @@
 "星水",
 "Yanmei的刀",
 
-    ];
+];
 
-        public static List<string> ItemName 
-        { 
-            get{
-                return itemName.Distinct().Select(f => {
-                    if (f.Contains("染料")) return "染料";
-                    return f;
-                }).Distinct().ToList();
-            }
+    public static List<string> ItemName 
+    { 
+        get{
+            return itemName.Distinct().Select(f => {
+                if (f.Contains("染料")) return "染料";
+                return f;
+            }).Distinct().ToList();
         }
+    }
 
-        private static List<string> nPCName =
-        [
-            "小炮弹水母",
+    private static List<string> nPCName =
+    [
+        "小炮弹水母",
 "肿胀翻车鱼",
 "博比特虫",
 "博比特虫",
@@ -2735,15 +2735,14 @@
 "硫火女巫",
 "重生之龙，犽戎",
 
-    ];
+];
 
-        public static List<string> NPCName 
+    public static List<string> NPCName 
+    {
+        get
         {
-            get
-            {
-                return nPCName.Distinct().ToList();
-            }
+            return nPCName.Distinct().ToList();
         }
-
     }
+
 }

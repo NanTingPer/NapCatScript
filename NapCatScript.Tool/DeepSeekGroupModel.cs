@@ -1,6 +1,4 @@
-﻿using SQLite;
-
-namespace NapCatScript.Tool;
+﻿namespace NapCatScript.Tool;
 
 public class DeepSeekGroupModel : DeepSeekModel
 {

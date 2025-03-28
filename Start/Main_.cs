@@ -7,7 +7,6 @@ using static NapCatScript.MesgHandle.Parses.ReceiveMesg;
 using static NapCatScript.MesgHandle.Utils;
 using static NapCatScript.Tool.Config;
 using static NapCatScript.Start.FAQ;
-using static NapCatScript.Tool.SQLiteService;
 using HUtils = NapCatScript.MesgHandle.Utils;
 using NapCatScript.Start.Handles;
 using NapCatScript.Tool;

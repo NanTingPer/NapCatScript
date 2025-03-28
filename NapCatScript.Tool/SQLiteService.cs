@@ -1,6 +1,5 @@
 ﻿using SQLite;
 using System.Reflection;
-using System.Threading.Tasks;
 using Key = System.Reflection.PropertyInfo;
 
 namespace NapCatScript.Tool;
