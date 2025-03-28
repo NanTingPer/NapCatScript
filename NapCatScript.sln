@@ -3,15 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.13.35806.99
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "解决方案项", "解决方案项", "{9FA3D6BD-1EC1-3BA5-80CB-CE02773A58D5}"
-	ProjectSection(SolutionItems) = preProject
-		NapCatSprcit\NapCatSprcit.csproj = NapCatSprcit\NapCatSprcit.csproj
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NapCatScript.JsonFromat", "JsonFromat\NapCatScript.JsonFromat.csproj", "{7F234DDA-2643-BE9C-8A96-F095EB51EBCD}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NapCatScript.MesgHandle", "MesgHandle\NapCatScript.MesgHandle.csproj", "{10AA2AE0-850C-A1D5-436C-7B86C9C9F836}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NapCatScript.Start", "Start\NapCatScript.Start.csproj", "{CB1CBA22-4D1A-4122-AC0E-EFBAD9B31673}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
@@ -19,9 +10,20 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NapCatScript.Tool", "NapCatScript.Tool\NapCatScript.Tool.csproj", "{009C3951-E602-471C-A2F9-6C5BAD3F6E05}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NapCatScript.Model", "NapCatScript.Model\NapCatScript.Model.csproj", "{25F59680-C489-42CF-889D-02FE8C715A6A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NapCatScript.JsonFromat", "NapCatScript.JsonFromat\NapCatScript.JsonFromat.csproj", "{A5E56FDC-08F6-76C5-6E17-6E5ECFA7C3B1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NapCatScript.MesgHandle", "NapCatScript.MesgHandle\NapCatScript.MesgHandle.csproj", "{9B9DCA09-2ACA-8409-4E23-9EA1C190C438}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C44411E4-3055-0F9D-A19E-163A50DC2AF4} = {C44411E4-3055-0F9D-A19E-163A50DC2AF4}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NapCatScript.Tool", "NapCatScript.Tool\NapCatScript.Tool.csproj", "{F679980A-2FCA-AB9D-8FDC-9AAE8326CBEA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "解决方案项", "解决方案项", "{9FA3D6BD-1EC1-3BA5-80CB-CE02773A58D5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NapCatScript.Services", "NapCatScript.Services\NapCatScript.Services.csproj", "{C44411E4-3055-0F9D-A19E-163A50DC2AF4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,26 +31,30 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7F234DDA-2643-BE9C-8A96-F095EB51EBCD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7F234DDA-2643-BE9C-8A96-F095EB51EBCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7F234DDA-2643-BE9C-8A96-F095EB51EBCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7F234DDA-2643-BE9C-8A96-F095EB51EBCD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{10AA2AE0-850C-A1D5-436C-7B86C9C9F836}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{10AA2AE0-850C-A1D5-436C-7B86C9C9F836}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{10AA2AE0-850C-A1D5-436C-7B86C9C9F836}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{10AA2AE0-850C-A1D5-436C-7B86C9C9F836}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CB1CBA22-4D1A-4122-AC0E-EFBAD9B31673}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CB1CBA22-4D1A-4122-AC0E-EFBAD9B31673}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CB1CBA22-4D1A-4122-AC0E-EFBAD9B31673}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CB1CBA22-4D1A-4122-AC0E-EFBAD9B31673}.Release|Any CPU.Build.0 = Release|Any CPU
-		{009C3951-E602-471C-A2F9-6C5BAD3F6E05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{009C3951-E602-471C-A2F9-6C5BAD3F6E05}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{009C3951-E602-471C-A2F9-6C5BAD3F6E05}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{009C3951-E602-471C-A2F9-6C5BAD3F6E05}.Release|Any CPU.Build.0 = Release|Any CPU
 		{25F59680-C489-42CF-889D-02FE8C715A6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{25F59680-C489-42CF-889D-02FE8C715A6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{25F59680-C489-42CF-889D-02FE8C715A6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{25F59680-C489-42CF-889D-02FE8C715A6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5E56FDC-08F6-76C5-6E17-6E5ECFA7C3B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5E56FDC-08F6-76C5-6E17-6E5ECFA7C3B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5E56FDC-08F6-76C5-6E17-6E5ECFA7C3B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5E56FDC-08F6-76C5-6E17-6E5ECFA7C3B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B9DCA09-2ACA-8409-4E23-9EA1C190C438}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B9DCA09-2ACA-8409-4E23-9EA1C190C438}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B9DCA09-2ACA-8409-4E23-9EA1C190C438}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B9DCA09-2ACA-8409-4E23-9EA1C190C438}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F679980A-2FCA-AB9D-8FDC-9AAE8326CBEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F679980A-2FCA-AB9D-8FDC-9AAE8326CBEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F679980A-2FCA-AB9D-8FDC-9AAE8326CBEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F679980A-2FCA-AB9D-8FDC-9AAE8326CBEA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C44411E4-3055-0F9D-A19E-163A50DC2AF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C44411E4-3055-0F9D-A19E-163A50DC2AF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C44411E4-3055-0F9D-A19E-163A50DC2AF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C44411E4-3055-0F9D-A19E-163A50DC2AF4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

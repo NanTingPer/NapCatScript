@@ -1,5 +1,5 @@
 ﻿using static NapCatScript.MesgHandle.Utils;
-using static NapCatScript.Tool.SQLiteService;
+using static NapCatScript.Services.SQLiteService;
 namespace NapCatScript.Start;
 
 public class FAQ

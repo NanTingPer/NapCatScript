@@ -1,4 +1,4 @@
-﻿namespace NapCatScript.Tool;
+﻿namespace NapCatScript.Services;
 
 public class Loging
 {

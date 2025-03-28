@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>11</LangVersion>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NapCatScript.JsonFromat\NapCatScript.JsonFromat.csproj" />
+    <ProjectReference Include="..\NapCatScript.Model\NapCatScript.Model.csproj" />
+    <ProjectReference Include="..\NapCatScript.Services\NapCatScript.Services.csproj" />
+  </ItemGroup>
+</Project>

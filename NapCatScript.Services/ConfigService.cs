@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace NapCatScript.Tool;
+namespace NapCatScript.Services;
 
 public class ConfigService
 {

@@ -14,8 +14,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\JsonFromat\NapCatScript.JsonFromat.csproj" />
-    <ProjectReference Include="..\MesgHandle\NapCatScript.MesgHandle.csproj" />
+    <ProjectReference Include="..\NapCatScript.JsonFromat\NapCatScript.JsonFromat.csproj" />
+    <ProjectReference Include="..\NapCatScript.MesgHandle\NapCatScript.MesgHandle.csproj" />
+    <ProjectReference Include="..\NapCatScript.Model\NapCatScript.Model.csproj" />
+    <ProjectReference Include="..\NapCatScript.Services\NapCatScript.Services.csproj" />
     <ProjectReference Include="..\NapCatScript.Tool\NapCatScript.Tool.csproj" />
   </ItemGroup>
 

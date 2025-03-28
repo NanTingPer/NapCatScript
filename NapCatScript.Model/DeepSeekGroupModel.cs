@@ -1,4 +1,4 @@
-﻿namespace NapCatScript.Tool;
+﻿namespace NapCatScript.Model;
 
 public class DeepSeekGroupModel : DeepSeekModel
 {

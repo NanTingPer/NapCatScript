@@ -3,9 +3,6 @@
 /.vs
 /NapCatSprcit/obj
 /NapCatSprcit/bin
-/JsonFromat/bin
-/JsonFromat/obj
-/MesgHandle/obj
 /NapCatSprcit/.vs
 /Start/bin
 /Start/obj
@@ -14,3 +11,10 @@
 /NapCatScript.Tool/bin
 /Start/Properties
 /NapCatScript.Model/obj
+/NapCatScript.JsonFromat/obj
+/NapCatScript.MesgHandle/bin
+/NapCatScript.MesgHandle/obj
+/NapCatScript.Model/bin
+/NapCatScript.Services/bin
+/NapCatScript.JsonFromat/bin
+/NapCatScript.Services/obj

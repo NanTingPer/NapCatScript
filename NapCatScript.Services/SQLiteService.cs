@@ -1,8 +1,7 @@
 ﻿using SQLite;
-using System.Reflection;
 using Key = System.Reflection.PropertyInfo;
 
-namespace NapCatScript.Tool;
+namespace NapCatScript.Services;
 
 public class SQLiteService
 {
@@ -48,7 +47,7 @@ public class SQLiteService
             return;
         }
 
-        PropertyInfo[] pInfos = dataType.GetProperties();
+        Key[] pInfos = dataType.GetProperties();
         foreach (var pinfo in pInfos) {
             var newValue = pinfo.GetValue(data);
             pinfo.SetValue(oldData, newValue);
@@ -73,7 +72,7 @@ public class SQLiteService
         await Connection.DeleteAllAsync<T>();
     }
 
-    public async Task DeleteRarng<T>(List<T> delectObj) where T : new()
+    public async Task DeleteRange<T>(List<T> delectObj) where T : new()
     {
         var propty = typeof(T).GetProperty("Key");
         if (propty == null)

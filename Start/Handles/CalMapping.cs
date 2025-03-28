@@ -1,5 +1,4 @@
 ﻿using static NapCatScript.MesgHandle.Utils;
-using static NapCatScript.Tool.SQLiteService;
 
 namespace NapCatScript.Start.Handles
 {
@@ -12,7 +11,6 @@ namespace NapCatScript.Start.Handles
         public const string MapSplit2 = "=>";
 
         public const string DelSplit = "删除映射#";
-
         /// <summary>
         /// 获取映射
         /// </summary>

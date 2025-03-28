@@ -1,15 +1,12 @@
 ﻿using NapCatScript.JsonFromat;
 using NapCatScript.MesgHandle.Parses;
 using System.Net.WebSockets;
-using System.Text;
 using static NapCatScript.MesgHandle.Parses.ReceiveMesg;
 using static NapCatScript.MesgHandle.Utils;
-using static NapCatScript.Tool.Config;
 using static NapCatScript.Start.FAQ;
 using HUtils = NapCatScript.MesgHandle.Utils;
+using Config = NapCatScript.Services.Config;
 using NapCatScript.Start.Handles;
-using NapCatScript.Tool;
-using System.Text.RegularExpressions;
 
 namespace NapCatScript.Start;
 

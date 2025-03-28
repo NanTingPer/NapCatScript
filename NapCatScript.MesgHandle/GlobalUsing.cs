@@ -10,3 +10,5 @@ global using System.Threading.Tasks;
 
 global using NapCatScript.Model;
 global using NapCatScript.Tool;
+
+global using Loging = NapCatScript.Services.Loging;

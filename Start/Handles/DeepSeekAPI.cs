@@ -1,9 +1,4 @@
-﻿using NapCatScript.Tool;
-using System.Text;
-using System.Text.Json;
-using System.Text.RegularExpressions;
-using static NapCatScript.MesgHandle.Utils;
-using static NapCatScript.Tool.SQLiteService;
+﻿using static NapCatScript.MesgHandle.Utils;
 
 namespace NapCatScript.Start.Handles;
 
@@ -335,7 +330,7 @@ public class DeepSeekAPI
             List<T> mesgs = await Service.GetAll<T>();
             mesgs = GetMesg<T>(mesgs, mesg);
 
-            await Service.DeleteRarng(mesgs);
+            await Service.DeleteRange(mesgs);
             //await Service.DeleteALL<DeepSeekModel>();
         } catch(Exception e) {
             Console.WriteLine("删除上下文失败");

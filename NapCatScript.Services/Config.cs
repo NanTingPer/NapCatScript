@@ -1,4 +1,4 @@
-﻿namespace NapCatScript.Tool;
+﻿namespace NapCatScript.Services;
 
 /// <summary>
 /// 配置系统

@@ -1,7 +1,6 @@
 ﻿using NapCatScript.JsonFromat;
 using NapCatScript.JsonFromat.Mesgs;
 using NapCatScript.MesgHandle.Parses;
-using System.Text;
 using static NapCatScript.Start.Main_;
 using static NapCatScript.MesgHandle.Utils;
 
