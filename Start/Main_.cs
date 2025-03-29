@@ -82,6 +82,7 @@ public class Main_
                     NoPMesgList.RemoveAt(0);
                     string mesgContent = mesg.MessageContent;
                     Log.Info(mesg);
+                    MService.SetAsync(mesg);
                     mesgContent = Regex.Replace(mesgContent, @"\s", "");
                     if (!mesgContent.StartsWith("亭亭$亭"))
                         DeepSeekAPI.AddGroupMesg(mesg); //加入组
