@@ -1,4 +1,5 @@
 ﻿using SQLite;
+using System.Linq.Expressions;
 using Key = System.Reflection.PropertyInfo;
 
 namespace NapCatScript.Services;
@@ -91,6 +92,12 @@ public class SQLiteService
     {
         await CreateTable<T>();
         return await Connection.Table<T>().ToListAsync();
+    }
+
+    public async Task<List<T>> Get<T>(Expression<Func<T, bool>> expr) where T : new()
+    {
+        await CreateTable<T>();
+        return await Connection.Table<T>().Where(expr).ToListAsync();
     }
 
     public async Task Insert<T>(T obj) where T : new()

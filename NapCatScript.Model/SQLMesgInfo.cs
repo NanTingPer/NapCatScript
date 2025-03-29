@@ -7,5 +7,5 @@ namespace NapCatScript.Model;
 public class SQLMesgInfo : MesgInfo
 {
     [PrimaryKey]
-    public string Key { get; } = string.Empty;
+    public string Key { get; set; } = string.Empty;
 }

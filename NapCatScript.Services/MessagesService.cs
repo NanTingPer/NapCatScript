@@ -1,4 +1,7 @@
-﻿namespace NapCatScript.Services;
+﻿using System.Linq.Expressions;
+using System.Threading.Tasks;
+
+namespace NapCatScript.Services;
 
 public class MessagesService
 {
@@ -7,12 +10,23 @@ public class MessagesService
 
     private MessagesService() { }
 
-    public void Set(MesgInfo mesg)
+    public async void SetAsync(MesgInfo mesg)
     {
-        
+        await sql.Insert(mesg.ToMesgInfo());
+    }
+
+    public async Task<List<SQLMesgInfo>> Get(Expression<Func<SQLMesgInfo, bool>> expr)
+    {
+        return await sql.Get(expr);
     }
 }
 
-    //    public static SQLMesgInfo ToMesgInfo(this MesgInfo mesg)
-    //{
-    //}
+static class MesgExt
+{
+    public static SQLMesgInfo ToMesgInfo(this MesgInfo mesg)
+    {
+        var obj = new SQLMesgInfo();
+        obj.Key = Guid.NewGuid().ToString("N");
+        return TypeMap(mesg, obj);
+    }
+}
