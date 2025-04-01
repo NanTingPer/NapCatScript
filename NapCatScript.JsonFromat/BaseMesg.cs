@@ -11,7 +11,14 @@
 ///     setonline   设置在线状态
 ///     ArkShare    获取群聊卡片
 ///     ArkShare    获取推荐好友
-///     https://napcat.apifox.cn/226659197e0 获取点赞列表
+///     
+/// No:
+///     获取收藏表情 /fetch_custom_face
+///     获取用户状态 /nc_get_user_status
+///     获取小程序卡片 /get_mini_app_ark
+///     获取私聊文件链接 /get_private_file_url
+///     获取单向好友列表 /get_unidirectional_friend_list
+///     设置自定义在线状态 /set_diy_online_status
 /// </summary>
 public abstract class BaseMesg
 {
