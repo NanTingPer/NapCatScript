@@ -1,7 +1,7 @@
 ﻿namespace NapCatScript.JsonFromat.Mesgs;
 
 /// <summary>
-/// @消息
+/// @(At)消息
 /// </summary>
 public class AtMesg : BaseMesg
 {
@@ -50,7 +50,7 @@ public class AtMesg : BaseMesg
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         [JsonPropertyName("name")]
-        public string Name { get; set; }
+        public string? Name { get; set; } = null;
 
         [JsonPropertyName("qq")]
         public string QQ { get; set; }

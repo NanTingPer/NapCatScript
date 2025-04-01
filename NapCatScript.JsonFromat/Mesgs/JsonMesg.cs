@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace NapCatScript.JsonFromat.Mesgs;
+﻿namespace NapCatScript.JsonFromat.Mesgs;
 
 /// <summary>
 /// Json卡片消息

@@ -1,4 +1,4 @@
-﻿namespace NapCatScript.JsonFromat.Mesgs;
+﻿namespace NapCatScript.JsonFromat;
 
 /// <summary>
 /// 已有:
