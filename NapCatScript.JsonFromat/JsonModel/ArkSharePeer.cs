@@ -41,3 +41,45 @@ public enum ArkSharePeerEnum
     User_id,
     Group_id
 }
+
+/// <summary>
+/// ArkSharePeer的返回Json
+/// </summary>
+public class ArkSharePeerReturn
+{
+    public string ArkJson { get => Data_.ArkJson; }
+
+    [JsonPropertyName("data")]
+    public Data Data_ { get; set; }
+
+    [JsonPropertyName("echo")]
+    public string Echo { get; set; }
+
+    [JsonPropertyName("message")]
+    public string Message { get; set; }
+
+    [JsonPropertyName("retcode")]
+    public double Retcode { get; set; }
+
+    [JsonPropertyName("status")]
+    public string Status { get; set; }
+
+    [JsonPropertyName("wording")]
+    public string Wording { get; set; }
+    public class Data
+    {
+        /// <summary>
+        /// 卡片json
+        /// </summary>
+        [JsonPropertyName("arkJson")]
+        public string ArkJson { get; set; }
+
+        [JsonPropertyName("errCode")]
+        public double ErrCode { get; set; }
+
+        [JsonPropertyName("errMsg")]
+        public string ErrMsg { get; set; }
+    }
+}
+
+

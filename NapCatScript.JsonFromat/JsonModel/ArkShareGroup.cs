@@ -12,3 +12,30 @@ public class ArkShareGroup(string group_id) : BaseMesg //获取推荐群聊卡�
         public string Group_id { get; set; } = group_id;
     }
 }
+
+/// <summary>
+/// ArkShareGroupReturn的返回
+/// </summary>
+public class ArkShareGroupReturn
+{
+    /// <summary>
+    /// 卡片json
+    /// </summary>
+    [JsonPropertyName("data")]
+    public string Data { get; set; }
+
+    [JsonPropertyName("echo")]
+    public string Echo { get; set; }
+
+    [JsonPropertyName("message")]
+    public string Message { get; set; }
+
+    [JsonPropertyName("retcode")]
+    public double Retcode { get; set; }
+
+    [JsonPropertyName("status")]
+    public string Status { get; set; }
+
+    [JsonPropertyName("wording")]
+    public string Wording { get; set; }
+}

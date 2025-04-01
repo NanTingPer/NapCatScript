@@ -1,12 +1,8 @@
 ﻿namespace NapCatScript.JsonFromat.JsonModel;
 
-public class set_online_status : BaseMesg
+public class set_online_status(set_online_status.OnlineType type) : BaseMesg
 {
-    public override string JsonText { get; set; }
-    public set_online_status(OnlineType type)
-    {
-        JsonText = JsonSerializer.Serialize(new Root(type));
-    }
+    public override string JsonText { get; set; } = JsonSerializer.Serialize(new Root(type));
 
     private class Root
     {
@@ -190,8 +186,5 @@ public class set_online_status : BaseMesg
         熬夜中,
         追剧中,
         我的电量,
-
-
-
     }
 }
