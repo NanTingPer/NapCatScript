@@ -1,5 +1,8 @@
 ﻿namespace NapCatScript.JsonFromat.Mesgs;
 
+/// <summary>
+/// @消息
+/// </summary>
 public class AtMesg : BaseMesg
 {
     public override string JsonText { get; set; }
@@ -13,7 +16,7 @@ public class AtMesg : BaseMesg
         JsonText = JsonSerializer.Serialize(new Root(name, qqid));
     }
 
-    public partial class Root
+    private class Root
     {
         public Root(string qqid)
         {
@@ -32,7 +35,7 @@ public class AtMesg : BaseMesg
         public string Type { get; set; } = MsgType.at.ToString();
     }
 
-    public class Data
+    private class Data
     {
         public Data(string qqid)
         {

@@ -5,7 +5,7 @@
 /// </summary>
 public class VideoMesg : BaseMesg
 {
-    private string JsonText { get; set; } = string.Empty;
+    public override string JsonText { get; set; }
 
     /// <param name="file">本地路径或者网络路径, file://D:/a.mp4</param>
     public VideoMesg(string file)
@@ -15,7 +15,7 @@ public class VideoMesg : BaseMesg
         JsonText = JsonSerializer.Serialize(obj);
     }
 
-    public class JsonClass
+    private class JsonClass
     {
         public JsonClass(Data data)
         {
@@ -31,7 +31,7 @@ public class VideoMesg : BaseMesg
         //JsonClass
     }
 
-    public class Data
+    private class Data
     {
         public Data(string content)
         {
@@ -41,5 +41,4 @@ public class VideoMesg : BaseMesg
         [JsonPropertyName("file")]
         public string file { get; set; }
     }
-
 }

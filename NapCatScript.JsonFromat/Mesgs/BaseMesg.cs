@@ -7,6 +7,7 @@
 ///     Image       图片消息
 ///     Video       视频消息
 ///     Record      语音消息
+///     At          At消息
 /// </summary>
 public abstract class BaseMesg
 {

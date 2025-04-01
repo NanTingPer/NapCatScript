@@ -15,7 +15,7 @@ public class RecordMesg : BaseMesg
         JsonText = JsonSerializer.Serialize(obj);
     }
 
-    public class JsonClass
+    private class JsonClass
     {
         public JsonClass(Data data)
         {
@@ -31,7 +31,7 @@ public class RecordMesg : BaseMesg
         //JsonClass
     }
 
-    public class Data
+    private class Data
     {
         public Data(string content)
         {
