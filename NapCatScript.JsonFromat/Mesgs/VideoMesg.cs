@@ -42,9 +42,4 @@ public class VideoMesg : BaseMesg
         public string file { get; set; }
     }
 
-    public override string GetString()
-    {
-        return JsonText;
-    }
-
 }

@@ -7,7 +7,7 @@ namespace NapCatScript.JsonFromat.Mesgs;
 /// </summary>
 public class JsonMesg : BaseMesg
 {
-    private string JsonText { get; set; } = string.Empty;
+    public override string JsonText { get; set; }
     
     public JsonMesg(string content)
     {
@@ -41,10 +41,5 @@ public class JsonMesg : BaseMesg
 
         [JsonPropertyName("data")]
         public string data { get; set; }
-    }
-
-    public override string GetString()
-    {
-        return JsonText;
     }
 }
