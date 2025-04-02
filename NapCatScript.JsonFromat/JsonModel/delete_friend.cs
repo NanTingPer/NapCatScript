@@ -5,7 +5,7 @@
 /// </summary>
 /// <param name="user_id"> 用户id </param>
 /// <param name="tempBlock"> 是否拉黑 </param>
-/// <param name="temoBothDel"> 是否双向删除 </param>
+/// <param name="tempBothDel"> 是否双向删除 </param>
 public class delete_friend(string user_id, bool tempBlock, bool tempBothDel) : BaseMesg
 {
     public override string JsonText { get; set; } = JsonSerializer.Serialize(new Root(user_id, tempBlock, tempBothDel));

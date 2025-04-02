@@ -34,4 +34,23 @@ public static class SendMesg
         
     }
 
+    /// <summary>
+    /// 发送消息，返回回应消息
+    /// httpURI是请求接口, mesg是ConetntJson
+    /// </summary>
+    /// <returns></returns>
+    public static Task<HttpResponseMessage> Send(string httpuri, string msg, Encoding? enc = null, Dictionary<string, string>? hands = null, string contentType = "application/json")
+    {
+        enc ??= Encoding.UTF8;
+        var httpClient = new HttpClient();
+        if (hands != null) {
+            foreach (var hand in hands)
+                httpClient.DefaultRequestHeaders.Add(hand.Key, hand.Value);
+        }
+
+        var content = new StringContent(msg, enc, contentType);
+        return httpClient.PostAsync(httpuri, content);
+    }
+
+
 }

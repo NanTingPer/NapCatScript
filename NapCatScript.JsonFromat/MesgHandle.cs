@@ -1,5 +1,4 @@
-﻿using NapCatScript.JsonFromat.Mesgs;
-using System.Text;
+﻿using System.Text;
 
 namespace NapCatScript.JsonFromat;
 

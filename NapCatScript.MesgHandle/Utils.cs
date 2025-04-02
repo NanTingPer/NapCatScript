@@ -1,6 +1,9 @@
 ﻿using NapCatScript.JsonFromat;
 using NapCatScript.JsonFromat.Mesgs;
 using NapCatScript.MesgHandle.Parses;
+using NapCatScript.JsonFromat.JsonModel;
+using System.Threading.Tasks;
+using System.Net.Http;
 
 namespace NapCatScript.MesgHandle;
 public static class Utils
@@ -51,5 +54,121 @@ public static class Utils
         string conet = r.MesgString;
         await SendMesg.Send(sendUri, conet, null, ct);
     }
+}
+
+public class Send
+{
+    public string ArkShareGroupAPI { get => HttpURI + nameof(ArkShareGroup); }
+    public string ArkSharePeerAPI { get => HttpURI + nameof(ArkSharePeer); }
+    public string CreateCollectionAPI { get => HttpURI + nameof(create_collection); }
+    public string DeleteFriendAPI { get => HttpURI + nameof(delete_friend); }
+    public string HttpURI { get; set; } = "";
+    public Send(string httpURI)
+    {
+        if (httpURI.EndsWith("/"))
+            HttpURI = httpURI;
+        else HttpURI = httpURI + "/";
+    }
+
+    /// <summary>
+    /// 获取群卡片
+    /// </summary>
+    public async Task<ArkShareGroupReturn?> GetArkShareGroupAsync(string group_id)
+    {
+        HttpResponseMessage? httpc = null;
+        try {
+            httpc = await SendMesg.Send(ArkShareGroupAPI, new ArkShareGroup(group_id).ToString(), null);
+        } catch (Exception e){
+            Loging.Log.Erro(e.Message, e.StackTrace);
+            return null;
+        }
+        if ((int)httpc.StatusCode != 200) return null;
+        return JsonSerializer.Deserialize<ArkShareGroupReturn>(await httpc.Content.ReadAsStringAsync());
+    }
+
+    /// <summary>
+    /// 获取推荐好友/群聊卡片
+    /// </summary>
+    public async Task<ArkSharePeerReturn?> GetArkSharePeerAsync(string id,ArkSharePeerEnum type)
+    {
+        HttpResponseMessage? httpc = null;
+        try {
+            httpc = await SendMesg.Send(ArkSharePeerAPI, new ArkSharePeer(id, type).ToString(), null);
+        } catch (Exception e) {
+            Loging.Log.Erro(e.Message, e.StackTrace);
+            return null;
+        }
+        if ((int)httpc.StatusCode != 200) return null;
+        return JsonSerializer.Deserialize<ArkSharePeerReturn>(await httpc.Content.ReadAsStringAsync());
+    }
+
+    /// <summary>
+    /// 创建收藏内容
+    /// </summary>
+    /// <param name="bried"> 收藏标题 </param>
+    /// <param name="rowdata"> 收藏内容 </param>
+    public async void CreateCollection(string bried, string rowdata)
+    {
+        try {
+            _ = await SendMesg.Send(CreateCollectionAPI, new create_collection(bried, rowdata).JsonText);
+        } catch (Exception e) {
+            Loging.Log.Erro(e.Message, e.StackTrace);
+        }
+    }
+
+    /// <summary>
+    /// 创建收藏内容，成功返回true
+    /// </summary>
+    /// <param name="bried"> 收藏标题 </param>
+    /// <param name="rowdata"> 收藏内容 </param>
+    public async Task<bool> CreateCollectionAsync(string bried, string rowdata)
+    {
+        HttpResponseMessage httpc;
+        try {
+            httpc = await SendMesg.Send(CreateCollectionAPI, new create_collection(bried, rowdata).JsonText);
+            if ((int)httpc.StatusCode != 200)
+                return false;
+            return true;
+        } catch (Exception e) {
+            Loging.Log.Erro(e.Message, e.StackTrace);
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// 删除好友
+    /// </summary>
+    /// <param name="user_id"> 用户id </param>
+    /// <param name="tempBlock"> 是否拉黑 </param>
+    /// <param name="tempBothDel"> 是否双向删除 </param>
+    public async void DeleteFriend(string user_id, bool tempBlock, bool tempBothDel)
+    {
+        try {
+            _ = await SendMesg.Send(DeleteFriendAPI, new delete_friend(user_id, tempBlock, tempBothDel).JsonText);
+        } catch (Exception e) {
+            Loging.Log.Erro(e.Message, e.StackTrace);
+        }
+    }
+
+    /// <summary>
+    /// 删除好友，成功返回true
+    /// </summary>
+    /// <param name="user_id"> 用户id </param>
+    /// <param name="tempBlock"> 是否拉黑 </param>
+    /// <param name="tempBothDel"> 是否双向删除 </param>
+    public async Task<bool> DeleteFriendAsync(string user_id, bool tempBlock, bool tempBothDel)
+    {
+        HttpResponseMessage httpc;
+        try {
+            httpc = await SendMesg.Send(DeleteFriendAPI, new delete_friend(user_id, tempBlock, tempBothDel).JsonText);
+            if ((int)httpc.StatusCode != 200)
+                return false;
+            return true;
+        } catch (Exception e) {
+            Loging.Log.Erro(e.Message, e.StackTrace);
+            return false;
+        }
+    }
+
 }
 
