@@ -5,6 +5,11 @@
 /// </summary>
 public class get_profile_like
 {
+    /// <summary>
+    /// 用户信息列表
+    /// </summary>
+    public List<UserInfo> UserInfos { get => Data_.UserInfos; }
+
     [JsonPropertyName("data")]
     public Data Data_ { get; set; }
 

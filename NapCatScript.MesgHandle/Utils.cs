@@ -4,6 +4,7 @@ using NapCatScript.MesgHandle.Parses;
 using NapCatScript.JsonFromat.JsonModel;
 using System.Threading.Tasks;
 using System.Net.Http;
+using System.Net;
 
 namespace NapCatScript.MesgHandle;
 public static class Utils
@@ -62,6 +63,16 @@ public class Send
     public string ArkSharePeerAPI { get => HttpURI + nameof(ArkSharePeer); }
     public string CreateCollectionAPI { get => HttpURI + nameof(create_collection); }
     public string DeleteFriendAPI { get => HttpURI + nameof(delete_friend); }
+    public string GetFriendListAPI { get => HttpURI + nameof(get_friend_list); }
+    public string GetFriendsWithCategoryAPI { get => HttpURI + nameof(get_friends_with_category); }
+    public string GetProFileLikeAPI { get => HttpURI + nameof(get_profile_like); }
+    public string GetStrangerInfoAPI { get => HttpURI + nameof(get_stranger_info); }
+    public string SendLikeAPI { get => HttpURI + nameof(send_like); }
+    public string SetFriendAddRequestAPI { get => HttpURI + nameof(set_friend_add_request); }
+    public string SetOnlineStatusAPI { get => HttpURI + nameof(set_online_status); }
+    public string SetQQAvatarAPI { get => HttpURI + nameof(set_qq_avatar); }
+    public string SetSelfLongnickAPI { get => HttpURI + nameof(set_self_longnick); }
+    public string UploadPrivateFileAPI { get => HttpURI + nameof(upload_private_file); }
     public string HttpURI { get; set; } = "";
     public Send(string httpURI)
     {
@@ -69,12 +80,279 @@ public class Send
             HttpURI = httpURI;
         else HttpURI = httpURI + "/";
     }
+    #region 上传私聊文件 upload_private_file
+    /// <summary>
+    /// 上传私聊文件
+    /// </summary>
+    /// <param name="user_id"> 用户id </param>
+    /// <param name="file"> 文件路径 </param>
+    /// <param name="name"> 目标名称 </param>
+    public async Task<bool> UploadPrivateFileAsync(string user_id, string file, string name)
+    {
+        HttpResponseMessage httpc;
+        try {
+            httpc = await SendMesg.Send(UploadPrivateFileAPI, new upload_private_file(user_id, file, name).JsonText);
+            if (httpc.StatusCode == HttpStatusCode.OK)
+                return true;
+            return false;
+        } catch (Exception e) {
+            Loging.Log.Erro("上传私聊文件", e.Message, e.StackTrace);
+            return false;
+        }
+    }
+    /// <summary>
+    /// 上传私聊文件
+    /// </summary>
+    /// <param name="user_id"> 用户id </param>
+    /// <param name="file"> 文件路径 </param>
+    /// <param name="name"> 目标名称 </param>
+    public async void UploadPrivateFile(string user_id, string file, string name)
+    {
+        try {
+            await SendMesg.Send(UploadPrivateFileAPI, new upload_private_file(user_id, file, name).JsonText);
+        } catch (Exception e) {
+            Loging.Log.Erro("上传私聊文件", e.Message, e.StackTrace);
+        }
+    }
+    #endregion
+
+    #region 设置个性签名 set_self_longnick
+    /// <summary>
+    /// 设置个性签名
+    /// </summary>
+    public async Task<bool> SetSelfLongnickAsync(string content)
+    {
+        HttpResponseMessage httpc;
+        try {
+            httpc = await SendMesg.Send(SetSelfLongnickAPI, new set_self_longnick(content).JsonText);
+            if (httpc.StatusCode == HttpStatusCode.OK)
+                return true;
+            return false;
+        } catch (Exception e) {
+            Loging.Log.Erro("设置个性签名", e.Message, e.StackTrace);
+            return false;
+        }
+    }
+    /// <summary>
+    /// 设置个性签名
+    /// </summary>
+    public async void SetSelfLongnick(string content)
+    {
+        try {
+            await SendMesg.Send(SetSelfLongnickAPI, new set_self_longnick(content).JsonText);
+        } catch (Exception e) {
+            Loging.Log.Erro("设置个性签名", e.Message, e.StackTrace);
+        }
+    }
+    #endregion
+
+    #region 设置QQ头像 set_qq_avatar
+    /// <summary>
+    /// 设置QQ头像
+    /// </summary>
+    public async Task<bool> SetQQAvatarAsync(string path)
+    {
+        HttpResponseMessage httpc;
+        try {
+            httpc = await SendMesg.Send(SetQQAvatarAPI, new set_qq_avatar(path).JsonText);
+            if (httpc.StatusCode == HttpStatusCode.OK)
+                return true;
+            return false;
+        } catch (Exception e) {
+            Loging.Log.Erro("设置QQ头像", e.Message, e.StackTrace);
+            return false;
+        }
+    }
+    /// <summary>
+    /// 设置QQ头像
+    /// </summary>
+    public async void SetQQAvatar(string path)
+    {
+        try {
+            await SendMesg.Send(SetQQAvatarAPI, new set_qq_avatar(path).JsonText);
+        } catch (Exception e) {
+            Loging.Log.Erro("设置QQ头像", e.Message, e.StackTrace);
+        }
+    }
+    #endregion
+
+    #region 设置在线状态 set_online_status
+    /// <summary>
+    /// 设置在线状态
+    /// </summary>
+    public async Task<bool> SetOnlineStatusAsync(set_online_status.OnlineType type)
+    {
+        HttpResponseMessage httpc;
+        try {
+            httpc = await SendMesg.Send(SetOnlineStatusAPI, new set_online_status(type).JsonText);
+            if (httpc.StatusCode == HttpStatusCode.OK)
+                return true;
+            return false;
+        } catch (Exception e) {
+            Loging.Log.Erro("设置在线状态", e.Message, e.StackTrace);
+            return false;
+        }
+    }
+    /// <summary>
+    /// 设置在线状态
+    /// </summary>
+    public async void SetOnlineStatus(set_online_status.OnlineType type)
+    {
+        try {
+            await SendMesg.Send(SetOnlineStatusAPI, new set_online_status(type).JsonText);
+        } catch (Exception e) {
+            Loging.Log.Erro("设置在线状态", e.Message, e.StackTrace);
+        }
+    }
+    #endregion
+
+    #region 处理好友请求 set_friend_add_request
+    /// <summary>
+    /// 处理好友请求
+    /// </summary>
+    /// <param name="flag"> 目标id </param>
+    /// <param name="approve"> 是否同意 </param>
+    /// <param name="remark"> 设置备注 </param>
+    public async Task<bool> SetFriendAddRequestAsync(string flag, bool approve,string remark)
+    {
+        HttpResponseMessage httpc;
+        try {
+            httpc = await SendMesg.Send(SetFriendAddRequestAPI, new set_friend_add_request(flag, approve, remark).JsonText);
+            if (httpc.StatusCode == HttpStatusCode.OK)
+                return true;
+            return false;
+        } catch (Exception e) {
+            Loging.Log.Erro("处理好友请求", e.Message, e.StackTrace);
+            return false;
+        }
+    }
+    /// <summary>
+    /// 处理好友请求
+    /// </summary>
+    /// <param name="flag"> 目标id </param>
+    /// <param name="approve"> 是否同意 </param>
+    /// <param name="remark"> 设置备注 </param>
+    public async void SetFriendAddRequest(string flag, bool approve, string remark)
+    {
+        try {
+            await SendMesg.Send(SetFriendAddRequestAPI, new set_friend_add_request(flag, approve, remark).JsonText);
+        } catch (Exception e) {
+            Loging.Log.Erro("处理好友请求", e.Message, e.StackTrace);
+        }
+    }
+    #endregion
+
+    #region 点赞 send_like
+    /// <summary>
+    /// 给目标用户点赞
+    /// </summary>
+    public async Task<bool> SendLikeAsync(string user_id, int num)
+    {
+        HttpResponseMessage httpc;
+        try {
+            httpc = await SendMesg.Send(SendLikeAPI, new send_like(user_id, num).JsonText);
+            if (httpc.StatusCode == HttpStatusCode.OK)
+                return true;
+            return false;
+        } catch (Exception e) {
+            Loging.Log.Erro(e.Message, e.StackTrace);
+            return false;
+        }
+    }
+    /// <summary>
+    /// 给目标用户点赞
+    /// </summary>
+    public async void SendLike(string user_id, int num)
+    {
+        try {
+            await SendMesg.Send(SendLikeAPI, new send_like(user_id, num).JsonText);
+        } catch (Exception e) {
+            Loging.Log.Erro(e.Message, e.StackTrace);
+        }
+    }
+    #endregion
+
+    #region 获取帐号信息 get_stranger_info
+    /// <summary>
+    /// 获取点赞列表
+    /// </summary>
+    public async Task<get_stranger_infoReturn?> GetStrangerInfoAsync(string user_id)
+    {
+        HttpResponseMessage httpc;
+        try {
+            httpc = await SendMesg.Send(GetStrangerInfoAPI, new get_stranger_info(user_id).JsonText);
+            if ((int)httpc.StatusCode != 200)
+                return null;
+            return JsonSerializer.Deserialize<get_stranger_infoReturn>(await httpc.Content.ReadAsStringAsync());
+        } catch (Exception e) {
+            Loging.Log.Erro(e.Message, e.StackTrace);
+            return null;
+        }
+    }
+    #endregion
+
+    #region 获取点赞列表 get_profile_like
+    /// <summary>
+    /// 获取点赞列表
+    /// </summary>
+    public async Task<get_profile_like?> GetProFileLikeAsync()
+    {
+        HttpResponseMessage httpc;
+        try {
+            httpc = await SendMesg.Send(GetProFileLikeAPI, "{}");
+            if ((int)httpc.StatusCode != 200)
+                return null;
+            return JsonSerializer.Deserialize<get_profile_like>(await httpc.Content.ReadAsStringAsync());
+        } catch (Exception e) {
+            Loging.Log.Erro(e.Message, e.StackTrace);
+            return null;
+        }
+    }
+    #endregion
+
+    #region 获取好友信息分组列表 get_friends_with_category
+    /// <summary>
+    /// 获取好友信息分组列表
+    /// </summary>
+    public async Task<get_friends_with_category?> GetFriendsWithCategoryAsync()
+    {
+        HttpResponseMessage httpc;
+        try {
+            httpc = await SendMesg.Send(GetFriendsWithCategoryAPI, "{}");
+            if ((int)httpc.StatusCode != 200)
+                return null;
+            return JsonSerializer.Deserialize<get_friends_with_category>(await httpc.Content.ReadAsStringAsync());
+        } catch (Exception e) {
+            Loging.Log.Erro(e.Message, e.StackTrace);
+            return null;
+        }
+    }
+    #endregion
+
+    #region 获取好友列表 get_friend_list
+    /// <summary>
+    /// 获取好友列表
+    /// </summary>
+    public async Task<get_friend_listReturn?> GetFriendListAsync()
+    {
+        HttpResponseMessage httpc;
+        try {
+            httpc = await SendMesg.Send(GetFriendListAPI, new get_friend_list().JsonText);
+            if ((int)httpc.StatusCode != 200)
+                return null;
+            return JsonSerializer.Deserialize<get_friend_listReturn>(await httpc.Content.ReadAsStringAsync());
+        } catch (Exception e) {
+            Loging.Log.Erro(e.Message, e.StackTrace);
+            return null;
+        }
+    }
+    #endregion
 
     #region 获取群聊卡片 ArkShareGroup
 
-    /// <summary>
-    /// 获取群卡片
-    /// </summary>
+        /// <summary>
+        /// 获取群卡片
+        /// </summary>
     public async Task<ArkShareGroupReturn?> GetArkShareGroupAsync(string group_id)
     {
         HttpResponseMessage? httpc = null;
@@ -191,10 +469,26 @@ public class SendCN
         send = new Send(httpURI);
     }
 
-    public Task<ArkShareGroupReturn?> 获取群聊卡片(string group_id) => send.GetArkShareGroupAsync(group_id);
-    public Task<ArkSharePeerReturn?> 获取推荐好友或者群聊卡片(string id, ArkSharePeerEnum type) => send.GetArkSharePeerAsync(id, type);
+    public Task<ArkShareGroupReturn?> 获取群聊卡片(string 群号) => send.GetArkShareGroupAsync(群号);
+    public Task<ArkSharePeerReturn?> 获取推荐好友或者群聊卡片(string id, ArkSharePeerEnum 类型) => send.GetArkSharePeerAsync(id, 类型);
     public void 创建收藏内容(string 收藏标题, string 收藏内容) => send.CreateCollection(收藏标题, 收藏内容);
     public Task<bool> 创建收藏内容Async(string 收藏标题, string 收藏内容) => send.CreateCollectionAsync(收藏标题, 收藏内容);
     public void 删除好友(string 用户ID, bool 是否拉黑, bool 是否双向删除) => send.DeleteFriend(用户ID, 是否拉黑, 是否双向删除);
     public Task<bool> 删除好友Async(string 用户ID, bool 是否拉黑, bool 是否双向删除) => send.DeleteFriendAsync(用户ID, 是否拉黑, 是否双向删除);
+    public Task<get_friend_listReturn?> 获取好友列表Async() => send.GetFriendListAsync();
+    public Task<get_friends_with_category?> 获取好友信息分组列表Async() => send.GetFriendsWithCategoryAsync();
+    public Task<get_profile_like?> 获取点赞列表Async() => send.GetProFileLikeAsync();
+    public Task<get_stranger_infoReturn?> 获取帐号信息Async(string 用户ID) => send.GetStrangerInfoAsync(用户ID);
+    public Task<bool> 点赞Async(string 用户ID, int 次数) => send.SendLikeAsync(用户ID, 次数);
+    public void 点赞(string 用户ID, int 次数) => send.SendLike(用户ID, 次数);
+    public Task<bool> 处理好友请求Async(string 目标ID, bool 是否同意, string 备注) => send.SetFriendAddRequestAsync(目标ID, 是否同意, 备注);
+    public void 处理好友请求(string 目标ID, bool 是否同意, string 备注) => send.SetFriendAddRequest(目标ID, 是否同意, 备注);
+    public Task<bool> 设置在线状态Async(set_online_status.OnlineType type) => send.SetOnlineStatusAsync(type);
+    public void 设置在线状态(set_online_status.OnlineType type) => send.SetOnlineStatus(type);
+    public Task<bool> 设置QQ头像Async(string 文件路径) => send.SetQQAvatarAsync(文件路径);
+    public void 设置QQ头像(string 文件路径) => send.SetQQAvatar(文件路径);
+    public Task<bool> 设置个性签名Async(string 内容) => send.SetSelfLongnickAsync(内容);
+    public void 设置个性签名(string 内容) => send.SetSelfLongnick(内容);
+    public Task<bool> 上传私聊文件Async(string 用户ID, string 文件路径, string 名称) => send.UploadPrivateFileAsync(用户ID, 文件路径, 名称);
+    public void 上传私聊文件(string 用户ID, string 文件路径, string 名称) => send.UploadPrivateFile(用户ID, 文件路径, 名称);
 }
