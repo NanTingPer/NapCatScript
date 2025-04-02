@@ -70,6 +70,9 @@ public class Send
         else HttpURI = httpURI + "/";
     }
 
+    #region 获取群聊卡片 ArkShareGroup
+    public Task<ArkShareGroupReturn?> 获取群聊卡片(string group_id) => GetArkShareGroupAsync(group_id);
+
     /// <summary>
     /// 获取群卡片
     /// </summary>
@@ -85,6 +88,10 @@ public class Send
         if ((int)httpc.StatusCode != 200) return null;
         return JsonSerializer.Deserialize<ArkShareGroupReturn>(await httpc.Content.ReadAsStringAsync());
     }
+    #endregion
+
+    #region 获取推荐好友或者群聊卡片 ArkSharePeer
+    public Task<ArkSharePeerReturn?> 获取推荐好友或者群聊卡片(string id, ArkSharePeerEnum type) => GetArkSharePeerAsync(id, type);
 
     /// <summary>
     /// 获取推荐好友/群聊卡片
@@ -102,6 +109,11 @@ public class Send
         return JsonSerializer.Deserialize<ArkSharePeerReturn>(await httpc.Content.ReadAsStringAsync());
     }
 
+    #endregion
+
+    #region 创建收藏内容 create_collection
+    public void 创建收藏内容(string 收藏标题, string 收藏内容) => CreateCollection(收藏标题, 收藏内容);
+    public Task<bool> 创建收藏内容Async(string 收藏标题, string 收藏内容) => CreateCollectionAsync(收藏标题, 收藏内容);
     /// <summary>
     /// 创建收藏内容
     /// </summary>
@@ -135,6 +147,11 @@ public class Send
         }
     }
 
+    #endregion
+
+    #region 删除好友 delete_friend
+    public void 删除好友(string 用户ID, bool 是否拉黑, bool 是否双向删除) => DeleteFriend(用户ID, 是否拉黑, 是否双向删除);
+    public Task<bool> 删除好友Async(string 用户ID, bool 是否拉黑, bool 是否双向删除) => DeleteFriendAsync(用户ID, 是否拉黑, 是否双向删除);
     /// <summary>
     /// 删除好友
     /// </summary>
@@ -169,6 +186,6 @@ public class Send
             return false;
         }
     }
-
+    #endregion
 }
 
