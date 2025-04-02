@@ -1,6 +1,6 @@
 ﻿namespace NapCatScript.JsonFromat.JsonModel;
 
-public class set_online_status(set_online_status.OnlineType type) : BaseMesg
+public class set_online_status(set_online_status.OnlineType type) : RequestJson
 {
     public override string JsonText { get; set; } = JsonSerializer.Serialize(new Root(type));
 

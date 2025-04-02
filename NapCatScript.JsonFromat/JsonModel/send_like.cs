@@ -5,7 +5,7 @@
 /// </summary>
 /// <param name="user_id"> 目标用户id </param>
 /// <param name="num"> 点击数量 </param>
-public class send_like(string user_id, int num) : BaseMesg
+public class send_like(string user_id, int num) : RequestJson
 {
     public override string JsonText { get; set; } = JsonSerializer.Serialize(new Root(user_id, num));
 

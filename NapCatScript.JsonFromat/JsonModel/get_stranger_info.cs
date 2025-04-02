@@ -3,7 +3,7 @@
 /// <summary>
 /// 获取帐号信息
 /// </summary>
-public class get_stranger_info(string user_id) : BaseMesg
+public class get_stranger_info(string user_id) : RequestJson
 {
     public override string JsonText { get; set; } = JsonSerializer.Serialize(new Root(user_id));
 

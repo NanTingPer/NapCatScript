@@ -4,7 +4,7 @@
 /// 设置QQ头像
 /// </summary>
 /// <param name="file">本地路径或网络路径"D:/a.jpg"</param>
-public class set_qq_avatar(string file) : BaseMesg
+public class set_qq_avatar(string file) : RequestJson
 {
     public override string JsonText { get; set; } = JsonSerializer.Serialize(new Root(file));
 

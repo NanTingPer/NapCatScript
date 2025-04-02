@@ -3,7 +3,7 @@
 /// <summary>
 /// 获取好友列表
 /// </summary>
-public class get_friend_list(bool no = false) : BaseMesg
+public class get_friend_list(bool no = false) : RequestJson
 {
     public override string JsonText { get; set; } = JsonSerializer.Serialize(new Root(no));
 

@@ -5,7 +5,7 @@
 /// </summary>
 /// <param name="bried"> 收藏标题 </param>
 /// <param name="rowdata"> 收藏内容 </param>
-public class create_collection(string bried, string rowdata) : BaseMesg
+public class create_collection(string bried, string rowdata) : RequestJson
 {
     public override string JsonText { get; set; } = JsonSerializer.Serialize(new Root(bried, rowdata));
 

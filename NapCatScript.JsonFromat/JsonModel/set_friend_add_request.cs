@@ -6,7 +6,7 @@
 /// <param name="flag"> 目标id </param>
 /// <param name="approve"> 是否同意 </param>
 /// <param name="remark"> 设置备注 </param>
-public class set_friend_add_request(string flag, bool approve, string remark) : BaseMesg
+public class set_friend_add_request(string flag, bool approve, string remark) : RequestJson
 {
     public override string JsonText { get; set; } = JsonSerializer.Serialize(new Root(flag, approve, remark));
 

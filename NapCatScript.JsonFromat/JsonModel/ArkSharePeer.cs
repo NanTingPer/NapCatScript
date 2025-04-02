@@ -3,7 +3,7 @@
 /// <summary>
 /// 获取推荐好友/群聊卡片
 /// </summary>
-public class ArkSharePeer(string id, ArkSharePeerEnum type) : BaseMesg //获取推荐好友/群聊卡片
+public class ArkSharePeer(string id, ArkSharePeerEnum type) : RequestJson //获取推荐好友/群聊卡片
 {
     public override string JsonText { get; set; } = JsonSerializer.Serialize(new Root(id, type));
 
