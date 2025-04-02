@@ -71,7 +71,6 @@ public class Send
     }
 
     #region 获取群聊卡片 ArkShareGroup
-    public Task<ArkShareGroupReturn?> 获取群聊卡片(string group_id) => GetArkShareGroupAsync(group_id);
 
     /// <summary>
     /// 获取群卡片
@@ -91,7 +90,6 @@ public class Send
     #endregion
 
     #region 获取推荐好友或者群聊卡片 ArkSharePeer
-    public Task<ArkSharePeerReturn?> 获取推荐好友或者群聊卡片(string id, ArkSharePeerEnum type) => GetArkSharePeerAsync(id, type);
 
     /// <summary>
     /// 获取推荐好友/群聊卡片
@@ -112,8 +110,6 @@ public class Send
     #endregion
 
     #region 创建收藏内容 create_collection
-    public void 创建收藏内容(string 收藏标题, string 收藏内容) => CreateCollection(收藏标题, 收藏内容);
-    public Task<bool> 创建收藏内容Async(string 收藏标题, string 收藏内容) => CreateCollectionAsync(收藏标题, 收藏内容);
     /// <summary>
     /// 创建收藏内容
     /// </summary>
@@ -150,8 +146,6 @@ public class Send
     #endregion
 
     #region 删除好友 delete_friend
-    public void 删除好友(string 用户ID, bool 是否拉黑, bool 是否双向删除) => DeleteFriend(用户ID, 是否拉黑, 是否双向删除);
-    public Task<bool> 删除好友Async(string 用户ID, bool 是否拉黑, bool 是否双向删除) => DeleteFriendAsync(用户ID, 是否拉黑, 是否双向删除);
     /// <summary>
     /// 删除好友
     /// </summary>
@@ -189,3 +183,18 @@ public class Send
     #endregion
 }
 
+public class SendCN
+{
+    private Send send;
+    public SendCN(string httpURI)
+    {
+        send = new Send(httpURI);
+    }
+
+    public Task<ArkShareGroupReturn?> 获取群聊卡片(string group_id) => send.GetArkShareGroupAsync(group_id);
+    public Task<ArkSharePeerReturn?> 获取推荐好友或者群聊卡片(string id, ArkSharePeerEnum type) => send.GetArkSharePeerAsync(id, type);
+    public void 创建收藏内容(string 收藏标题, string 收藏内容) => send.CreateCollection(收藏标题, 收藏内容);
+    public Task<bool> 创建收藏内容Async(string 收藏标题, string 收藏内容) => send.CreateCollectionAsync(收藏标题, 收藏内容);
+    public void 删除好友(string 用户ID, bool 是否拉黑, bool 是否双向删除) => send.DeleteFriend(用户ID, 是否拉黑, 是否双向删除);
+    public Task<bool> 删除好友Async(string 用户ID, bool 是否拉黑, bool 是否双向删除) => send.DeleteFriendAsync(用户ID, 是否拉黑, 是否双向删除);
+}
