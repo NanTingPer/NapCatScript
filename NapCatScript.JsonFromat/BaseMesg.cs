@@ -23,6 +23,9 @@
 public abstract class BaseMesg
 {
     public abstract string JsonText { get; set; }
+    public abstract JsonElement JsonElement { get; set; }
+    public abstract JsonDocument JsonDocument { get; set; }
+    public abstract dynamic JsonObject { get; set; }
     public virtual string GetString()
     {
         return JsonText;

@@ -6,6 +6,9 @@
 public class RecordMesg : BaseMesg
 {
     public override string JsonText { get; set; }
+    public override JsonElement JsonElement { get; set; }
+    public override JsonDocument JsonDocument { get; set; }
+    public override dynamic JsonObject { get; set; }
 
     /// <param name="content">本地路径或者网络路径, file://D:/a.mp3</param>
     public RecordMesg(string content)
@@ -13,6 +16,9 @@ public class RecordMesg : BaseMesg
         Data data = new Data(content);
         JsonClass obj = new JsonClass(data);
         JsonText = JsonSerializer.Serialize(obj);
+        JsonElement = JsonSerializer.SerializeToElement(obj);
+        JsonDocument = JsonSerializer.SerializeToDocument(obj);
+        JsonObject = obj;
     }
 
     private class JsonClass

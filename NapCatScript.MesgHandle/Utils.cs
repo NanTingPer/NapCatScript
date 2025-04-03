@@ -2,7 +2,6 @@
 using NapCatScript.JsonFromat.Mesgs;
 using NapCatScript.MesgHandle.Parses;
 using NapCatScript.JsonFromat.JsonModel;
-using System.Threading.Tasks;
 using System.Net.Http;
 using System.Net;
 

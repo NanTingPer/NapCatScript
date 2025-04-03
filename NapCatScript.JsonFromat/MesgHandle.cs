@@ -8,6 +8,10 @@ namespace NapCatScript.JsonFromat;
 public class MesgHandle : BaseMesg
 {
     public override string JsonText { get; set; }
+    public override JsonElement JsonElement { get; set; }
+    public override JsonDocument JsonDocument { get; set; }
+    public override dynamic JsonObject { get; set; }
+
     /// <summary>
     /// 构建 使用MessagesJsonObject获取
     /// </summary>
@@ -20,33 +24,49 @@ public class MesgHandle : BaseMesg
             contents.Add(item.ToString());
         }
 
-        Root root = new Root(user_id, contents);
+        Root root = new Root(user_id, contents, mestype);
         JsonText = JsonSerializer.Serialize(root);
-        if (mestype == MesgTo.group) {
-            string[] strings = JsonText.Split("user_id");
-            StringBuilder sbuilder = new StringBuilder();
-            sbuilder.Append(strings[0]);
-            sbuilder.Append("group_id");
-            for (int i = 1; i < strings.Length; i++) {
-                sbuilder.Append(strings[i]);
-            }
-            JsonText = sbuilder.ToString();
-        }
+        JsonElement = JsonSerializer.SerializeToElement(root);
+        JsonDocument = JsonSerializer.SerializeToDocument(root);
+        JsonObject = root;
+        //if (mestype == MesgTo.group) {
+        //    string[] strings = JsonText.Split("user_id");
+        //    StringBuilder sbuilder = new StringBuilder();
+        //    sbuilder.Append(strings[0]);
+        //    sbuilder.Append("group_id");
+        //    for (int i = 1; i < strings.Length; i++) {
+        //        sbuilder.Append(strings[i]);
+        //    }
+        //    JsonText = sbuilder.ToString();
+        //}
     }
 
 
     public class Root
     {
-        public Root(string user_id, List<string> message)
+        public Root(string user_id, List<string> message, MesgTo sendTo)
         {
-            User_id = user_id;
+            switch (sendTo) {
+                case MesgTo.group:
+                    Group_id = user_id;
+                    break;
+                case MesgTo.user:
+                    User_id = user_id;
+                    break;
+            }
             Message = message;
         }
 
         [JsonPropertyName("user_id")]
-        public string User_id { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? User_id { get; set; } = null;
+
+        [JsonPropertyName("group_id")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string? Group_id { get; set; } = null;
 
         [JsonPropertyName("message")]
         public List<string> Message { get; set; }
     }
+
 }

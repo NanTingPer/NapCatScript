@@ -1,4 +1,6 @@
-﻿namespace NapCatScript.JsonFromat.Mesgs;
+﻿using System.Text.Json.Nodes;
+
+namespace NapCatScript.JsonFromat.Mesgs;
 
 /// <summary>
 /// @(At)消息
@@ -6,14 +8,25 @@
 public class AtMesg : BaseMesg
 {
     public override string JsonText { get; set; }
+    public override JsonElement JsonElement { get; set; }
+    public override JsonDocument JsonDocument { get; set; }
+    public override dynamic JsonObject { get; set; }
     public AtMesg(string qqid)
     {
-        JsonText = JsonSerializer.Serialize(new Root(qqid));
+        var jsonObject = new Root(qqid);
+        JsonText = JsonSerializer.Serialize(jsonObject);
+        JsonElement = JsonSerializer.SerializeToElement(jsonObject);
+        JsonDocument = JsonSerializer.SerializeToDocument(jsonObject);
+        JsonObject = jsonObject;
     }
 
     public AtMesg(string name, string qqid)
     {
-        JsonText = JsonSerializer.Serialize(new Root(name, qqid));
+        var jsonObject = new Root(name, qqid);
+        JsonText = JsonSerializer.Serialize(jsonObject);
+        JsonElement = JsonSerializer.SerializeToElement(jsonObject);
+        JsonDocument = JsonSerializer.SerializeToDocument(jsonObject);
+        JsonObject = jsonObject;
     }
 
     private class Root

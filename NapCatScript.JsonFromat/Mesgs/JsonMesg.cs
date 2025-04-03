@@ -6,12 +6,18 @@
 public class JsonMesg : BaseMesg
 {
     public override string JsonText { get; set; }
-    
+    public override JsonElement JsonElement { get; set; }
+    public override JsonDocument JsonDocument { get; set; }
+    public override dynamic JsonObject { get; set; }
+
     public JsonMesg(string content)
     {
         Data data = new Data(content);
         JsonClass obj = new JsonClass(data);
         JsonText = JsonSerializer.Serialize(obj);
+        JsonElement = JsonSerializer.SerializeToElement(obj);
+        JsonDocument = JsonSerializer.SerializeToDocument(obj);
+        JsonObject = obj;
     }
 
     private class JsonClass
