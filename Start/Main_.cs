@@ -38,6 +38,76 @@ public class Main_
     public static List<PluginType> Plugins = [];
     static void Main(string[] args)
     {
+        LoadPlugin();
+        #region Main
+        try {
+            string? useUri = GetConf(URI);
+            string? httpUri = GetConf(HttpURI);
+            BotId = GetConf(BootId) ?? "";
+            StartString = $"[CQ:at,qq={BotId}]";
+            StartString = Regex.Replace(StartString, @"\s", "");
+            if (string.IsNullOrEmpty(useUri) || string.IsNullOrEmpty(httpUri)) {
+                Console.WriteLine("请检查Uri配置");
+                return;
+            }
+            SocketUri = useUri;
+            HttpUri = httpUri;
+            DeepSeekKey = GetConf(Config.DeepSeekKey) ?? "";
+            RootId = GetConf(Config.RootId) ?? "";
+            //接收消息 并将有效消息存放到NoPMesgList
+            Task.Run(Receive);
+
+            //发送消息
+            Task.Run(Send);
+
+            while (true) {
+                _ = Console.ReadLine();
+            }
+
+        } catch (Exception e) {
+            Log.Erro(e.Message + "\r\n" + e.StackTrace);
+        }
+
+
+    }
+    #endregion Main
+
+    private static async void Receive()
+    {
+        await 建立连接(Socket, SocketUri ??= "1");
+        while (true) {
+            await Task.Delay(1);
+            try {
+                MesgInfo? mesg = await Socket.Receive(CTokrn); //收到的消息
+                if (mesg is not null) {
+                    NoPMesgList.Add(mesg);
+                    Console.WriteLine(mesg);
+                }
+            } catch (Exception e) {
+                Console.WriteLine($"消息接收发生错误: {e.Message}\r\n {e.StackTrace}");
+                Log.Erro("消息接收发生错误: ", e.Message, e.StackTrace);
+            }
+
+        }
+    }
+
+    private static async void Send()
+    {
+        while (true) {
+            await Task.Delay(1);
+            if (NoPMesgList.Count <= 0)
+                continue;
+
+            MesgInfo mesg = NoPMesgList.First();
+            NoPMesgList.RemoveAt(0);
+            Log.Info(mesg);
+            MService.SetAsync(mesg);
+            Plugins.ForEach(f => f.Run(mesg, HttpUri));
+        }
+    }
+
+    private static void LoadPlugin()
+    {
         string pluginDirectory = Path.Combine(Environment.CurrentDirectory, "Plugin");
         if (!Directory.Exists(pluginDirectory))
             Directory.CreateDirectory(pluginDirectory);
@@ -55,68 +125,7 @@ public class Main_
             obj.Init();
             Plugins.Add(obj);
         }
-        #region Main
-        try {
-            string? useUri = GetConf(URI);
-            string? httpUri = GetConf(HttpURI);
-            BotId = GetConf(BootId) ?? "";
-            StartString = $"[CQ:at,qq={BotId}]";
-            StartString = Regex.Replace(StartString, @"\s", "");
-            if (string.IsNullOrEmpty(useUri) || string.IsNullOrEmpty(httpUri)) {
-                Console.WriteLine("请检查Uri配置");
-                return;
-            }
-            SocketUri = useUri;
-            HttpUri = httpUri;
-            DeepSeekKey = GetConf(Config.DeepSeekKey) ?? "";
-            RootId = GetConf(Config.RootId) ?? "";
-            //接收消息 并将有效消息存放到NoPMesgList
-            Task.Run(async () => {
-                await 建立连接(Socket, useUri ??= "1");
-                while (true) {
-                    await Task.Delay(1);
-                    try {
-                        MesgInfo? mesg = await Socket.Receive(CTokrn); //收到的消息
-                        if (mesg is not null) {
-                            NoPMesgList.Add(mesg);
-                            Console.WriteLine(mesg);
-                        }
-                    } catch (Exception e) {
-                        Console.WriteLine($"消息接收发生错误: {e.Message}\r\n {e.StackTrace}");
-                        Log.Erro("消息接收发生错误: ", e.Message, e.StackTrace);
-                    }
-
-                }
-            });
-
-            //发送消息
-            Task.Run(async () => {
-                while (true) {
-                    await Task.Delay(1);
-                    if (NoPMesgList.Count <= 0)
-                        continue;
-
-                    MesgInfo mesg = NoPMesgList.First();
-                    NoPMesgList.RemoveAt(0);
-                    Log.Info(mesg);
-                    MService.SetAsync(mesg);
-                    Plugins.ForEach(f => f.Run(mesg, HttpUri));
-                }
-
-            });
-
-
-            while (true) {
-                _ = Console.ReadLine();
-            }
-
-        } catch (Exception e) {
-            Log.Erro(e.Message + "\r\n" + e.StackTrace);
-        }
-
-
     }
-    #endregion Main
 
     /// <summary>
     /// 往sbuilder添加字符串
