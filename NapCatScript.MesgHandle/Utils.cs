@@ -16,13 +16,13 @@ public static class Utils
     {
         if (message.MessageType == "group") {
             mesg = MesgTo.group;
-            if (uri.EndsWith("/")) return uri + API.GroupMsgNoX;
+            if (uri.EndsWith('/')) return uri + API.GroupMsgNoX;
             else return uri + API.GroupMsg;
         }
 
         if (message.MessageType == "private") {
             mesg = MesgTo.user;
-            if (uri.EndsWith("/")) return uri + API.PrivateMsgNoX;
+            if (uri.EndsWith('/')) return uri + API.PrivateMsgNoX;
             else return uri + API.PrivateMsg;
         }
         mesg = MesgTo.user;
@@ -75,9 +75,9 @@ public class Send
     public string HttpURI { get; set; } = "";
     public Send(string httpURI)
     {
-        if (httpURI.EndsWith("/"))
+        if (httpURI.EndsWith('/'))
             HttpURI = httpURI;
-        else HttpURI = httpURI + "/";
+        else HttpURI = httpURI + '/';
     }
     #region 上传私聊文件 upload_private_file
     /// <summary>

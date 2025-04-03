@@ -7,6 +7,9 @@ using static NapCatScript.Start.FAQ;
 using HUtils = NapCatScript.MesgHandle.Utils;
 using Config = NapCatScript.Services.Config;
 using NapCatScript.Start.Handles;
+using System.Runtime.Loader;
+using System.Reflection;
+using NapCatScript.Services;
 
 namespace NapCatScript.Start;
 
@@ -32,8 +35,27 @@ public class Main_
     public static List<MesgInfo> NoPMesgList { get; } = [];
     public static bool IsConnection = false;
     public static Random rand = new Random();
+    public static List<PluginType> Plugins = [];
     static void Main(string[] args)
     {
+        string pluginDirectory = Path.Combine(Environment.CurrentDirectory, "Plugin");
+        if (!Directory.Exists(pluginDirectory))
+            Directory.CreateDirectory(pluginDirectory);
+        string[] plugins = Directory.GetDirectories(pluginDirectory); //给的是绝对路径
+        foreach (var pluginPath in plugins) {
+            string pluginName = new DirectoryInfo(pluginPath).Name;
+            string pluginDllPath = Path.Combine(pluginPath, pluginName + ".dll");
+            PluginLoad plugin = new PluginLoad(pluginDllPath);
+            Assembly ass = plugin.LoadFromAssemblyPath(pluginDllPath);
+            Type? type = ass.GetTypes().Where(f => f.Name == "TestClass").FirstOrDefault();
+            if (type is null) return;
+            ConstructorInfo? pluginConstructor = type.GetConstructors().FirstOrDefault(f => f.GetParameters().Length == 0);
+            if (pluginConstructor is null) return;
+            PluginType obj = (PluginType)pluginConstructor.Invoke(null);
+            obj.Init();
+            Plugins.Add(obj);
+        }
+        #region Main
         try {
             string? useUri = GetConf(URI);
             string? httpUri = GetConf(HttpURI);
@@ -67,10 +89,6 @@ public class Main_
                 }
             });
 
-            //while (!IsConnection) {
-            //    Thread.Sleep(3);
-            //}
-
             //发送消息
             Task.Run(async () => {
                 while (true) {
@@ -80,76 +98,25 @@ public class Main_
 
                     MesgInfo mesg = NoPMesgList.First();
                     NoPMesgList.RemoveAt(0);
-                    string mesgContent = mesg.MessageContent;
                     Log.Info(mesg);
                     MService.SetAsync(mesg);
-                    mesgContent = Regex.Replace(mesgContent, @"\s", "");
-                    if (!mesgContent.StartsWith("亭亭$亭"))
-                        DeepSeekAPI.AddGroupMesg(mesg); //加入组
-                    if (mesgContent.StartsWith(StartString) || mesgContent.StartsWith("亭亭")) {
-                        try {
-                            DeepSeekAPI.SendAsync(mesg, httpUri, mesgContent, CTokrn);
-                        } catch (Exception E) {
-                            Console.WriteLine($"DeepSeek错误: {E.Message} \r\n {E.StackTrace}");
-                            Log.Erro(E.Message, E.StackTrace);
-                        }
-                        continue;
-                    }
-
-                    var co = await FAQI.Get(mesgContent);
-                    if (co is not null) {
-                        SendTextAsync(mesg, HttpUri, $"{co.Value}\r\n----来自:{co.UserName}", CTokrn);
-                        continue;
-                    }
-
-                    if (mesgContent.Trim().StartsWith('.')) {
-                        //string[] mesgs = mesgContent.Split(".");
-                        string txtContent/* = mesgs[1]*/;//消息内容
-                        txtContent = mesgContent.Trim().Substring(1);
-                        if (txtContent.StartsWith("映射#")) {
-                            CalMapping.AddAsync(mesg, HttpUri, txtContent, CTokrn);
-                            continue;
-                        } else if (txtContent.StartsWith("删除映射#")) {
-                            CalMapping.DeleteAsync(mesg, HttpUri, txtContent, CTokrn);
-                            continue;
-                        } else if (txtContent.StartsWith("FAQ#")) {
-                            FAQI.AddAsync(mesg, HttpUri, txtContent, CTokrn);
-                            continue;
-                        } else if (txtContent.StartsWith("删除FAQ#")) {
-                            FAQI.DeleteAsync(txtContent);
-                            SendTextAsync(mesg, HttpUri, "好啦好啦，删掉啦", CTokrn);
-                            continue;
-                        } else if (txtContent.StartsWith("help#")) {
-                            SendTextAsync(mesg, HttpUri,
-                                """
-                            对于灾厄Wiki: 
-                                1. 使用"." + 物品名称 可以获得对应物品的wiki页, 例 .震波炸弹
-                                2. 使用".映射#" 可以设置对应物品映射, 例   .映射#神明吞噬者=>神吞
-                                3. 使用".删除映射#" 可以删除对应映射, 例   .删除映射#神吞
-                            对于FAQ:
-                                1. 使用".FAQ#" 可以创建FAQ     例      .FAQ#灾厄是什么###灾厄是一个模组
-                                2. 使用".删除FAQ#" 可以删除FAQ 例      .删除FAQ#灾厄是什么
-                            
-                            """, CTokrn);
-                            continue;
-                        }
-
-                        txtContent = await CalMapping.GetMap(txtContent);
-                        string filePath = Path.Combine(Environment.CurrentDirectory, "Cal", txtContent + ".png");
-                        string sendUrl = HUtils.GetMsgURL(HttpUri, mesg, out MesgTo MESGTO);
-                        CalImage.SendAsync(mesg, txtContent, filePath, sendUrl, MESGTO);
-                    }
+                    Plugins.ForEach(f => f.Run(mesg, HttpUri));
                 }
+
             });
+
 
             while (true) {
                 _ = Console.ReadLine();
             }
+
         } catch (Exception e) {
             Log.Erro(e.Message + "\r\n" + e.StackTrace);
         }
 
+
     }
+    #endregion Main
 
     /// <summary>
     /// 往sbuilder添加字符串

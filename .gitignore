@@ -18,3 +18,5 @@
 /NapCatScript.Services/bin
 /NapCatScript.JsonFromat/bin
 /NapCatScript.Services/obj
+/TestPlugin/obj
+/TestPlugin/bin

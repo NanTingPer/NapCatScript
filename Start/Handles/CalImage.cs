@@ -3,6 +3,7 @@ using NapCatScript.JsonFromat.Mesgs;
 using NapCatScript.MesgHandle.Parses;
 using static NapCatScript.Start.Main_;
 using static NapCatScript.MesgHandle.Utils;
+using NapCatScript.Model;
 
 namespace NapCatScript.Start.Handles;
 

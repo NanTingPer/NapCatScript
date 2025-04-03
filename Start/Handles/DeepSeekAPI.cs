@@ -1,4 +1,5 @@
-﻿using static NapCatScript.MesgHandle.Utils;
+﻿using NapCatScript.Model;
+using static NapCatScript.MesgHandle.Utils;
 
 namespace NapCatScript.Start.Handles;
 
