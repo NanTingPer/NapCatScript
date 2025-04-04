@@ -1,13 +1,7 @@
-﻿using NapCatScript.JsonFromat;
-using NapCatScript.MesgHandle.Parses;
+﻿using NapCatScript.MesgHandle.Parses;
 using System.Net.WebSockets;
 using static NapCatScript.MesgHandle.Parses.ReceiveMesg;
-using static NapCatScript.MesgHandle.Utils;
-using static NapCatScript.Start.FAQ;
-using HUtils = NapCatScript.MesgHandle.Utils;
 using Config = NapCatScript.Services.Config;
-using NapCatScript.Start.Handles;
-using System.Runtime.Loader;
 using System.Reflection;
 using NapCatScript.Services;
 
@@ -26,10 +20,8 @@ public class Main_
     /// 基础请求uri http://127.0.0.1:6666
     /// </summary>
     public static string HttpUri { get; set; } = "";
-    public static string DeepSeekKey { get; set; } = "";
     public static string RootId { get; set; } = "";
     public static string BotId { get; set; } = "";
-    public static string StartString { get; set; } = "";
     public static ClientWebSocket Socket { get; } = new ClientWebSocket();
     public static CancellationToken CTokrn { get; } = new CancellationToken();
     public static List<MesgInfo> NoPMesgList { get; } = [];
@@ -44,15 +36,12 @@ public class Main_
             string? useUri = GetConf(URI);
             string? httpUri = GetConf(HttpURI);
             BotId = GetConf(BootId) ?? "";
-            StartString = $"[CQ:at,qq={BotId}]";
-            StartString = Regex.Replace(StartString, @"\s", "");
             if (string.IsNullOrEmpty(useUri) || string.IsNullOrEmpty(httpUri)) {
                 Console.WriteLine("请检查Uri配置");
                 return;
             }
             SocketUri = useUri;
             HttpUri = httpUri;
-            DeepSeekKey = GetConf(Config.DeepSeekKey) ?? "";
             RootId = GetConf(Config.RootId) ?? "";
             //接收消息 并将有效消息存放到NoPMesgList
             Task.Run(Receive);
@@ -116,14 +105,17 @@ public class Main_
             string pluginName = new DirectoryInfo(pluginPath).Name;
             string pluginDllPath = Path.Combine(pluginPath, pluginName + ".dll");
             PluginLoad plugin = new PluginLoad(pluginDllPath);
-            Assembly ass = plugin.LoadFromAssemblyPath(pluginDllPath);
-            Type? type = ass.GetTypes().Where(f => f.Name == "TestClass").FirstOrDefault();
-            if (type is null) return;
-            ConstructorInfo? pluginConstructor = type.GetConstructors().FirstOrDefault(f => f.GetParameters().Length == 0);
-            if (pluginConstructor is null) return;
-            PluginType obj = (PluginType)pluginConstructor.Invoke(null);
-            obj.Init();
-            Plugins.Add(obj);
+            Assembly ass = plugin.LoadFromAssemblyPath(pluginDllPath); //加载插件程序集
+            #region 初始化插件的全部PluginType
+            IEnumerable<Type> pluginStartTypes = ass.GetTypes().Where(f => typeof(PluginType) == f.BaseType);
+            foreach (var pluginStartType in pluginStartTypes) {
+                ConstructorInfo? pluginConstructor = pluginStartType.GetConstructors().FirstOrDefault(f => f.GetParameters().Length == 0);
+                if (pluginConstructor is null) return;
+                PluginType obj = (PluginType)pluginConstructor.Invoke(null);
+                obj.Init();
+                Plugins.Add(obj);
+            }
+            #endregion
         }
     }
 

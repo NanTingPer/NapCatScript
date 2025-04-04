@@ -1,7 +1,7 @@
-﻿using NapCatScript.Model;
+﻿using NapCatScript.Start;
 using static NapCatScript.MesgHandle.Utils;
 
-namespace NapCatScript.Start.Handles;
+namespace TestPlugin;
 
 public class DeepSeekAPI
 {
@@ -25,7 +25,7 @@ public class DeepSeekAPI
         string[] temp = content.Split("$");
         Log.Info("消息进入DeepSeekAPI: " + content);
         GoTo @goto = await Command(mesg, temp, httpURI, tk);
-        if (Regex.Replace(content, @"\s", "").StartsWith(Main_.StartString + "总结群消息")) {
+        if (Regex.Replace(content, @"\s", "").StartsWith(TestClass.StartString + "总结群消息")) {
             @goto = GoTo.Con;
         }
         switch (@goto) {
@@ -103,11 +103,11 @@ public class DeepSeekAPI
         #endregion
         var hand = new Dictionary<string, string>()
         {
-            {"Authorization", $"Bearer {Main_.DeepSeekKey}"},
+            {"Authorization", $"Bearer {TestClass.DeepSeekKey}"},
         };
 
         JsonDocument? document = null;
-        string sendContent = await MesgHandle.Parses.SendMesg.Send("https://api.deepseek.com/chat/completions", jsonContent, null, Main_.CTokrn, hand);
+        string sendContent = await NapCatScript.MesgHandle.Parses.SendMesg.Send("https://api.deepseek.com/chat/completions", jsonContent, null, Main_.CTokrn, hand);
         if(sendContent == "Erro") {
             SendTextAsync(mesg, httpURI, "服务器挂掉惹，等等吧~", tk);
             活跃数--;
@@ -274,7 +274,7 @@ public class DeepSeekAPI
         
         try {
             List<DeepSeekModel> upDowns = await Service.GetAll<DeepSeekModel>();
-            upDowns = GetMesg<DeepSeekModel>(upDowns, mesg);//过滤本群聊消息
+            upDowns = GetMesg(upDowns, mesg);//过滤本群聊消息
             if (upDowns.Count == 0) {
                 await Service.Insert<DeepSeekModel>(dsm);
                 return;
@@ -308,7 +308,7 @@ public class DeepSeekAPI
             return "";
         }
 
-        upDowns = GetMesg<T>(upDowns, mesg);
+        upDowns = GetMesg(upDowns, mesg);
         StringBuilder sBuilder = new StringBuilder();
         foreach (var dsm in upDowns) {
             sBuilder.Append(dsm.UserName);
@@ -329,7 +329,7 @@ public class DeepSeekAPI
     {
         try {
             List<T> mesgs = await Service.GetAll<T>();
-            mesgs = GetMesg<T>(mesgs, mesg);
+            mesgs = GetMesg(mesgs, mesg);
 
             await Service.DeleteRange(mesgs);
             //await Service.DeleteALL<DeepSeekModel>();
@@ -357,7 +357,7 @@ public class DeepSeekAPI
 
         try {
             List<DeepSeekGroupModel> mesgs = await Service.GetAll<DeepSeekGroupModel>();
-            mesgs = GetMesg<DeepSeekGroupModel>(mesgs, mesg);//有效消息
+            mesgs = GetMesg(mesgs, mesg);//有效消息
                                          //只保留二十条上下文
             if (mesgs.Count == 0) {
                 await Service.Insert<DeepSeekModel>(dsgm);

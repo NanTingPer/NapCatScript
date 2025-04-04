@@ -1,30 +1,26 @@
 ﻿using NapCatScript.JsonFromat;
-using NapCatScript.Model;
 using NapCatScript.Services;
-using System.Text.RegularExpressions;
 using static NapCatScript.Start.Main_;
-using static NapCatScript.Start.Handles.DeepSeekAPI;
-using static NapCatScript.Start.Handles.CalMapping;
-using static NapCatScript.Start.Handles.CalImage;
 using static NapCatScript.Start.FAQ;
-using static NapCatScript.Services.Loging;
-using static NapCatScript.Services.Config;
-using NapCatScript.Start.Handles;
 
 using static NapCatScript.MesgHandle.Utils;
 using HUtils = NapCatScript.MesgHandle.Utils;
-using System.Threading.Tasks;
 
 namespace TestPlugin;
 
 public class TestClass : PluginType
 {
+    public static string DeepSeekKey { get; set; } = "";
+    public static string StartString { get; set; } = "";
     public override void Init()
     {
+        StartString = $"[CQ:at,qq={BotId}]";
+        StartString = Regex.Replace(StartString, @"\s", "");
+        DeepSeekKey = GetConf(Config.DeepSeekKey) ?? "";
         Console.WriteLine("Hello Is My Plugin!");
     }
 
-    public override async void Run(MesgInfo mesg, string httpUri)
+    public override async Task Run(MesgInfo mesg, string httpUri)
     {
         string mesgContent = mesg.MessageContent;
         mesgContent = Regex.Replace(mesgContent, @"\s", "");

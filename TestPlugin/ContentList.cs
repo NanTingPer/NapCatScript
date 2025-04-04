@@ -1,4 +1,4 @@
-﻿namespace NapCatScript.Start;
+﻿namespace TestPlugin;
 
 public static class ContentList
 {

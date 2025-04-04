@@ -4,8 +4,9 @@ using NapCatScript.MesgHandle.Parses;
 using static NapCatScript.Start.Main_;
 using static NapCatScript.MesgHandle.Utils;
 using NapCatScript.Model;
+using System.Text;
 
-namespace NapCatScript.Start.Handles;
+namespace TestPlugin;
 
 public static class CalImage
 {

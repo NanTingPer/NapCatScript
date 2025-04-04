@@ -3,5 +3,5 @@
 public abstract class PluginType
 {
     public abstract void Init();
-    public abstract void Run(MesgInfo mesg, string httpUri);
+    public abstract Task Run(MesgInfo mesg, string httpUri);
 }

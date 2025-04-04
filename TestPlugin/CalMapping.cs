@@ -1,6 +1,8 @@
-﻿using static NapCatScript.MesgHandle.Utils;
+﻿using NapCatScript.Model;
+using static NapCatScript.MesgHandle.Utils;
+using static NapCatScript.Services.SQLiteService;
 
-namespace NapCatScript.Start.Handles
+namespace TestPlugin
 {
     public static class CalMapping
     {
