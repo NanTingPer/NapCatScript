@@ -463,9 +463,9 @@ public class Send
 public class SendCN
 {
     private Send send;
-    public SendCN(string httpURI)
+    public SendCN(Send sd)
     {
-        send = new Send(httpURI);
+        send = sd;
     }
 
     public Task<ArkShareGroupReturn?> 获取群聊卡片(string 群号) => send.GetArkShareGroupAsync(群号);

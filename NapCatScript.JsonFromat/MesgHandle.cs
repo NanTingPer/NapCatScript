@@ -5,7 +5,7 @@ namespace NapCatScript.JsonFromat;
 /// <summary>
 /// 最终消息类
 /// </summary>
-public class MesgHandle : BaseMesg
+public class MesgHandle : BaseMsg
 {
     public override string JsonText { get; set; }
     public override JsonElement JsonElement { get; set; }
@@ -17,7 +17,7 @@ public class MesgHandle : BaseMesg
     /// </summary>
     /// <param name="user_id"> 用户id </param>
     /// <param name="text"> 要发送的消息 </param>
-    public MesgHandle(string user_id, MesgTo mestype, params BaseMesg[] mesgs)
+    public MesgHandle(string user_id, MesgTo mestype, params BaseMsg[] mesgs)
     {
         List<string> contents = [];
         foreach (var item in mesgs) {

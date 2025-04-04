@@ -5,57 +5,60 @@ namespace NapCatScript.JsonFromat.Mesgs;
 /// <summary>
 /// @(At)消息
 /// </summary>
-public class AtMesg : BaseMesg
+public class AtMsg : BaseMsg
 {
     public override string JsonText { get; set; }
     public override JsonElement JsonElement { get; set; }
     public override JsonDocument JsonDocument { get; set; }
     public override dynamic JsonObject { get; set; }
-    public AtMesg(string qqid)
+    public AtMsg(string qqid)
     {
-        var jsonObject = new Root(qqid);
+        var jsonObject = new AtMsgJson(qqid);
         JsonText = JsonSerializer.Serialize(jsonObject);
         JsonElement = JsonSerializer.SerializeToElement(jsonObject);
         JsonDocument = JsonSerializer.SerializeToDocument(jsonObject);
         JsonObject = jsonObject;
     }
 
-    public AtMesg(string name, string qqid)
+    public AtMsg(string name, string qqid)
     {
-        var jsonObject = new Root(name, qqid);
+        var jsonObject = new AtMsgJson(name, qqid);
         JsonText = JsonSerializer.Serialize(jsonObject);
         JsonElement = JsonSerializer.SerializeToElement(jsonObject);
         JsonDocument = JsonSerializer.SerializeToDocument(jsonObject);
         JsonObject = jsonObject;
     }
+}
 
-    private class Root
+/// <summary>
+/// at消息的json
+/// </summary>
+public class AtMsgJson : MsgJson
+{
+    public AtMsgJson(string qqid)
     {
-        public Root(string qqid)
-        {
-            Message = new Data(qqid);
-        }
-
-        public Root(string name, string qqid)
-        {
-            Message = new Data(name, qqid);
-        }
-
-        [JsonPropertyName("message")]
-        public Data Message { get; set; }
-
-        [JsonPropertyName("type")]
-        public string Type { get; set; } = MsgType.at.ToString();
+        Message = new AtMsgData(qqid);
     }
 
-    private class Data
+    public AtMsgJson(string name, string qqid)
     {
-        public Data(string qqid)
+        Message = new AtMsgData(name, qqid);
+    }
+
+    [JsonPropertyName("message")]
+    public AtMsgData Message { get; set; }
+
+    [JsonPropertyName("type")]
+    public string Type { get; set; } = MsgType.at.ToString();
+
+    public class AtMsgData
+    {
+        public AtMsgData(string qqid)
         {
             QQ = qqid;
         }
 
-        public Data(string name, string qqid)
+        public AtMsgData(string name, string qqid)
         {
             Name = name;
             QQ = qqid;
@@ -69,3 +72,5 @@ public class AtMesg : BaseMesg
         public string QQ { get; set; }
     }
 }
+
+

@@ -1,9 +1,11 @@
-﻿namespace NapCatScript.JsonFromat.Mesgs;
+﻿using static NapCatScript.JsonFromat.Mesgs.VideoMsgJson;
+
+namespace NapCatScript.JsonFromat.Mesgs;
 
 /// <summary>
 /// 视频消息
 /// </summary>
-public class VideoMesg : BaseMesg
+public class VideoMesg : BaseMsg
 {
     public override string JsonText { get; set; }
     public override JsonElement JsonElement { get; set; }
@@ -13,33 +15,36 @@ public class VideoMesg : BaseMesg
     /// <param name="file">本地路径或者网络路径, file://D:/a.mp4</param>
     public VideoMesg(string file)
     {
-        Data data = new Data(file);
-        JsonClass obj = new JsonClass(data);
+        VideoMsgData data = new VideoMsgData(file);
+        VideoMsgJson obj = new VideoMsgJson(data);
         JsonText = JsonSerializer.Serialize(obj);
         JsonElement = JsonSerializer.SerializeToElement(obj);
         JsonDocument = JsonSerializer.SerializeToDocument(obj);
         JsonObject = obj;
     }
+}
 
-    private class JsonClass
+/// <summary>
+/// 视频消息的Json对象
+/// </summary>
+public class VideoMsgJson : MsgJson
+{
+    public VideoMsgJson(VideoMsgData data)
     {
-        public JsonClass(Data data)
-        {
-            Data = data;
-        }
-
-        [JsonPropertyName("type")]
-        public MsgType Type { get; set; } = MsgType.video;//语音消息
-
-        [JsonPropertyName("data")]
-        public Data Data { get; set; }
-
-        //JsonClass
+        Data = data;
     }
 
-    private class Data
+    [JsonPropertyName("type")]
+    public MsgType Type { get; set; } = MsgType.video;//语音消息
+
+    [JsonPropertyName("data")]
+    public VideoMsgData Data { get; set; }
+
+    //JsonClass
+
+    public class VideoMsgData
     {
-        public Data(string content)
+        public VideoMsgData(string content)
         {
             file = content;
         }
@@ -47,4 +52,7 @@ public class VideoMesg : BaseMesg
         [JsonPropertyName("file")]
         public string file { get; set; }
     }
+
+
 }
+

@@ -4,6 +4,7 @@ using static NapCatScript.MesgHandle.Parses.ReceiveMesg;
 using Config = NapCatScript.Services.Config;
 using System.Reflection;
 using NapCatScript.Services;
+using NapCatScript.MesgHandle;
 
 namespace NapCatScript.Start;
 
@@ -28,38 +29,37 @@ public class Main_
     public static bool IsConnection = false;
     public static Random rand = new Random();
     public static List<PluginType> Plugins = [];
+    public static Send SendObject { get; private set; }
+    static Main_()
+    {
+        string? useUri = GetConf(URI);
+        string? httpUri = GetConf(HttpURI);
+        BotId = GetConf(BootId) ?? "";
+        if (string.IsNullOrEmpty(useUri) || string.IsNullOrEmpty(httpUri)) {
+            Console.WriteLine("配置文件已生成，请检查Uri配置");
+            Console.ReadLine();
+            Environment.Exit(0);
+        }
+        SocketUri = useUri;
+        HttpUri = httpUri;
+        RootId = GetConf(Config.RootId) ?? "";
+        SendObject = new Send(HttpUri);
+    }
     static void Main(string[] args)
     {
         LoadPlugin();
-        #region Main
         try {
-            string? useUri = GetConf(URI);
-            string? httpUri = GetConf(HttpURI);
-            BotId = GetConf(BootId) ?? "";
-            if (string.IsNullOrEmpty(useUri) || string.IsNullOrEmpty(httpUri)) {
-                Console.WriteLine("请检查Uri配置");
-                return;
-            }
-            SocketUri = useUri;
-            HttpUri = httpUri;
-            RootId = GetConf(Config.RootId) ?? "";
             //接收消息 并将有效消息存放到NoPMesgList
             Task.Run(Receive);
-
             //发送消息
             Task.Run(Send);
-
             while (true) {
                 _ = Console.ReadLine();
             }
-
         } catch (Exception e) {
             Log.Erro(e.Message + "\r\n" + e.StackTrace);
         }
-
-
     }
-    #endregion Main
 
     private static async void Receive()
     {

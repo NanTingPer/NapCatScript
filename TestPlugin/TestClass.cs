@@ -5,6 +5,7 @@ using static NapCatScript.Start.FAQ;
 
 using static NapCatScript.MesgHandle.Utils;
 using HUtils = NapCatScript.MesgHandle.Utils;
+using NapCatScript.Start;
 
 namespace TestPlugin;
 
