@@ -51,6 +51,4 @@ public static class SendMesg
         var content = new StringContent(msg, enc, contentType);
         return httpClient.PostAsync(httpuri, content);
     }
-
-
 }
