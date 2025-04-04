@@ -35,14 +35,17 @@ public class AtMsg : BaseMsg
 /// </summary>
 public class AtMsgJson : MsgJson
 {
+    public override string JsonText { get; set; }
     public AtMsgJson(string qqid)
     {
         Message = new AtMsgData(qqid);
+        JsonText = JsonSerializer.Serialize(this);
     }
 
     public AtMsgJson(string name, string qqid)
     {
         Message = new AtMsgData(name, qqid);
+        JsonText = JsonSerializer.Serialize(this);
     }
 
     [JsonPropertyName("message")]

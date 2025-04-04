@@ -25,17 +25,27 @@ public class MarkDownMsg : BaseMsg
 /// </summary>
 public class MarkDownJson : MsgJson
 {
-    public MarkDownJson(MarkDownJsonData data, string type = "text")
+    public MarkDownJson(MarkDownJsonData data)
     {
         Data = data;
-        Type = type;
+        JsonText = JsonSerializer.Serialize(this);
     }
+
+    public MarkDownJson(string content)
+    {
+        Data = new MarkDownJsonData(content);
+        JsonText = JsonSerializer.Serialize(this);
+    }
+
 
     [JsonPropertyName("type")]
     public string Type { get; set; } = "markdown";
 
     [JsonPropertyName("data")]
     public MarkDownJsonData Data { get; set; } = new MarkDownJsonData();
+
+    [JsonIgnore]
+    public override string JsonText { get; set; }
 
     public class MarkDownJsonData
     {

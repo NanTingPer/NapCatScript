@@ -47,6 +47,7 @@ public enum ArkSharePeerEnum
 /// </summary>
 public class ArkSharePeerReturn
 {
+    [JsonIgnore]
     public string ArkJson { get => Data_.ArkJson; }
 
     [JsonPropertyName("data")]

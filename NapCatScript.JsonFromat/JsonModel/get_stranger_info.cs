@@ -22,43 +22,57 @@ public class get_stranger_infoReturn
     /// <summary>
     /// 年龄
     /// </summary>
+    [JsonIgnore]
     public double Age { get => Data_.Age; }
     /// <summary>
     /// 是否为VIP
     /// </summary>
+    [JsonIgnore]
     public bool IsVip { get => Data_.IsVip; }
     /// <summary>
     /// 是否为年费VIP
     /// </summary>
+    [JsonIgnore]
     public bool IsYearsVip { get => Data_.IsYearsVip; }
     /// <summary>
     /// 登录天数
     /// </summary>
+    [JsonIgnore]
     public double LoginDays { get => Data_.LoginDays; }
     /// <summary>
     /// 个性签名
     /// </summary>
+    [JsonIgnore]
     public string LongNick { get => Data_.LongNick; }
     /// <summary>
     /// 昵称
     /// </summary>
+    [JsonIgnore]
     public string Nickname { get => Data_.Nickname; }
+    [JsonIgnore]
     public string Qid { get => Data_.Qid; }
     /// <summary>
     /// QQ等级
     /// </summary>
+    [JsonIgnore]
     public double QQLevel { get => Data_.QqLevel; }
+    [JsonIgnore]
     public double RegTime { get => Data_.RegTime; }
     /// <summary>
     /// 备注
     /// </summary>
+    [JsonIgnore]
     public string Remark { get => Data_.Remark; }
     /// <summary>
     /// 性别
     /// </summary>
+    [JsonIgnore]
     public string Sex { get => Data_.Sex; }
+    [JsonIgnore]
     public string Uid { get => Data_.Uid; }
+    [JsonIgnore]
     public string Uin { get => Data_.Uin; }
+    [JsonIgnore]
     public double UserId { get => Data_.UserId; }
 
     /// <summary>

@@ -29,6 +29,11 @@ public class MesgInfo
     /// </summary>
     public string MessageType { get; set; } = string.Empty;
 
+    public string GetId()
+    {
+        if (UserId != string.Empty) return UserId;
+        else return GroupId;
+    }
     public override string ToString()
     {
 

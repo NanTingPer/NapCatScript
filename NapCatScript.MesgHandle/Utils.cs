@@ -4,6 +4,8 @@ using NapCatScript.MesgHandle.Parses;
 using NapCatScript.JsonFromat.JsonModel;
 using System.Net.Http;
 using System.Net;
+using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace NapCatScript.MesgHandle;
 public static class Utils
@@ -72,12 +74,40 @@ public class Send
     public string SetQQAvatarAPI { get => HttpURI + nameof(set_qq_avatar); }
     public string SetSelfLongnickAPI { get => HttpURI + nameof(set_self_longnick); }
     public string UploadPrivateFileAPI { get => HttpURI + nameof(upload_private_file); }
+    public string SendPrivateMsg { get => HttpURI + "send_private_msg"; }
+    public string SendGroupMsg { get => HttpURI + "send_group_msg"; }
     public string HttpURI { get; set; } = "";
     public Send(string httpURI)
     {
         if (httpURI.EndsWith('/'))
             HttpURI = httpURI;
         else HttpURI = httpURI + '/';
+    }
+
+    ///<summary>
+    ///获取Msg消息URL 基本消息(API访问链接)
+    ///<para> uri是原始链接 例如: http://127.0.0.1:6666 </para>
+    ///</summary>
+    private string GetMsgSendToURI(MesgTo mesg)
+    {
+        switch (mesg) {
+            case MesgTo.group:
+                return HttpURI + "send_group_msg";
+            case MesgTo.user:
+                return HttpURI + "send_private_msg";
+        }
+        return "";
+    }
+
+    public MesgTo GetMesgTo(MesgInfo mesginfo, out string id)
+    {
+        if (mesginfo.MessageType == "group") {
+            id = mesginfo.GroupId;
+            return MesgTo.group;
+        } else {
+            id = mesginfo.UserId;
+            return MesgTo.user;
+        }
     }
     #region 上传私聊文件 upload_private_file
     /// <summary>
@@ -458,6 +488,47 @@ public class Send
         }
     }
     #endregion
+
+    #region 发送markDown
+    /// <summary>
+    /// 此方法发送的MarkDown用户id为123456. 昵称为 匿名
+    /// </summary>
+    /// <param name="id"> 群ID / 个人ID </param>
+    /// <param name="content"> 内容 </param>
+    /// <param name="type"> 类型 </param>
+    public async void SendMarkDown(string id, string content, MesgTo type)
+    {
+        var MarkDownJson = new MarkDownJson(content);
+        var 二级转发消息 = new TwoForwardMsgJson(MarkDownJson);
+        var 一级转发消息 = new ForwardData(二级转发消息);
+        ForwardMsgJson postContent =  new ForwardMsgJson(id, 一级转发消息, type);
+        string postContents = JsonSerializer.Serialize(postContent);
+
+        string POSTURI = HttpURI + "send_forward_msg";
+        HttpResponseMessage? postReturnContent = await SendMesg.Send(POSTURI, postContents);
+        await postReturnContent.Content.ReadAsStringAsync();
+    }
+
+    /// <summary>
+    /// 此方法发送的MarkDown 聊天记录消息用户为拉起用户
+    /// </summary>
+    /// <param name="id"> 群ID / 个人ID </param>
+    /// <param name="content"> 内容 </param>
+    /// <param name="type"> 类型 </param>
+    public async void SendMarkDown(string id, string content, MesgInfo mesg, MesgTo type)
+    {
+        var MarkDownJson = new MarkDownJson(content);
+        var 二级转发消息 = new TwoForwardMsgJson(mesg.UserId, mesg.UserName, MarkDownJson);
+        var 一级转发消息 = new ForwardData(mesg.UserId, mesg.UserName, 二级转发消息);
+        ForwardMsgJson postContent = new ForwardMsgJson(id, 一级转发消息, type);
+        string postContents = JsonSerializer.Serialize(postContent);
+
+        string POSTURI = HttpURI + "send_forward_msg";
+        HttpResponseMessage? postReturnContent = await SendMesg.Send(POSTURI, postContents);
+        await postReturnContent.Content.ReadAsStringAsync();
+    }
+
+    #endregion
 }
 
 public class SendCN
@@ -490,4 +561,13 @@ public class SendCN
     public void 设置个性签名(string 内容) => send.SetSelfLongnick(内容);
     public Task<bool> 上传私聊文件Async(string 用户ID, string 文件路径, string 名称) => send.UploadPrivateFileAsync(用户ID, 文件路径, 名称);
     public void 上传私聊文件(string 用户ID, string 文件路径, string 名称) => send.UploadPrivateFile(用户ID, 文件路径, 名称);
+    public void 发送MarkDown(string 目标, string 内容, MesgInfo 消息引用, MesgTo 去处) => send.SendMarkDown(目标, 内容, 消息引用, 去处);
+    /// <summary>
+    /// 此方法发送的MarkDown用户id为123456. 昵称为 匿名
+    /// </summary>
+    /// <param name="id"> 群ID / 个人ID </param>
+    /// <param name="content"> 内容 </param>
+    /// <param name="type"> 类型 </param>
+    public void 发送MarkDown(string 目标, string 内容, MesgTo 去处) => send.SendMarkDown(目标, 内容, 去处);
+
 }

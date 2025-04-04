@@ -1,4 +1,6 @@
-﻿namespace NapCatScript.JsonFromat.Mesgs;
+﻿using System.Text;
+
+namespace NapCatScript.JsonFromat.Mesgs;
 
 public class TwoForwardMsg : BaseMsg
 {
@@ -16,16 +18,26 @@ public class TwoForwardMsgJson : MsgJson
     public TwoForwardMsgJson(TwoForawrdMsgJsonData data)
     {
         Data = data;
+        JsonText = JsonSerializer.Serialize(this);
     }
 
     public TwoForwardMsgJson(string user_id, string nickname, List<MsgJson> contents)
     {
         Data = new TwoForawrdMsgJsonData(user_id, nickname, contents);
+        JsonText = JsonSerializer.Serialize(this);
     }
+
+    public TwoForwardMsgJson(string user_id, string nickname, MsgJson contents)
+    {
+        Data = new TwoForawrdMsgJsonData(user_id, nickname, [contents]);
+        JsonText = JsonSerializer.Serialize(this);
+    }
+
 
     public TwoForwardMsgJson(MsgJson content)
     {
         Data = new TwoForawrdMsgJsonData(content);
+        JsonText = JsonSerializer.Serialize(this);
     }
 
     /// <summary>
@@ -39,6 +51,8 @@ public class TwoForwardMsgJson : MsgJson
     /// </summary>
     [JsonPropertyName("data")]
     public TwoForawrdMsgJsonData Data { get; set; }
+    [JsonIgnore]
+    public override string JsonText { get; set; }
 }
 
 /// <summary>

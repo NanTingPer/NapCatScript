@@ -32,6 +32,7 @@ public class VideoMsgJson : MsgJson
     public VideoMsgJson(VideoMsgData data)
     {
         Data = data;
+        JsonText = JsonSerializer.Serialize(this);
     }
 
     [JsonPropertyName("type")]
@@ -39,6 +40,8 @@ public class VideoMsgJson : MsgJson
 
     [JsonPropertyName("data")]
     public VideoMsgData Data { get; set; }
+    [JsonIgnore]
+    public override string JsonText { get; set; }
 
     //JsonClass
 

@@ -29,6 +29,7 @@ public class RecordMsgJson : MsgJson
     public RecordMsgJson(RecordMsgData data)
     {
         Data = data;
+        JsonText = JsonSerializer.Serialize(this);
     }
 
     [JsonPropertyName("type")]
@@ -36,7 +37,7 @@ public class RecordMsgJson : MsgJson
 
     [JsonPropertyName("data")]
     public RecordMsgData Data { get; set; }
-
+    public override string JsonText { get; set; }
 
     public class RecordMsgData
     {

@@ -29,6 +29,14 @@ public class TextMsgJson : MsgJson
     {
         Data = data;
         Type = type;
+        JsonText = JsonSerializer.Serialize(this);
+    }
+
+    public TextMsgJson(string data, string type = "text")
+    {
+        Data = new TextMsgData(data);
+        Type = type;
+        JsonText = JsonSerializer.Serialize(this);
     }
 
     [JsonPropertyName("type")]
@@ -36,6 +44,8 @@ public class TextMsgJson : MsgJson
 
     [JsonPropertyName("data")]
     public TextMsgData Data { get; set; } = new TextMsgData();
+    [JsonIgnore]
+    public override string JsonText { get; set; }
 
     public class TextMsgData
     {

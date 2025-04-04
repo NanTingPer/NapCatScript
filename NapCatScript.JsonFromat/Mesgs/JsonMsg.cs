@@ -28,9 +28,12 @@ public class JsonMsg : BaseMsg
 /// </summary>
 public class JsonMsgJson : MsgJson
 {
+    [JsonIgnore]
+    public override string JsonText { get; set; }
     public JsonMsgJson(JsonMsgData data)
     {
         Data = data;
+        JsonText = JsonSerializer.Serialize(this);
     }
 
     [JsonPropertyName("type")]
