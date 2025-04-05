@@ -27,7 +27,7 @@ public class TestClass : PluginType
         mesgContent = Regex.Replace(mesgContent, @"\s", "");
         if (!mesgContent.StartsWith("亭亭$亭"))
             DeepSeekAPI.AddGroupMesg(mesg); //加入组
-        if (mesgContent.StartsWith(StartString) || mesgContent.StartsWith("亭亭")) {
+        if (mesgContent.Contains(StartString) || mesgContent.Contains("亭亭")) {
             try {
                 DeepSeekAPI.SendAsync(mesg, httpUri, mesgContent, CTokrn);
             } catch (Exception E) {

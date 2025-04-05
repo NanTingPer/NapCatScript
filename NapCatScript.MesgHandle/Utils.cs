@@ -386,7 +386,8 @@ public class Send
     {
         HttpResponseMessage? httpc = null;
         try {
-            httpc = await SendMesg.Send(ArkShareGroupAPI, new ArkShareGroup(group_id).ToString(), null);
+            var requestJson = new ArkShareGroup(group_id).ToString();
+            httpc = await SendMesg.Send(ArkShareGroupAPI, requestJson, null);
         } catch (Exception e){
             Loging.Log.Erro(e.Message, e.StackTrace);
             return null;

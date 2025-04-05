@@ -9,6 +9,7 @@ public class ArkShareGroup(string group_id) : RequestJson //获取推荐群聊�
 
     public class Root(string group_id)
     {
+        [JsonPropertyName("group_id")]
         public string Group_id { get; set; } = group_id;
     }
 }

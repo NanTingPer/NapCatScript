@@ -86,7 +86,6 @@ public class Main_
             await Task.Delay(1);
             if (NoPMesgList.Count <= 0)
                 continue;
-
             MesgInfo mesg = NoPMesgList.First();
             NoPMesgList.RemoveAt(0);
             Log.Info(mesg);
