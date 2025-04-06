@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Net;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
+using System.Linq;
 
 namespace NapCatScript.MesgHandle;
 public static class Utils
@@ -74,8 +75,9 @@ public class Send
     public string SetQQAvatarAPI { get => HttpURI + nameof(set_qq_avatar); }
     public string SetSelfLongnickAPI { get => HttpURI + nameof(set_self_longnick); }
     public string UploadPrivateFileAPI { get => HttpURI + nameof(upload_private_file); }
-    public string SendPrivateMsg { get => HttpURI + "send_private_msg"; }
-    public string SendGroupMsg { get => HttpURI + "send_group_msg"; }
+    public string SendPrivateMsgAPI { get => HttpURI + "send_private_msg"; }
+    public string SendGroupMsgAPI { get => HttpURI + "send_group_msg"; }
+    public string SendMsgAPI { get => HttpURI + "send_msg"; }
     public string HttpURI { get; set; } = "";
     public Send(string httpURI)
     {
@@ -529,6 +531,55 @@ public class Send
         await postReturnContent.Content.ReadAsStringAsync();
     }
 
+    public async void SendMarkDown(string id, MesgInfo mesg, List<string> markdownContents, MesgTo type)
+    {
+        List<MsgJson> contents = new List<MsgJson>();
+        foreach (var content in markdownContents)
+            contents.Add(new MarkDownJson(content));
+
+        var 二级转发消息 = new TwoForwardMsgJson(mesg.UserId, mesg.UserName, contents);
+        var 一级转发消息 = new ForwardData(mesg.UserId, mesg.UserName, 二级转发消息);
+        ForwardMsgJson postContent = new ForwardMsgJson(id, 一级转发消息, type);
+        string postContents = JsonSerializer.Serialize(postContent);
+
+        string POSTURI = HttpURI + "send_forward_msg";
+        HttpResponseMessage? postReturnContent = await SendMesg.Send(POSTURI, postContents);
+        await postReturnContent.Content.ReadAsStringAsync();
+    }
+
+    public void SendMarkDown(string id, MesgInfo mesg, MesgTo type, params string[] markdownContents) => SendMarkDown(id, mesg, markdownContents.ToList(), type);
+    #endregion
+
+    #region 发送消息
+    /// <summary>
+    /// 发送单一消息内容
+    /// </summary>
+    /// <param name="id"> 目标id </param>
+    /// <param name="type"> 私聊还是群聊 </param>
+    /// <param name="content"> 消息内容 </param>
+    public void SendMsg(string id, MesgTo type, MsgJson content) => SendMsg(id, type, new List<MsgJson>() { content });
+
+    /// <summary>
+    /// 发送消息
+    /// </summary>
+    /// <param name="id"> 目标id </param>
+    /// <param name="type"> 私聊还是群聊 </param>
+    /// <param name="contents"> 消息内容 </param>
+    public void SendMsg(string id, MesgTo type, params MsgJson[] contents) => SendMsg(id, type, contents.ToList());
+
+    /// <summary>
+    /// 发送消息
+    /// </summary>
+    /// <param name="id"> 目标id </param>
+    /// <param name="type"> 私聊还是群聊 </param>
+    /// <param name="contents"> 消息内容 </param>
+    public async void SendMsg(string id, MesgTo type, List<MsgJson> contents)
+    {
+        SendMsgJson postJson = new SendMsgJson(id, contents, type);
+        string requestUri = GetMsgSendToURI(type);
+        HttpResponseMessage message = await SendMesg.Send(requestUri, postJson.JsonText);
+        string content = await message.Content.ReadAsStringAsync();
+    }
     #endregion
 }
 
@@ -570,5 +621,6 @@ public class SendCN
     /// <param name="content"> 内容 </param>
     /// <param name="type"> 类型 </param>
     public void 发送MarkDown(string 目标, string 内容, MesgTo 去处) => send.SendMarkDown(目标, 内容, 去处);
-
+    public void 发送MarkDown(string 目标, MesgInfo 来源的方法引用, MesgTo 去处, params string[] 内容集) => send.SendMarkDown(目标, 来源的方法引用, 去处, 内容集);
+    public void 发送MarkDown(string 目标, MesgInfo 来源的方法引用, List<string> 内容集, MesgTo 去处) => send.SendMarkDown(目标, 来源的方法引用, 内容集, 去处);
 }

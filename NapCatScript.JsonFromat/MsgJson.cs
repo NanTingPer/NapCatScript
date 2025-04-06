@@ -21,6 +21,7 @@ namespace NapCatScript.JsonFromat;
 [JsonDerivedType(typeof(VideoMsgJson))]
 [JsonDerivedType(typeof(TwoForwardMsgJson))]
 [JsonDerivedType(typeof(MarkDownJson))]
+[JsonDerivedType(typeof(AtMsgJson))]
 public abstract class MsgJson
 {
     [JsonIgnore]

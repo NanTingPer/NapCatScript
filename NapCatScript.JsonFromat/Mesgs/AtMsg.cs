@@ -35,21 +35,22 @@ public class AtMsg : BaseMsg
 /// </summary>
 public class AtMsgJson : MsgJson
 {
+    [JsonIgnore]
     public override string JsonText { get; set; }
     public AtMsgJson(string qqid)
     {
-        Message = new AtMsgData(qqid);
+        Data = new AtMsgData(qqid);
         JsonText = JsonSerializer.Serialize(this);
     }
 
     public AtMsgJson(string name, string qqid)
     {
-        Message = new AtMsgData(name, qqid);
+        Data = new AtMsgData(name, qqid);
         JsonText = JsonSerializer.Serialize(this);
     }
 
-    [JsonPropertyName("message")]
-    public AtMsgData Message { get; set; }
+    [JsonPropertyName("data")]
+    public AtMsgData Data { get; set; }
 
     [JsonPropertyName("type")]
     public string Type { get; set; } = MsgType.at.ToString();

@@ -5,6 +5,8 @@ using Config = NapCatScript.Services.Config;
 using System.Reflection;
 using NapCatScript.Services;
 using NapCatScript.MesgHandle;
+using NapCatScript.JsonFromat.Mesgs;
+using NapCatScript.JsonFromat;
 
 namespace NapCatScript.Start;
 
@@ -82,16 +84,28 @@ public class Main_
 
     private static async void Send()
     {
+        Send sned = new Send(HttpUri);
         while (true) {
             await Task.Delay(1);
             if (NoPMesgList.Count <= 0)
                 continue;
             MesgInfo mesg = NoPMesgList.First();
+            //interfaceTest(sned); // Test
             NoPMesgList.RemoveAt(0);
             Log.Info(mesg);
             MService.SetAsync(mesg);
             Plugins.ForEach(f => f.Run(mesg, HttpUri));
         }
+    }
+
+    private static void interfaceTest(Send send)
+    {
+        var contents = new List<MsgJson>()
+        {
+            new AtMsgJson("qqid"),
+            new TextMsgJson("sendMsgText"),
+        };
+        send.SendMsg("qqid", MesgTo.user, contents);
     }
 
     private static void LoadPlugin()

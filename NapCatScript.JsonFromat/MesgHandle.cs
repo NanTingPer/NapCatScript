@@ -29,16 +29,6 @@ public class MesgHandle : BaseMsg
         JsonElement = JsonSerializer.SerializeToElement(root);
         JsonDocument = JsonSerializer.SerializeToDocument(root);
         JsonObject = root;
-        //if (mestype == MesgTo.group) {
-        //    string[] strings = JsonText.Split("user_id");
-        //    StringBuilder sbuilder = new StringBuilder();
-        //    sbuilder.Append(strings[0]);
-        //    sbuilder.Append("group_id");
-        //    for (int i = 1; i < strings.Length; i++) {
-        //        sbuilder.Append(strings[i]);
-        //    }
-        //    JsonText = sbuilder.ToString();
-        //}
     }
 
 
@@ -49,13 +39,19 @@ public class MesgHandle : BaseMsg
             switch (sendTo) {
                 case MesgTo.group:
                     Group_id = user_id;
+                    Message_Type = "group";
                     break;
                 case MesgTo.user:
                     User_id = user_id;
+                    Message_Type = "private";
                     break;
             }
+            Message_Type ??= "private";
             Message = message;
         }
+
+        [JsonPropertyName("message_type")]
+        public string Message_Type { get; set; }
 
         [JsonPropertyName("user_id")]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
