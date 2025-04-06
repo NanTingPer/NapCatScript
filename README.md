@@ -1,5 +1,5 @@
 # NapCatScript
-使用NapCat作为前端的一个Bot后端
+基于NapCat的QQBot
 
 # 插件开发
 
