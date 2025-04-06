@@ -40,6 +40,7 @@ public class DeepSeekAPI
                 content = await GetUpDownContent<DeepSeekGroupModel>(mesg);
                 prompt2 = "现在你是消息总结专家，总结时最好说明谁拉起的话题，最后一条消息是总结要求<[CQ:XXX]总结群消息,YYYYY>其中YYYYY是总结要求。无要求就简略总结";
                 content += $"#####{content}";
+                Console.WriteLine("DeepSeekAPI: 总结");
                 break;
             default:
                 content = await GetUpDownContent<DeepSeekModel>(mesg);
@@ -77,8 +78,14 @@ public class DeepSeekAPI
         systemContent.Append("。当前时间:");
         systemContent.Append(DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss"));
         RequestJson rjson = new RequestJson(systemContent.ToString(), content);
-        string jsonContent = JsonSerializer.Serialize(rjson);
-
+        string jsonContent;
+        try {
+            jsonContent = JsonSerializer.Serialize(rjson);
+        } catch (Exception e) {
+            Log.Erro("序列化出错", e.Message, e.StackTrace);
+            SendAsync(mesg, httpURI, "呃唔，请求失败了，好像是序列化的问题。不用担心啦，没挂哦~", tk);
+            return;
+        }
         #region del
         //string jsonContent =
         //    $$"""
