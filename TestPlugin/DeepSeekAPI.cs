@@ -1,4 +1,5 @@
 ﻿using NapCatScript.Start;
+using System.Text.Json.Serialization;
 using static NapCatScript.MesgHandle.Utils;
 
 namespace TestPlugin;
@@ -68,38 +69,50 @@ public class DeepSeekAPI
         }
         活跃数++;
         #region json
-        string jsonContent =
-            $$"""
-            {
-              "messages": [
-                {
-                  "content": "{{prompt2}}\n设定如下:{{standard}}。当前时间:{{DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss")}}",
-                  "role": "system"
-                },
-                {
-                    "role": "user",
-                    "content": "{{content.Replace("\"", "")}}"
-                }
-              ],
-              "model": "deepseek-chat",
-              "frequency_penalty": 0,
-              "max_tokens": 2500,
-              "presence_penalty": 0,
-              "response_format": {
-                "type": "text"
-              },
-              "stop": null,
-              "stream": false,
-              "stream_options": null,
-              "temperature": 1,
-              "top_p": 1,
-              "tools": null,
-              "tool_choice": "none",
-              "logprobs": false,
-              "top_logprobs": null
-            }
-            """;
-        jsonContent = Regex.Replace(jsonContent, @"\s", "");
+        StringBuilder systemContent = new StringBuilder();
+        systemContent.Append(prompt2);
+        systemContent.Append("\\n");
+        systemContent.Append("设定如下:");
+        systemContent.Append(standard);
+        systemContent.Append("。当前时间:");
+        systemContent.Append(DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss"));
+        RequestJson rjson = new RequestJson(systemContent.ToString(), content);
+        string jsonContent = JsonSerializer.Serialize(rjson);
+
+        #region del
+        //string jsonContent =
+        //    $$"""
+        //    {
+        //      "messages": [
+        //        {
+        //          "content": "{{prompt2}}\n设定如下:{{standard}}。当前时间:{{DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss")}}",
+        //          "role": "system"
+        //        },
+        //        {
+        //            "role": "user",
+        //            "content": "{{content.Replace("\"", "")}}"
+        //        }
+        //      ],
+        //      "model": "deepseek-chat",
+        //      "frequency_penalty": 0,
+        //      "max_tokens": 2500,
+        //      "presence_penalty": 0,
+        //      "response_format": {
+        //        "type": "text"
+        //      },
+        //      "stop": null,
+        //      "stream": false,
+        //      "stream_options": null,
+        //      "temperature": 1,
+        //      "top_p": 1,
+        //      "tools": null,
+        //      "tool_choice": "none",
+        //      "logprobs": false,
+        //      "top_logprobs": null
+        //    }
+        //    """;
+        //jsonContent = Regex.Replace(jsonContent, @"\s", "");
+        #endregion del
         #endregion
         var hand = new Dictionary<string, string>()
         {
@@ -412,5 +425,82 @@ public class DeepSeekAPI
         /// 继续
         /// </summary>
         GoOn
+    }
+
+    public class RequestJson
+    {
+        public RequestJson(string systemContent, string userContent)
+        {
+            Messages = new List<Message>()
+            {
+                new Message(systemContent, "system"),
+                new Message(userContent, "user")
+            };
+        }
+
+        [JsonPropertyName("messages")]
+        public List<Message> Messages { get; set; }
+
+        [JsonPropertyName("model")]
+        public string Model { get; set; } = "deepseek-chat";
+
+        [JsonPropertyName("frequency_penalty")]
+        public int Frequency_penalty { get; set; } = 0;
+
+        [JsonPropertyName("max_tokens")]
+        public int Max_Tokens { get; set; } = 2500;
+
+        [JsonPropertyName("response_format")]
+        public ResponseFormat Response_Format { get; set; } = new ResponseFormat();
+
+        [JsonPropertyName("stop")]
+        public string? Stop { get; set; } = null;
+
+        [JsonPropertyName("stream")]
+        public bool Stream { get; set; } = false;
+
+        [JsonPropertyName("stream_options")]
+        public string? Stream_Options { get; set; } = null;
+
+        [JsonPropertyName("temperature")]
+        public int Temperature { get; set; } = 1;
+
+        [JsonPropertyName("top_p")]
+        public int Top_p { get; set; } = 1;
+
+        [JsonPropertyName("tools")]
+        public string? Tools { get; set; } = null;
+
+        [JsonPropertyName("tool_choice")]
+        public string Tool_Choice { get; set; } = "none";
+
+        [JsonPropertyName("logprobs")]
+        public bool Logprobs { get; set; } = false;
+
+        [JsonPropertyName("top_logprobs")]
+        public string? Top_Logprobs { get; set; } = null;
+        public class Message
+        {
+            public Message(string content, string role)
+            {
+                Content = content;
+                Role = role;
+            }
+            [JsonPropertyName("content")]
+            public string Content { get; set; }
+
+            [JsonPropertyName("role")]
+            public string Role { get; set; }
+        }
+
+        public class ResponseFormat
+        {
+            public ResponseFormat(string type = "text")
+            {
+                Type = type;
+            }
+            [JsonPropertyName("type")]
+            public string Type { get; set; }
+        }
     }
 }
