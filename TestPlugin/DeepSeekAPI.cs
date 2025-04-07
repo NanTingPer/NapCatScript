@@ -1,4 +1,5 @@
-﻿using NapCatScript.Start;
+﻿using NapCatScript.JsonFromat;
+using NapCatScript.Start;
 using System.Text.Json.Serialization;
 using static NapCatScript.MesgHandle.Utils;
 
@@ -38,7 +39,7 @@ public class DeepSeekAPI
                 break;
             case GoTo.Con:
                 content = await GetUpDownContent<DeepSeekGroupModel>(mesg);
-                prompt2 = "现在你是消息总结专家，总结时最好说明谁拉起的话题，最后一条消息是总结要求<[CQ:XXX]总结群消息,YYYYY>其中YYYYY是总结要求。无要求就简略总结";
+                prompt2 = "现在你是消息总结专家，总结时最好说明谁拉起的话题，最后一条消息是总结要求<[CQ:XXX]总结群消息,YYYYY>其中YYYYY是总结要求。无要求就简略总结。以markdown格式输出，不要带```markdown。最大文本量不超1000";
                 content += $"#####{content}";
                 Console.WriteLine("DeepSeekAPI: 总结");
                 break;
@@ -151,7 +152,12 @@ public class DeepSeekAPI
                     if (message.TryGetProperty("content", out var recContent)) {
                         try {
                             var text = recContent.GetString()/*.Substring(3)*/;
-                            SendTextAsync(mesg, httpURI, text, tk);
+                            if (@goto != GoTo.Con)
+                                SendTextAsync(mesg, httpURI, text, tk);
+                            else {
+                                MesgTo msgto = TestClass.SendObj!.GetMesgTo(mesg, out var id);
+                                TestClass.SendObj.SendMarkDown(id, text, msgto);
+                            }
                             await UpDownContent(recContent.GetString(), mesg);
                             AddGroupMesg(mesg, recContent.GetString()); //加入组
                         } catch (Exception e){

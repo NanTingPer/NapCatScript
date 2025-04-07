@@ -6,6 +6,7 @@ using static NapCatScript.Start.FAQ;
 using static NapCatScript.MesgHandle.Utils;
 using HUtils = NapCatScript.MesgHandle.Utils;
 using NapCatScript.Start;
+using NapCatScript.MesgHandle;
 
 namespace TestPlugin;
 
@@ -13,12 +14,14 @@ public class TestClass : PluginType
 {
     public static string DeepSeekKey { get; set; } = "";
     public static string StartString { get; set; } = "";
+    public static Send? SendObj { get; private set; } 
     public override void Init()
     {
         StartString = $"[CQ:at,qq={BotId}]";
         StartString = Regex.Replace(StartString, @"\s", "");
         DeepSeekKey = GetConf(Config.DeepSeekKey) ?? "";
         Console.WriteLine("Hello Is My Plugin!");
+        SendObj = Send;
     }
 
     public override async Task Run(MesgInfo mesg, string httpUri)
