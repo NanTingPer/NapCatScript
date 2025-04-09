@@ -31,6 +31,10 @@ public class Loging
     {
         foreach (var obj in content) {
             Writer.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss") + " Erro :" + obj.ToString());
+            var tempColor = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine(obj.ToString());
+            Console.ForegroundColor = tempColor;
         }
         Writer.Flush();
     }

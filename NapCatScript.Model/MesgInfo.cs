@@ -29,6 +29,11 @@ public class MesgInfo
     /// </summary>
     public string MessageType { get; set; } = string.Empty;
 
+    /// <summary>
+    /// 心跳
+    /// </summary>
+    public long lifeTime = 0;
+
     public string GetId()
     {
         if (UserId != string.Empty) return UserId;

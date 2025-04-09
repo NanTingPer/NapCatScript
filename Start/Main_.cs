@@ -7,6 +7,10 @@ using NapCatScript.Services;
 using NapCatScript.MesgHandle;
 using NapCatScript.JsonFromat.Mesgs;
 using NapCatScript.JsonFromat;
+using System.Net.Sockets;
+using System;
+using System.Threading.Tasks;
+using System.Data;
 
 namespace NapCatScript.Start;
 
@@ -25,12 +29,20 @@ public class Main_
     public static string HttpUri { get; set; } = "";
     public static string RootId { get; set; } = "";
     public static string BotId { get; set; } = "";
-    public static ClientWebSocket Socket { get; } = new ClientWebSocket();
+    public static ClientWebSocket Socket { get; private set; } = new ClientWebSocket();
     public static CancellationToken CTokrn { get; } = new CancellationToken();
     public static List<MesgInfo> NoPMesgList { get; } = [];
     public static bool IsConnection = false;
     public static Random rand = new Random();
     public static List<PluginType> Plugins = [];
+    public static long lifeTime = 0;
+    public static long oldLifeTime = 0;
+    public static long seconds = 0;
+
+    /// <summary>
+    /// ws状态
+    /// </summary>
+    public static ConnectionState state = ConnectionState.Open;
     public static Send SendObject { get; private set; }
     static Main_()
     {
@@ -55,6 +67,9 @@ public class Main_
             Task.Run(Receive);
             //发送消息
             Task.Run(Send);
+            //心跳
+            Task.Run(LifeCycle);
+
             while (true) {
                 _ = Console.ReadLine();
             }
@@ -63,6 +78,9 @@ public class Main_
         }
     }
 
+    /// <summary>
+    /// 建立链接并接受消息
+    /// </summary>
     private static async void Receive()
     {
         await 建立连接(Socket, SocketUri ??= "1");
@@ -71,17 +89,21 @@ public class Main_
             try {
                 MesgInfo? mesg = await Socket.Receive(CTokrn); //收到的消息
                 if (mesg is not null) {
+                    if (mesg.lifeTime != 0)
+                        SetLifeTime(mesg.lifeTime);
                     NoPMesgList.Add(mesg);
                     Console.WriteLine(mesg);
                 }
             } catch (Exception e) {
-                Console.WriteLine($"消息接收发生错误: {e.Message}\r\n {e.StackTrace}");
                 Log.Erro("消息接收发生错误: ", e.Message, e.StackTrace);
             }
 
         }
     }
 
+    /// <summary>
+    /// 每收到消息 就发送
+    /// </summary>
     private static async void Send()
     {
         Send sned = new Send(HttpUri);
@@ -151,11 +173,61 @@ public class Main_
             Console.WriteLine("连接成功");
             IsConnection = true;
         } catch (Exception e){
-            Console.WriteLine(e.Message);
-            Console.WriteLine("建立连接: 请检查URI是否有效，服务是否正常可访问");
-            Log.Erro(e.Message, e.StackTrace, "建立连接: 请检查URI是否有效，服务是否正常可访问");
+            Log.Erro("建立连接: 请检查URI是否有效，服务是否正常可访问", e.Message, e.StackTrace);
             Environment.Exit(0);
         }
         SetConf(URI, uri);
+    }
+
+    /// <summary>
+    /// 重新链接
+    /// </summary>
+    /// <returns>成功返回true</returns>
+    private static async Task<bool> ReConnect(string uri)
+    {
+        try {
+            Socket.Abort();
+            //await Socket.CloseAsync(WebSocketCloseStatus.Empty, "", CTokrn);
+            Socket = new ClientWebSocket();
+            await Socket.ConnectAsync(new Uri(uri), CTokrn);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+
+    /// <summary>
+    /// 设置心跳时间
+    /// </summary>
+    private static void SetLifeTime(long time)
+    {
+        oldLifeTime = lifeTime;
+        lifeTime = time;
+    }
+
+    /// <summary>
+    /// 心跳
+    /// </summary>
+    private static async Task LifeCycle()
+    {
+        while (true) {
+            //1000是一秒
+            await Task.Delay(1000); //500秒
+            seconds++;
+            if (!IsConnection)
+                continue;
+            //DateTime.Now.Ticks
+            if(seconds % 9 == 0 && (Socket.State == WebSocketState.Closed || Socket.State == WebSocketState.CloseSent || Socket.State == WebSocketState.CloseReceived || Socket.State == WebSocketState.Aborted)) {
+                var temp = Console.ForegroundColor;
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("重新连接");
+                Console.ForegroundColor = temp;
+                if (await ReConnect(SocketUri))
+                    state = ConnectionState.Open;
+                else
+                    state = ConnectionState.Closed;
+            }
+        }
     }
 }
