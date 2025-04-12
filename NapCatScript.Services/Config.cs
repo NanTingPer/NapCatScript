@@ -50,7 +50,7 @@ public static class Config
         CreateConfFile(ConfigName);
         AConfig.Clear();
         string allText = File.ReadAllText(CreateConfFile(ConfigName));
-        string[] allconf = allText.Split("\r\n");
+        string[] allconf = allText.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries/*"\r\n"*/);
         for (int i = 0; i < allconf.Length; i++) {
             string c = allconf[i];
             if (string.IsNullOrEmpty(c))
