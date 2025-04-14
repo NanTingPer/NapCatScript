@@ -44,7 +44,7 @@ public class SQLiteService
         try {
             oldData = await Get<T>(keyValue.ToString());
         } catch (Exception e) {
-            Console.WriteLine("没有此数据");
+            Loging.Log.Erro("没有此数据: ", e.Message, e.StackTrace);
             return;
         }
 
@@ -83,7 +83,7 @@ public class SQLiteService
             try {
                 await Delete<T>(propty.GetValue(obj));
             } catch (Exception e) {
-                Console.WriteLine("删除失败:  " + e.Message);
+                Loging.Log.Erro("数据删除失败:  " + e.Message, e.StackTrace);
             }
         }
     }
@@ -106,19 +106,16 @@ public class SQLiteService
             await CreateTable<T>();
             var keyProperty = typeof(T).GetProperty("Key");
             if (keyProperty == null) {
-                Console.WriteLine("未找到Key属性");
                 return;
             }
             var keyValue = keyProperty.GetValue(obj);
             var existing = await Connection.FindAsync<T>(keyValue);
             if (existing == null) {
                 await Connection.InsertAsync(obj);
-                Console.WriteLine("插入成功");
             } else {
-                Console.WriteLine("已存在");
             }
         } catch (Exception ex) {
-            Console.WriteLine($"插入失败: {ex.Message}");
+            Loging.Log.Erro($"数据插入失败: {ex.Message}", ex.StackTrace);
         }
 
         //try {

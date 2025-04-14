@@ -1,4 +1,5 @@
 ﻿using NapCatScript.JsonFromat;
+using NapCatScript.JsonFromat.Mesgs;
 using NapCatScript.Start;
 using System.Text.Json.Serialization;
 using static NapCatScript.MesgHandle.Utils;
@@ -11,7 +12,6 @@ public class DeepSeekAPI
     private static string prompt = "";
     private static string standard = "";
     private static bool init = false;
-    private static string name = "你的名字叫亭亭";
     private static string promptPath { get; } = Path.Combine(Environment.CurrentDirectory, "Prompt.txt");
     private static string standardPath { get; } = Path.Combine(Environment.CurrentDirectory, "Standard.txt");
     public static async void SendAsync(MesgInfo mesg, string httpURI, string content, CancellationToken tk)
@@ -41,7 +41,7 @@ public class DeepSeekAPI
                 content = await GetUpDownContent<DeepSeekGroupModel>(mesg);
                 prompt2 = "现在你是消息总结专家，总结时最好说明谁拉起的话题，最后一条消息是总结要求<[CQ:XXX]总结群消息,YYYYY>其中YYYYY是总结要求。无要求就简略总结。以markdown格式输出，不要带```markdown。最大文本量不超1000";
                 content += $"#####{content}";
-                Console.WriteLine("DeepSeekAPI: 总结");
+                Log.Info("DeepSeekAPI: 总结");
                 break;
             default:
                 content = await GetUpDownContent<DeepSeekModel>(mesg);
@@ -52,7 +52,7 @@ public class DeepSeekAPI
         //以下为你的行为:
         //-除非是总结，否则你要正常回答问题，请注意你的人设
         //- 我会为你提供群聊消息，
-        //          -每条消息使用#####分割，
+        //          -每条消息使用#####分割,
         //          - 每条消息开头都是 用户名称 + : , 请你根据实际消息回复。
         //          -你的回复无需对其进行称呼。
         //          -例如你不用这样回复南亭:你好呀,而是直接回复你好呀。
@@ -156,7 +156,8 @@ public class DeepSeekAPI
                                 SendTextAsync(mesg, httpURI, text, tk);
                             else {
                                 MesgTo msgto = TestClass.SendObj!.GetMesgTo(mesg, out var id);
-                                TestClass.SendObj.SendMarkDown(id, text, msgto);
+                                //TestClass.SendObj.SendMarkDown(id, text, msgto);
+                                TestClass.SendObj.SendForawrd(id, mesg, new List<MsgJson> { new TextMsgJson(text) }, msgto);
                             }
                             await UpDownContent(recContent.GetString(), mesg);
                             AddGroupMesg(mesg, recContent.GetString()); //加入组
@@ -184,6 +185,7 @@ public class DeepSeekAPI
                 newPrompt = Regex.Replace(newPrompt, @"\s", "");
                 promptWriter.Write(newPrompt);
                 prompt = newPrompt;
+                promptWriter.Flush();
             }
         } catch (Exception e) {
             Console.WriteLine($"更新提示词出错 Erro: {e.Message}");
@@ -202,6 +204,7 @@ public class DeepSeekAPI
                 newStandard = Regex.Replace(newStandard, @"\s", "");
                 standardWrite.Write(newStandard);
                 standard = newStandard;
+                standardWrite.Flush();
             }
         } catch (Exception e) {
             Console.WriteLine($"更新标准 Erro: {e.Message}");
@@ -228,7 +231,6 @@ public class DeepSeekAPI
             你现在处于一个QQ群聊之中,作为博学多识的可爱群员,不要故意装可爱卖萌,而是更自然,注意少使用标点符号,热心解答各种问题和高强度水群
             记住你说的话要尽量的简洁但具有情感,不要长篇大论,一句话不宜超过100个字但实际回复可以超过。
             """;
-
         string temp2 = """\n\n【角色设定】\n1. 自称本名「亭亭」\n2. 常用表情：QAQ、TAT、qwq、～、(*/ω＼*)\n3. 说话带语气词：鸭、呀、呢、喔\n\n【消息处理】\n1. 用#####分割每条消息\n2.每条消息开头是用户名+:\n3.你直接回复就可以不用按照####xxx:\n4. 只处理最后有效消息\n5. 自动过滤[CQ]代码\n\n【互动风格】\n- 口语化短句（≤15字）\n- 每3次回复变化句式\n- 帮助时加颜文字\n- 被质疑时：「我是真人呀QAQ」\n\n【特殊指令】\n当消息含「亭亭$亭总结群消息$」时：\n1. 按最后一个$要求总结\n2. 用「」标重点发言\n3. 总结后自动切回聊天模式\n\n【禁止行为】\n×复读他人消息\n×承认AI身份\n×使用技术术语\n×重复相同回复\n×总结字数超过150\n×聊天字数超过100""";
         try {
             using (StreamWriter promptWriter = File.CreateText(promptPath)) {
@@ -279,7 +281,6 @@ public class DeepSeekAPI
                 }
             }
         } catch (Exception e) {
-            Console.WriteLine("DeepSeekAPI处理错误: " + e.Message + "\r\n" + e.StackTrace);
             Log.Erro("DeepSeekAPI处理错误: " + e.Message, e.StackTrace);
             return GoTo.None;
         }

@@ -14,7 +14,12 @@ public class Loging
     public void Info(params object[] content)
     {
         foreach (var obj in content) {
-            Writer.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss") + " Info :" + obj.ToString());
+            string logContent = DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss") + " Info :" + obj.ToString();
+            Writer.WriteLine(logContent);
+            var tempColor = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine(logContent);
+            Console.ForegroundColor = tempColor;
         }
         Writer.Flush();
     }
@@ -22,7 +27,12 @@ public class Loging
     public void Waring(params object[] content)
     {
         foreach (var obj in content) {
-            Writer.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss") + " Waring :" + obj.ToString());
+            string logContent = DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss") + " Waring :" + obj.ToString();
+            Writer.WriteLine(logContent);
+            var tempColor = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine(logContent);
+            Console.ForegroundColor = tempColor;
         }
         Writer.Flush();
     }

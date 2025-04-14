@@ -550,6 +550,22 @@ public class Send
     public void SendMarkDown(string id, MesgInfo mesg, MesgTo type, params string[] markdownContents) => SendMarkDown(id, mesg, markdownContents.ToList(), type);
     #endregion
 
+    public async void SendForawrd(string id, MesgInfo mesgInfo, IEnumerable<MsgJson> msgs, MesgTo mesgTo)
+    {
+        List<ForwardData> fd = new List<ForwardData>();
+        foreach (var json in msgs) {
+            fd.Add(new ForwardData(mesgInfo.UserId, mesgInfo.UserName, json));
+        }
+        var fmj = new ForwardMsgJson(id, fd, mesgTo);
+        string RequtContent = JsonSerializer.Serialize(fmj);
+        string POSTURI = HttpURI + "send_forward_msg";
+        try {
+            await SendMesg.Send(POSTURI, RequtContent);
+        } catch (Exception e) {
+            Loging.Log.Erro(e.Message, e.StackTrace);
+        }
+    }
+
     #region 发送消息
     /// <summary>
     /// 发送单一消息内容

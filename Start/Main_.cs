@@ -92,7 +92,7 @@ public class Main_
                     if (mesg.lifeTime != 0)
                         SetLifeTime(mesg.lifeTime);
                     NoPMesgList.Add(mesg);
-                    Console.WriteLine(mesg);
+                    //Console.WriteLine(mesg);
                 }
             } catch (Exception e) {
                 Log.Erro("消息接收发生错误: ", e.Message, e.StackTrace);
@@ -116,7 +116,13 @@ public class Main_
             NoPMesgList.RemoveAt(0);
             Log.Info(mesg);
             MService.SetAsync(mesg);
-            Plugins.ForEach(f => f.Run(mesg, HttpUri));
+            foreach (var pType in Plugins) {
+                try {
+                    pType.Run(mesg, HttpUri);
+                } catch (Exception e) {
+                    Log.Erro($"插件:{pType.GetType().FullName}", e.Message, e.StackTrace);
+                }
+            }
         }
     }
 

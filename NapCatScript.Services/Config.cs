@@ -62,7 +62,7 @@ public static class Config
     }
 
     /// <summary>
-    /// 获取配置值
+    /// 获取配置值, 不存在则创建
     /// </summary>
     /// <param name="confName"> 配置名 </param>
     public static string? GetConf(string confName)

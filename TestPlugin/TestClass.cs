@@ -12,9 +12,18 @@ namespace TestPlugin;
 
 public class TestClass : PluginType
 {
+    public const string SKNAME = "DeepSeekRes";
     public static string DeepSeekKey { get; set; } = "";
     public static string StartString { get; set; } = "";
-    public static Send? SendObj { get; private set; } 
+    public static Send? SendObj { get; private set; }
+    public static string SkName { get; set; }
+
+    static TestClass()
+    {
+        SkName = Config.GetConf(SKNAME) ?? "亭亭";
+        SkName = SkName == "" ? "亭亭" : SkName;
+    }
+
     public override void Init()
     {
         StartString = $"[CQ:at,qq={BotId}]";
@@ -28,24 +37,9 @@ public class TestClass : PluginType
     {
         string mesgContent = mesg.MessageContent;
         mesgContent = Regex.Replace(mesgContent, @"\s", "");
-        if (!mesgContent.StartsWith("亭亭$亭"))
-            DeepSeekAPI.AddGroupMesg(mesg); //加入组
-        if (mesgContent.Contains(StartString) || mesgContent.Contains("亭亭")) {
-            try {
-                DeepSeekAPI.SendAsync(mesg, httpUri, mesgContent, CTokrn);
-            } catch (Exception E) {
-                Console.WriteLine($"DeepSeek错误: {E.Message} \r\n {E.StackTrace}");
-                Log.Erro(E.Message, E.StackTrace);
-            }
-            //continue;
-            return;
-        }
 
-        var co = await FAQI.Get(mesgContent);
-        if (co is not null) {
-            SendTextAsync(mesg, HttpUri, $"{co.Value}\r\n----来自:{co.UserName}", CTokrn);
-            //continue;
-            return;
+        if(mesg.MessageContent.Contains("总结群消息")) {
+            int a = 0;
         }
 
         if (mesgContent.Trim().StartsWith('.')) {
@@ -78,13 +72,39 @@ public class TestClass : PluginType
                                 2. 使用".删除FAQ#" 可以删除FAQ 例      .删除FAQ#灾厄是什么
                             
                             """, CTokrn);
-                return;// continue;
+                // continue;
+                return;
             }
-
             txtContent = await CalMapping.GetMap(txtContent);
             string filePath = Path.Combine(Environment.CurrentDirectory, "Cal", txtContent + ".png");
             string sendUrl = HUtils.GetMsgURL(HttpUri, mesg, out MesgTo MESGTO);
             CalImage.SendAsync(mesg, txtContent, filePath, sendUrl, MESGTO);
+            return;
+        }
+
+        var co = await FAQI.Get(mesgContent);
+        if (co is not null) {
+            SendTextAsync(mesg, HttpUri, $"{co.Value}\r\n----来自:{co.UserName}", CTokrn);
+            //continue;
+            return;
+        }
+
+        if (!mesgContent.StartsWith("亭亭$亭"))
+            DeepSeekAPI.AddGroupMesg(mesg); //加入组
+
+        if (string.IsNullOrEmpty(BotId)) {
+            Log.Waring("配置文件中BotId未填, 无法使用DeepSeekAPI服务");
+            return;
+        }
+        if (mesgContent.Contains(StartString) || mesgContent.Contains(SkName)) {
+            try {
+                DeepSeekAPI.SendAsync(mesg, httpUri, mesgContent, CTokrn);
+            } catch (Exception E) {
+                Console.WriteLine($"DeepSeek错误: {E.Message} \r\n {E.StackTrace}");
+                Log.Erro(E.Message, E.StackTrace);
+            }
+            //continue;
+            return;
         }
     }
 }
