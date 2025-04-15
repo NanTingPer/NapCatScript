@@ -65,8 +65,14 @@ public class Main_
         try {
             //接收消息 并将有效消息存放到NoPMesgList
             Task.Run(Receive);
+#if DEBUG
+            
+#endif
+
+#if RELEASE
             //发送消息
             Task.Run(Send);
+#endif
             //心跳
             Task.Run(LifeCycle);
 
