@@ -4,8 +4,6 @@ using NapCatScript.MesgHandle.Parses;
 using NapCatScript.JsonFromat.JsonModel;
 using System.Net.Http;
 using System.Net;
-using System.Threading.Tasks;
-using System.Text.RegularExpressions;
 using System.Linq;
 
 namespace NapCatScript.MesgHandle;
@@ -597,6 +595,13 @@ public class Send
         string content = await message.Content.ReadAsStringAsync();
     }
     #endregion
+
+    public void SendImage(string id, MesgTo mesgTo, string filePath)
+    {
+        string fileBase64 = ImageMsgJson.ToBase64(filePath);
+        ImageMsgJson img = new ImageMsgJson(fileBase64);
+        SendMsg(id, mesgTo, img);
+    }
 }
 
 public class SendCN

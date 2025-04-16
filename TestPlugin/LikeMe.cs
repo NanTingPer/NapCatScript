@@ -1,6 +1,4 @@
-﻿using NapCatScript.Start;
-
-namespace TestPlugin;
+﻿namespace TestPlugin;
 
 public class LikeMe : PluginType
 {

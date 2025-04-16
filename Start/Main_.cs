@@ -66,7 +66,8 @@ public class Main_
             //接收消息 并将有效消息存放到NoPMesgList
             Task.Run(Receive);
 #if DEBUG
-            
+            //发送消息
+            Task.Run(Send);
 #endif
 
 #if RELEASE
