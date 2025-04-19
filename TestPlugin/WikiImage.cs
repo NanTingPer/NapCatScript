@@ -1,9 +1,11 @@
 ﻿using NapCatScript.JsonFromat.Mesgs;
 using NapCatScript.MesgHandle.Parses;
+using System.Threading.Tasks;
+using static TestPlugin.ContentList;
 
 namespace TestPlugin;
 
-public class CalImage : PluginType
+public class WikiImage : PluginType
 {
     public override void Init()
     {
@@ -20,11 +22,11 @@ public class CalImage : PluginType
             string txtContent;//消息内容 = mesgs[1]
             txtContent = mesgContent.Trim().Substring(1);
             if (txtContent.StartsWith("映射#")) {
-                CalMapping.AddAsync(mesg, HttpUri, txtContent, CTokrn);
+                WikiNameMapping.AddAsync(mesg, HttpUri, txtContent, CTokrn);
                 //continue;
                 return;
             } else if (txtContent.StartsWith("删除映射#")) {
-                CalMapping.DeleteAsync(mesg, HttpUri, txtContent, CTokrn);
+                WikiNameMapping.DeleteAsync(mesg, HttpUri, txtContent, CTokrn);
                 return;//continue;
             } else if (txtContent.StartsWith("FAQ#")) {
                 FAQI.AddAsync(mesg, HttpUri, txtContent, CTokrn);
@@ -43,52 +45,76 @@ public class CalImage : PluginType
                             对于FAQ:
                                 1. 使用".FAQ#" 可以创建FAQ     例      .FAQ#灾厄是什么###灾厄是一个模组
                                 2. 使用".删除FAQ#" 可以删除FAQ 例      .删除FAQ#灾厄是什么
-                            
+
                             """, CTokrn);
                 // continue;
                 return;
             }
-            txtContent = await CalMapping.GetMap(txtContent);
-            string filePath = Path.Combine(Environment.CurrentDirectory, "Cal", txtContent + ".png");
-            string sendUrl = HUtils.GetMsgURL(HttpUri, mesg, out MesgTo MESGTO);
-            CalImage.SendAsync(mesg, txtContent, filePath, sendUrl, MESGTO);
+            txtContent = await WikiNameMapping.GetMap(txtContent);
+            string calFilePath = Path.Combine(Environment.CurrentDirectory, "Cal", txtContent + ".png");
+            string valFilePath = Path.Combine(Environment.CurrentDirectory, "Val", txtContent + ".png");
+            string sendUrl = GetMsgURL(HttpUri, mesg, out MesgTo MESGTO);
+            SendAsync(mesg, txtContent,  sendUrl, MESGTO, [calFilePath, valFilePath]);
             return;
         }
     }
 
-    public static async void/*Task<string>*/ SendAsync(MesgInfo mesg, string fileName, string filePath, string sendUrl, MesgTo MESGTO)
+    public static async void/*Task<string>*/ SendAsync(MesgInfo mesg, string fileName, string sendUrl, MesgTo MESGTO, params string[] filePaths)
     {
         if (string.IsNullOrEmpty(fileName))
             fileName = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-        if (File.Exists(filePath)) {
-            ImageMesg sendMesg = new ImageMesg(GetUserId(mesg), MESGTO, filePath);
-            await SendMesg.Send(sendUrl, sendMesg.MesgString, null, CTokrn);
+        bool sendAvtice = false;
+        foreach (var file in filePaths) {
+            sendAvtice = await SendImage(mesg, file, sendUrl, MESGTO) || sendAvtice;
+        }
+        if (sendAvtice) {
             return;
         }
-        Console.WriteLine("未找到文件: " + filePath);
+
+        Loging.Log.Info($"未找到文件: {filePaths}");
         #region 猜你想找
         StringBuilder 猜你想找 = new StringBuilder();
-        猜你想找.Append("猜你想找: ");
+        猜你想找.Append("猜你想找: \n");
+        猜你想找.Append("灾厄: ");
+
         //skip跳
         //take取
-        IEnumerable<string> contentItem = ContentList.ItemName.Where(str => str.Contains(fileName)).Take(5);
-        IEnumerable<string> contentNpc = ContentList.NPCName.Where(str => str.Contains(fileName)).Take(5);
+        IEnumerable<string> contentItem = GetContains(ItemName, fileName, 3);
+        IEnumerable<string> contentNpc = GetContains(NPCName, fileName, 3);
         List<string> 随机 = [];
-        int take = contentItem.Count() + contentNpc.Count();
-        if (take < 10) {
-            for (int i = take; i < 10; i++) {
-                int randInt = rand.Next(0, 2);
-                if (randInt == 1)
-                    随机.Add(ContentList.ItemName[rand.Next(0, ContentList.ItemName.Count)]);
-                if (randInt == 0)
-                    随机.Add(ContentList.NPCName[rand.Next(0, ContentList.NPCName.Count)]);
-            }
-        }
+        //int take = contentItem.Count() + contentNpc.Count();
+        //if (take < 10) {
+        //    for (int i = take; i < 10; i++) {
+        //        int randInt = rand.Next(0, 2);
+        //        if (randInt == 1)
+        //            随机.Add(ContentList.ItemName[rand.Next(0, ContentList.ItemName.Count)]);
+        //        if (randInt == 0)
+        //            随机.Add(ContentList.NPCName[rand.Next(0, ContentList.NPCName.Count)]);
+        //    }
+        //}
         AddString(猜你想找, contentNpc, contentItem, 随机.AsEnumerable());
-
+        猜你想找.Append("\n原版: ");
+        IEnumerable<string> vcontentItem = GetContains(VItems, fileName, 3);
+        IEnumerable<string> vcontentNpc = GetContains(VItems, fileName, 3);
+        AddString(猜你想找, vcontentItem, vcontentNpc);
         TextMesg tmesg = new TextMesg(GetUserId(mesg), MESGTO, 猜你想找.ToString().Substring(0, 猜你想找.Length - 2));
         await SendMesg.Send(sendUrl, tmesg.MesgString, null, CTokrn);
         return;
         #endregion
+    }
+
+    private static async Task<bool> SendImage(MesgInfo mesg, string filePath, string sendUrl, MesgTo MESGTO)
+    {
+        if (File.Exists(filePath)) {
+            ImageMesg sendMesg = new ImageMesg(GetUserId(mesg), MESGTO, filePath);
+            await SendMesg.Send(sendUrl, sendMesg.MesgString, null, CTokrn);
+            return true;
+        }
+        return false;
+    }
+
+    public static IEnumerable<string> GetContains(List<string> tarGetList, string containsString, int take)
+    {
+        return tarGetList.Where(f => f.Contains(containsString)).Take(take);
     }
 }

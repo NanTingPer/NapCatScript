@@ -28,7 +28,7 @@ public class FAQ
         try {
             await Service.Insert<FAQModel>(faq);
         } catch (Exception e) {
-            Console.WriteLine($"FAQ插入错误: {e.Message}\r\n {e.StackTrace}");
+            Log.Erro($"FAQ插入错误: {e.Message}\r\n {e.StackTrace}");
             return;
         }
         SendTextAsync(mesg, httpURI, "成功啦，试试？", ct);

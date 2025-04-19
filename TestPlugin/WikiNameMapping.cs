@@ -1,13 +1,13 @@
-﻿namespace TestPlugin;
+﻿using static TestPlugin.ContentList;
+namespace TestPlugin;
 
-public static class CalMapping
+public static class WikiNameMapping
 {
     /// <summary>
     /// .映射#头彩七=>头彩7
     /// </summary>
     public const string MapSplit = "映射#";
     public const string MapSplit2 = "=>";
-
     public const string DelSplit = "删除映射#";
     /// <summary>
     /// 获取映射
@@ -44,10 +44,13 @@ public static class CalMapping
             }
 
             string name = mapString[0];
-            bool pd1 = ContentList.ItemName.FirstOrDefault(f => f.Equals(name)) != null;
-            bool pd2 = ContentList.NPCName.FirstOrDefault(f => f.Equals(name)) != null;
-            if (!pd1 && !pd2) {
+            bool pd1 = ItemName.FirstOrDefault(f => f.Equals(name)) != null;
+            bool pd2 = NPCName.FirstOrDefault(f => f.Equals(name)) != null;
+            bool vitem = VItems.FirstOrDefault(f => f.Equals(name)) != null;
+            bool vnpc = VNPCs.FirstOrDefault(f => f.Equals(name)) != null;
+            if (!pd1 && !pd2 && !vitem && !vnpc) {
                 SendTextAsync(mesg, httpURI, "你确定有这个玩意？", ct);
+                return;
             }
             try {
                 await Service.CreateTable<MapModel>();
@@ -61,6 +64,7 @@ public static class CalMapping
         } catch(Exception e) {
             Console.WriteLine("错误！\r\n" + e.Message + "\r\n" + e.StackTrace);
             SendTextAsync(mesg, httpURI, "错误！\r\n" + e.Message + "\r\n" + e.StackTrace, ct);
+            Log.Erro(e.Message, e.StackTrace);
         }
     }
 
