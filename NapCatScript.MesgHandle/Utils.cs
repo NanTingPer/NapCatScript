@@ -41,6 +41,14 @@ public static class Utils
         return mesg.UserId;
     }
 
+    public static MesgTo GetMesgTo(this MesgInfo info)
+    {
+        if (info.MessageType == "group")
+            return MesgTo.group;
+        else
+            return MesgTo.user;
+    }
+
     /// <summary>
     /// 利用MesgInfo的内容，将文本发送出去
     /// </summary>
@@ -548,6 +556,13 @@ public class Send
     public void SendMarkDown(string id, MesgInfo mesg, MesgTo type, params string[] markdownContents) => SendMarkDown(id, mesg, markdownContents.ToList(), type);
     #endregion
 
+    /// <summary>
+    /// 合并转发消息
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="mesgInfo"></param>
+    /// <param name="msgs"></param>
+    /// <param name="mesgTo"></param>
     public async void SendForawrd(string id, MesgInfo mesgInfo, IEnumerable<MsgJson> msgs, MesgTo mesgTo)
     {
         List<ForwardData> fd = new List<ForwardData>();

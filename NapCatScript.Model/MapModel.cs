@@ -12,6 +12,9 @@ public class MapModel
     [Column("new"), PrimaryKey]
     public string Key { get; set; } = "";
 
+    /// <summary>
+    /// 原本的内容, 比如神明吞噬者
+    /// </summary>
     [Column("old")]
     public string oldString { get; set; } = "";
 

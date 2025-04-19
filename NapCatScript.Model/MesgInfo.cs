@@ -36,9 +36,14 @@ public class MesgInfo
 
     public string GetId()
     {
-        if (UserId != string.Empty) return UserId;
-        else return GroupId;
+        //if (UserId != string.Empty) return UserId;
+        //else return GroupId;
+        if (MessageType == "group")
+            return GroupId;
+        else
+            return UserId;
     }
+
     public override string ToString()
     {
 

@@ -34,7 +34,7 @@ public class TestClass : PluginType
 
         var co = await FAQI.Get(mesgContent);
         if (co is not null) {
-            SendTextAsync(mesg, HttpUri, $"{co.Value}\r\n----来自:{co.UserName}", CTokrn);
+            SendTextAsync(mesg, HttpUri, $"{co.Value}", CTokrn);//\r\n----来自:{co.UserName}
             //continue;
             return;
         }

@@ -1,4 +1,5 @@
-﻿using static TestPlugin.ContentList;
+﻿using System.Threading.Tasks;
+using static TestPlugin.ContentList;
 namespace TestPlugin;
 
 public static class WikiNameMapping
@@ -79,5 +80,30 @@ public static class WikiNameMapping
         string con = content.Split(DelSplit)[1];
         await Service.Delete<MapModel>(con);
         SendTextAsync(mesg, httpURI, "删掉啦，当然可能根本没有哦" ,ct);
+    }
+
+    /// <summary>
+    /// 获取全部Mapping
+    /// </summary>
+    public static async Task<string> GetMappings()
+    {
+        List<MapModel> mappings = await Service.GetAll<MapModel>();
+        var mapGroup = new Dictionary<string, List<string>>();
+        foreach (var map in mappings) {
+            if(mapGroup.TryGetValue(map.oldString, out var list)) { //存在
+                list.Add(map.Key);
+            } else {
+                mapGroup.Add(map.oldString, [map.Key]);
+            }
+        }
+
+        StringBuilder content = new StringBuilder();
+        foreach (var kv in mapGroup) {
+            content.Append(kv.Key + ":\n");
+            foreach (var map in kv.Value)
+                content.Append("    " + map + "\n");
+        }
+
+        return content.ToString();
     }
 }

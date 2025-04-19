@@ -49,6 +49,11 @@ public class WikiImage : PluginType
                 WikiNameMapping.AddAsync(mesg, HttpUri, txtContent, CTokrn);
                 //continue;
                 return;
+            } else if (txtContent.StartsWith("查看全部映射#")) {
+                string mappings = await WikiNameMapping.GetMappings();
+                TextMsgJson json = new TextMsgJson(mappings);
+                Send.SendForawrd(mesg.GetId(), mesg, [json], mesg.GetMesgTo());
+                return;
             } else if (txtContent.StartsWith("删除映射#")) {
                 WikiNameMapping.DeleteAsync(mesg, HttpUri, txtContent, CTokrn);
                 return;//continue;
