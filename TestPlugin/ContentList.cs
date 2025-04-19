@@ -2431,20 +2431,20 @@ public static class ContentList
 
 ];
 
-
-    public static List<string> ItemName { get; } = itemName.Distinct().Select(f => {
-        if (f.Contains("染料")) return "染料";
-        return f;
-    }).Distinct().ToList();
-    //public static List<string> ItemName 
-    //{ 
-    //    get{
-    //        return itemName.Distinct().Select(f => {
-    //            if (f.Contains("染料")) return "染料";
-    //            return f;
-    //        }).Distinct().ToList();
-    //    }
-    //}
+    //public static List<string> ItemName { get; } = itemName.Distinct().Select(f => {
+    //    if (f.Contains("染料")) return "染料";
+    //    return f;
+    //}).Distinct().ToList();
+    public static List<string> ItemName
+    {
+        get
+        {
+            return itemName.Distinct().Select(f => {
+                if (f.Contains("染料")) return "染料";
+                return f;
+            }).Distinct().ToList();
+        }
+    }
 
     private static List<string> nPCName =
     [
@@ -2742,43 +2742,55 @@ public static class ContentList
 
 ];
 
-    public static List<string> NPCName { get; } = nPCName.Distinct().ToList();
+    public static List<string> NPCName /*{ get; } = nPCName.Distinct().ToList();*/
+    {
+        get
+        {
+            return nPCName.Distinct().ToList();
+        }
+    }
+
+
+    //public static List<string> VNPCs /*{ get; } = vNPCs.Distinct().ToList();*/
     //{
     //    get
     //    {
-    //        return nPCName.Distinct().ToList();
+    //        return vNPCs.Distinct().ToList();
     //    }
     //}
 
-
-    public static List<string> VNPCs { get; } = vNPCs.Distinct().ToList();
-    public static List<string> VItems { get; } = vItems.Distinct().Select(f => {
-        if (f.Contains("火把")) return "火把";
-        if (f.Contains("旗") && !f.Contains("哥布林") && f.Length > 2) return "敌怪旗";
-        if (f.Contains("链甲")) return f.Replace("链甲", "盔甲");
-        if (f.Contains("护胫")) return f.Replace("护胫", "盔甲");
-        if (f.Contains("兜帽")) return f.Replace("兜帽", "盔甲");
-        if (f.Contains("八音盒")) return "八音盒";
-        if (f.Contains("椅")) return "椅子";
-        if (f.Contains("桌")) return "桌子";
-        if (f.Contains("灯笼")) return "灯笼";
-        if (f.Contains("火把")) return "火把";
-        if (f.Contains("雕像")) return "雕像";
-        if (f.Contains("钩")) return "钩爪";
-        if (f.Contains("盆栽")) return "盆栽";
-        if (f.Contains("矿车")) return "矿车";
-        if (f.Contains("纪念章")) return "纪念章";
-        if (f.Contains("床")) return "床";
-        if (f.Contains("书架")) return "书架";
-        if (f.Contains("工作台") && !f.Contains("重型")) return "工作台";
-        return f;
-    }).Distinct().ToList();
-
+    //public static List<string> VItems{ /*{ get; } =*/
+    //    get
+    //    {
+    //        return vItems.Distinct().Select(f => {
+    //            if (f.Contains("火把")) return "火把";
+    //            if (f.Contains("旗") && !f.Contains("哥布林") && f.Length > 2) return "敌怪旗";
+    //            if (f.Contains("链甲")) return f.Replace("链甲", "盔甲");
+    //            if (f.Contains("护胫")) return f.Replace("护胫", "盔甲");
+    //            if (f.Contains("兜帽")) return f.Replace("兜帽", "盔甲");
+    //            if (f.Contains("八音盒")) return "八音盒";
+    //            if (f.Contains("椅")) return "椅子";
+    //            if (f.Contains("桌")) return "桌子";
+    //            if (f.Contains("灯笼")) return "灯笼";
+    //            if (f.Contains("火把")) return "火把";
+    //            if (f.Contains("雕像")) return "雕像";
+    //            if (f.Contains("钩")) return "钩爪";
+    //            if (f.Contains("盆栽")) return "盆栽";
+    //            if (f.Contains("矿车")) return "矿车";
+    //            if (f.Contains("纪念章")) return "纪念章";
+    //            if (f.Contains("床")) return "床";
+    //            if (f.Contains("书架")) return "书架";
+    //            if (f.Contains("工作台") && !f.Contains("重型")) return "工作台";
+    //            if (f.Contains("音乐盒")) return "八音盒";
+    //            return f.Replace("/", "-");
+    //        }).Distinct().ToList();
+    //    }
+    //}
 
     /// <summary>
     /// 原版NPC
     /// </summary>
-    private static List<string> vNPCs = [
+    public static List<string> VNPCs = [
         "蓝史莱姆",
 "恶魔眼",
 "僵尸",
@@ -3325,7 +3337,7 @@ public static class ContentList
 "戮血沙鲨",
 "晶狐沙鲨",
 "愤怒翻滚怪",
-"???",
+//"???",
 "埃特尼亚水晶",
 "神秘传送门",
 "酒馆老板",
@@ -3472,7 +3484,7 @@ public static class ContentList
     /// <summary>
     /// 原版物品
     /// </summary>
-    private static List<string> vItems = [
+    public static List<string> VItems = [
 "铁镐",
 "土块",
 "石块",
@@ -8928,7 +8940,57 @@ public static class ContentList
 "小动物友谊指南（非活动）",
 "环境保护指南（非活动）",
 "和平共处指南（非活动）",
-
+        "森林",
+        "地下层",
+        "洞穴层",
+        "地狱",
+        "太空",
+        "雪原生物群系",
+        "冰雪生物群系",
+        "沙漠",
+        "地下沙漠",
+        "海洋",
+        "丛林",
+        "地下丛林",
+        "丛林神庙",
+        "发光蘑菇生物群系",
+        "腐化之地",
+        "地下腐化之地",
+        "猩红之地",
+        "地下猩红之地",
+        "神圣之地",
+        "地下神圣之地",
+        "地牢",
+        "仇恨",
+        "攻击速度",
+        "增益",
+        "暴击",
+        "伤害",
+        "日夜更替",
+        "减益",
+        "防御",
+        "难度",
+        "钓鱼",
+        "高尔夫",
+        "击退",
+        "运气",
+        "修饰语",
+        "月相",
+        //"音乐",
+        "NPC 掉落",
+        "玩家属性点",
+        "稀有度",
+        "生成",
+        "死亡",
+        "状态讯息",
+        "世界大小",
+        "武器",
+        "远程武器",
+        "近战武器",
+        "魔法武器",
+        "召唤武器",
+        "灵魂镰刀",
+        "职业设置",
         ];
 
 

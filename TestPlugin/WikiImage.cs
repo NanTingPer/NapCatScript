@@ -9,6 +9,30 @@ public class WikiImage : PluginType
 {
     public override void Init()
     {
+        VNPCs = VNPCs.Distinct().ToList();
+
+        VItems = VItems.Distinct().Select(f => {
+            if (f.Contains("火把")) return "火把";
+            if (f.Contains("旗") && !f.Contains("哥布林") && f.Length > 2) return "敌怪旗";
+            if (f.Contains("链甲")) return f.Replace("链甲", "盔甲");
+            if (f.Contains("护胫")) return f.Replace("护胫", "盔甲");
+            if (f.Contains("兜帽")) return f.Replace("兜帽", "盔甲");
+            if (f.Contains("八音盒")) return "八音盒";
+            if (f.Contains("椅")) return "椅子";
+            if (f.Contains("桌")) return "桌子";
+            if (f.Contains("灯笼")) return "灯笼";
+            if (f.Contains("火把")) return "火把";
+            if (f.Contains("雕像")) return "雕像";
+            if (f.Contains("钩")) return "钩爪";
+            if (f.Contains("盆栽")) return "盆栽";
+            if (f.Contains("矿车")) return "矿车";
+            if (f.Contains("纪念章")) return "纪念章";
+            if (f.Contains("床")) return "床";
+            if (f.Contains("书架")) return "书架";
+            if (f.Contains("工作台") && !f.Contains("重型")) return "工作台";
+            if (f.Contains("音乐盒")) return "八音盒";
+            return f.Replace("/", "-");
+        }).Distinct().ToList();
         Console.WriteLine("加载CalImage!");
     }
 
@@ -52,7 +76,11 @@ public class WikiImage : PluginType
             }
             txtContent = await WikiNameMapping.GetMap(txtContent);
             string calFilePath = Path.Combine(Environment.CurrentDirectory, "Cal", txtContent + ".png");
+//#if DEBUG
+//            string valFilePath = Path.Combine(@"D:\OpenSource\Create\灾厄WIKI\Val", txtContent + ".png");
+//#else
             string valFilePath = Path.Combine(Environment.CurrentDirectory, "Val", txtContent + ".png");
+//#endif
             string sendUrl = GetMsgURL(HttpUri, mesg, out MesgTo MESGTO);
             SendAsync(mesg, txtContent,  sendUrl, MESGTO, [calFilePath, valFilePath]);
             return;
@@ -74,7 +102,7 @@ public class WikiImage : PluginType
         Loging.Log.Info($"未找到文件: {filePaths}");
         #region 猜你想找
         StringBuilder 猜你想找 = new StringBuilder();
-        猜你想找.Append("猜你想找: \n");
+        猜你想找.Append("猜你想找 \n");
         猜你想找.Append("灾厄: ");
 
         //skip跳
@@ -92,10 +120,10 @@ public class WikiImage : PluginType
         //            随机.Add(ContentList.NPCName[rand.Next(0, ContentList.NPCName.Count)]);
         //    }
         //}
-        AddString(猜你想找, contentNpc, contentItem, 随机.AsEnumerable());
+        AddString(猜你想找, contentNpc, contentItem/*, 随机.AsEnumerable()*/);
         猜你想找.Append("\n原版: ");
         IEnumerable<string> vcontentItem = GetContains(VItems, fileName, 3);
-        IEnumerable<string> vcontentNpc = GetContains(VItems, fileName, 3);
+        IEnumerable<string> vcontentNpc = GetContains(VNPCs, fileName, 3);
         AddString(猜你想找, vcontentItem, vcontentNpc);
         TextMesg tmesg = new TextMesg(GetUserId(mesg), MESGTO, 猜你想找.ToString().Substring(0, 猜你想找.Length - 2));
         await SendMesg.Send(sendUrl, tmesg.MesgString, null, CTokrn);
