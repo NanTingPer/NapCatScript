@@ -11,14 +11,14 @@ public class ForwardMsg
 public class ForwardMsgJson
 {
 #pragma warning disable CS8618 // 在退出构造函数时，不可为 null 的字段必须包含非 null 值。请考虑添加 "required" 修饰符或声明为可为 null。
-    private ForwardMsgJson(string id, MesgTo type)
+    private ForwardMsgJson(string id, MsgTo type)
 #pragma warning restore CS8618 // 在退出构造函数时，不可为 null 的字段必须包含非 null 值。请考虑添加 "required" 修饰符或声明为可为 null。
     {
         switch (type) {
-            case MesgTo.user:
+            case MsgTo.user:
                 User_id = id;
                 break;
-            case MesgTo.group:
+            case MsgTo.group:
                 Group_id = id;
                 break;
         }
@@ -29,7 +29,7 @@ public class ForwardMsgJson
     /// 创建转发消息内容只有一条的消息
     /// </summary>
     /// <param name="id"> 群聊id / 用户id </param>
-    public ForwardMsgJson(string id, ForwardData/*ForwardMsgJsonMsg*/ content, MesgTo type) : this(id, type)
+    public ForwardMsgJson(string id, ForwardData/*ForwardMsgJsonMsg*/ content, MsgTo type) : this(id, type)
     {
         Messages.Add(new ForawrdMsgJsonMessage(content));
     }
@@ -38,7 +38,7 @@ public class ForwardMsgJson
     /// 创建转发消息
     /// </summary>
     /// <param name="id"> 群聊id / 用户id </param>
-    public ForwardMsgJson(string id, List<ForwardData/*ForwardMsgJsonMsg*/> contents, MesgTo type) : this(id, type)
+    public ForwardMsgJson(string id, List<ForwardData/*ForwardMsgJsonMsg*/> contents, MsgTo type) : this(id, type)
     {
         //Messages.Data = contents;
         foreach (var item in contents) {
@@ -50,7 +50,7 @@ public class ForwardMsgJson
     /// 创建转发消息
     /// </summary>
     /// <param name="id"> 群聊id / 用户id </param>
-    public ForwardMsgJson(string id, MesgTo type, params ForwardData/*ForwardMsgJsonMsg*/[] contents) : this(id, type)
+    public ForwardMsgJson(string id, MsgTo type, params ForwardData/*ForwardMsgJsonMsg*/[] contents) : this(id, type)
     {
         //Messages.Data.AddRange(contents);
         foreach (var item in contents) {
@@ -63,7 +63,7 @@ public class ForwardMsgJson
     /// </summary>
     /// <param name="id"> 群聊id / 用户id </param>
     /// <param name="prompt">外显内容</param>
-    public ForwardMsgJson(string id, List<ForwardData/*ForwardMsgJsonMsg*/> contents, string prompt, MesgTo type) : this(id, type)
+    public ForwardMsgJson(string id, List<ForwardData/*ForwardMsgJsonMsg*/> contents, string prompt, MsgTo type) : this(id, type)
     {
         //Messages.Data = contents;
         foreach (var item in contents) {

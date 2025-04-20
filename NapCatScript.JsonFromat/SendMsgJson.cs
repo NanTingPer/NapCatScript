@@ -5,13 +5,13 @@ public class SendMsgJson
     [JsonIgnore]
     public string JsonText { get => JsonSerializer.Serialize(this);}
 
-    public SendMsgJson(string user_id, List<MsgJson> message, MesgTo sendTo)
+    public SendMsgJson(string user_id, List<MsgJson> message, MsgTo sendTo)
     {
         switch (sendTo) {
-            case MesgTo.group:
+            case MsgTo.group:
                 Group_id = user_id;
                 break;
-            case MesgTo.user:
+            case MsgTo.user:
                 User_id = user_id;
                 break;
         }

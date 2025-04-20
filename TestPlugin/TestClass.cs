@@ -34,7 +34,8 @@ public class TestClass : PluginType
 
         var co = await FAQI.Get(mesgContent);
         if (co is not null) {
-            SendTextAsync(mesg, HttpUri, $"{co.Value}", CTokrn);//\r\n----来自:{co.UserName}
+            string faq = co.Value.Replace("\\n", "\n");
+            SendTextAsync(mesg, HttpUri, co.Value, CTokrn);//\r\n----来自:{co.UserName}
             //continue;
             return;
         }
@@ -56,5 +57,10 @@ public class TestClass : PluginType
             //continue;
             return;
         }
+    }
+
+    public static IEnumerable<string> GetContains(List<string> tarGetList, string containsString, int take)
+    {
+        return tarGetList.Where(f => f.Contains(containsString)).Take(take);
     }
 }

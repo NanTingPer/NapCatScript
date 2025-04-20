@@ -140,7 +140,7 @@ public class Main_
             new AtMsgJson("qqid"),
             new TextMsgJson("sendMsgText"),
         };
-        send.SendMsg("qqid", MesgTo.user, contents);
+        send.SendMsg("qqid", MsgTo.user, contents);
     }
 
     private static void LoadPlugin()

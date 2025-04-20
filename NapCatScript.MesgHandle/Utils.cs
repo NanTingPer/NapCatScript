@@ -13,20 +13,17 @@ public static class Utils
     ///获取Msg消息URL 基本消息(API访问链接)
     ///<para> uri是原始链接 例如: http://127.0.0.1:6666 </para>
     ///</summary>
-    public static string GetMsgURL(string uri, MesgInfo message, out MesgTo mesg)
+    public static string GetMsgToURL(this MesgInfo message, string uri)
     {
         if (message.MessageType == "group") {
-            mesg = MesgTo.group;
             if (uri.EndsWith('/')) return uri + API.GroupMsgNoX;
             else return uri + API.GroupMsg;
         }
 
         if (message.MessageType == "private") {
-            mesg = MesgTo.user;
             if (uri.EndsWith('/')) return uri + API.PrivateMsgNoX;
             else return uri + API.PrivateMsg;
         }
-        mesg = MesgTo.user;
         return "";
     }
 
@@ -41,12 +38,12 @@ public static class Utils
         return mesg.UserId;
     }
 
-    public static MesgTo GetMesgTo(this MesgInfo info)
+    public static MsgTo GetMsgTo(this MesgInfo info)
     {
         if (info.MessageType == "group")
-            return MesgTo.group;
+            return MsgTo.group;
         else
-            return MesgTo.user;
+            return MsgTo.user;
     }
 
     /// <summary>
@@ -58,8 +55,8 @@ public static class Utils
     /// <returns></returns>
     public static async void SendTextAsync(MesgInfo mesg, string httpURI, string content, CancellationToken ct)
     {
-        string sendUri = GetMsgURL(httpURI, mesg, out var mesgType);
-        TextMesg r = new TextMesg(GetUserId(mesg), mesgType, content);
+        string sendUri = mesg.GetMsgToURL(httpURI);
+        TextMesg r = new TextMesg(GetUserId(mesg), mesg.GetMsgTo(), content);
         string conet = r.MesgString;
         await SendMesg.Send(sendUri, conet, null, ct);
     }
@@ -96,25 +93,25 @@ public class Send
     ///获取Msg消息URL 基本消息(API访问链接)
     ///<para> uri是原始链接 例如: http://127.0.0.1:6666 </para>
     ///</summary>
-    private string GetMsgSendToURI(MesgTo mesg)
+    private string GetMsgSendToURI(MsgTo mesg)
     {
         switch (mesg) {
-            case MesgTo.group:
+            case MsgTo.group:
                 return HttpURI + "send_group_msg";
-            case MesgTo.user:
+            case MsgTo.user:
                 return HttpURI + "send_private_msg";
         }
         return "";
     }
 
-    public MesgTo GetMesgTo(MesgInfo mesginfo, out string id)
+    public MsgTo GetMesgTo(MesgInfo mesginfo, out string id)
     {
         if (mesginfo.MessageType == "group") {
             id = mesginfo.GroupId;
-            return MesgTo.group;
+            return MsgTo.group;
         } else {
             id = mesginfo.UserId;
-            return MesgTo.user;
+            return MsgTo.user;
         }
     }
     #region 上传私聊文件 upload_private_file
@@ -505,7 +502,7 @@ public class Send
     /// <param name="id"> 群ID / 个人ID </param>
     /// <param name="content"> 内容 </param>
     /// <param name="type"> 类型 </param>
-    public async void SendMarkDown(string id, string content, MesgTo type)
+    public async void SendMarkDown(string id, string content, MsgTo type)
     {
         var MarkDownJson = new MarkDownJson(content);
         var 二级转发消息 = new TwoForwardMsgJson(MarkDownJson);
@@ -524,7 +521,7 @@ public class Send
     /// <param name="id"> 群ID / 个人ID </param>
     /// <param name="content"> 内容 </param>
     /// <param name="type"> 类型 </param>
-    public async void SendMarkDown(string id, string content, MesgInfo mesg, MesgTo type)
+    public async void SendMarkDown(string id, string content, MesgInfo mesg, MsgTo type)
     {
         var MarkDownJson = new MarkDownJson(content);
         var 二级转发消息 = new TwoForwardMsgJson(mesg.UserId, mesg.UserName, MarkDownJson);
@@ -537,7 +534,7 @@ public class Send
         await postReturnContent.Content.ReadAsStringAsync();
     }
 
-    public async void SendMarkDown(string id, MesgInfo mesg, List<string> markdownContents, MesgTo type)
+    public async void SendMarkDown(string id, MesgInfo mesg, List<string> markdownContents, MsgTo type)
     {
         List<MsgJson> contents = new List<MsgJson>();
         foreach (var content in markdownContents)
@@ -553,7 +550,7 @@ public class Send
         await postReturnContent.Content.ReadAsStringAsync();
     }
 
-    public void SendMarkDown(string id, MesgInfo mesg, MesgTo type, params string[] markdownContents) => SendMarkDown(id, mesg, markdownContents.ToList(), type);
+    public void SendMarkDown(string id, MesgInfo mesg, MsgTo type, params string[] markdownContents) => SendMarkDown(id, mesg, markdownContents.ToList(), type);
     #endregion
 
     /// <summary>
@@ -563,7 +560,7 @@ public class Send
     /// <param name="mesgInfo"></param>
     /// <param name="msgs"></param>
     /// <param name="mesgTo"></param>
-    public async void SendForawrd(string id, MesgInfo mesgInfo, IEnumerable<MsgJson> msgs, MesgTo mesgTo)
+    public async void SendForawrd(string id, MesgInfo mesgInfo, IEnumerable<MsgJson> msgs, MsgTo mesgTo)
     {
         List<ForwardData> fd = new List<ForwardData>();
         foreach (var json in msgs) {
@@ -586,7 +583,7 @@ public class Send
     /// <param name="id"> 目标id </param>
     /// <param name="type"> 私聊还是群聊 </param>
     /// <param name="content"> 消息内容 </param>
-    public void SendMsg(string id, MesgTo type, MsgJson content) => SendMsg(id, type, new List<MsgJson>() { content });
+    public void SendMsg(string id, MsgTo type, MsgJson content) => SendMsg(id, type, new List<MsgJson>() { content });
 
     /// <summary>
     /// 发送消息
@@ -594,7 +591,7 @@ public class Send
     /// <param name="id"> 目标id </param>
     /// <param name="type"> 私聊还是群聊 </param>
     /// <param name="contents"> 消息内容 </param>
-    public void SendMsg(string id, MesgTo type, params MsgJson[] contents) => SendMsg(id, type, contents.ToList());
+    public void SendMsg(string id, MsgTo type, params MsgJson[] contents) => SendMsg(id, type, contents.ToList());
 
     /// <summary>
     /// 发送消息
@@ -602,7 +599,7 @@ public class Send
     /// <param name="id"> 目标id </param>
     /// <param name="type"> 私聊还是群聊 </param>
     /// <param name="contents"> 消息内容 </param>
-    public async void SendMsg(string id, MesgTo type, List<MsgJson> contents)
+    public async void SendMsg(string id, MsgTo type, List<MsgJson> contents)
     {
         SendMsgJson postJson = new SendMsgJson(id, contents, type);
         string requestUri = GetMsgSendToURI(type);
@@ -611,7 +608,7 @@ public class Send
     }
     #endregion
 
-    public void SendImage(string id, MesgTo mesgTo, string filePath)
+    public void SendImage(string id, MsgTo mesgTo, string filePath)
     {
         string fileBase64 = ImageMsgJson.ToBase64(filePath);
         ImageMsgJson img = new ImageMsgJson(fileBase64);
@@ -649,14 +646,14 @@ public class SendCN
     public void 设置个性签名(string 内容) => send.SetSelfLongnick(内容);
     public Task<bool> 上传私聊文件Async(string 用户ID, string 文件路径, string 名称) => send.UploadPrivateFileAsync(用户ID, 文件路径, 名称);
     public void 上传私聊文件(string 用户ID, string 文件路径, string 名称) => send.UploadPrivateFile(用户ID, 文件路径, 名称);
-    public void 发送MarkDown(string 目标, string 内容, MesgInfo 消息引用, MesgTo 去处) => send.SendMarkDown(目标, 内容, 消息引用, 去处);
+    public void 发送MarkDown(string 目标, string 内容, MesgInfo 消息引用, MsgTo 去处) => send.SendMarkDown(目标, 内容, 消息引用, 去处);
     /// <summary>
     /// 此方法发送的MarkDown用户id为123456. 昵称为 匿名
     /// </summary>
     /// <param name="id"> 群ID / 个人ID </param>
     /// <param name="content"> 内容 </param>
     /// <param name="type"> 类型 </param>
-    public void 发送MarkDown(string 目标, string 内容, MesgTo 去处) => send.SendMarkDown(目标, 内容, 去处);
-    public void 发送MarkDown(string 目标, MesgInfo 来源的方法引用, MesgTo 去处, params string[] 内容集) => send.SendMarkDown(目标, 来源的方法引用, 去处, 内容集);
-    public void 发送MarkDown(string 目标, MesgInfo 来源的方法引用, List<string> 内容集, MesgTo 去处) => send.SendMarkDown(目标, 来源的方法引用, 内容集, 去处);
+    public void 发送MarkDown(string 目标, string 内容, MsgTo 去处) => send.SendMarkDown(目标, 内容, 去处);
+    public void 发送MarkDown(string 目标, MesgInfo 来源的方法引用, MsgTo 去处, params string[] 内容集) => send.SendMarkDown(目标, 来源的方法引用, 去处, 内容集);
+    public void 发送MarkDown(string 目标, MesgInfo 来源的方法引用, List<string> 内容集, MsgTo 去处) => send.SendMarkDown(目标, 来源的方法引用, 内容集, 去处);
 }

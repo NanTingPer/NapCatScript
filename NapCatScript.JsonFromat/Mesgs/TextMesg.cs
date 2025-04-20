@@ -15,14 +15,14 @@ public class TextMesg
     /// </summary>
     /// <param name="user_id"> 用户id </param>
     /// <param name="text"> 要发送的消息 </param>
-    public TextMesg(string user_id, MesgTo mestype,string text)
+    public TextMesg(string user_id, MsgTo mestype,string text)
     {
         Data data = new Data(text);
         Message message = new Message(data);
         MesgObject = new Root(user_id, new List<Message>() { message });
         MesgJson = JsonSerializer.SerializeToDocument(MesgObject);
         MesgString = JsonSerializer.Serialize(MesgObject);
-        if (mestype == MesgTo.group) {
+        if (mestype == MsgTo.group) {
             string[] strings = MesgString.Split("user_id");
             StringBuilder sbuilder = new StringBuilder();
             sbuilder.Append(strings[0]);

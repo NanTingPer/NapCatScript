@@ -68,7 +68,7 @@ public enum MsgType
 
 }
 
-public enum MesgTo
+public enum MsgTo
 {
     group,
     user

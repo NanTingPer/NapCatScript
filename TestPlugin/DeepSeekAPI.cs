@@ -155,7 +155,7 @@ public class DeepSeekAPI
                             if (@goto != GoTo.Con)
                                 SendTextAsync(mesg, httpURI, text, tk);
                             else {
-                                MesgTo msgto = TestClass.SendObj!.GetMesgTo(mesg, out var id);
+                                MsgTo msgto = TestClass.SendObj!.GetMesgTo(mesg, out var id);
                                 //TestClass.SendObj.SendMarkDown(id, text, msgto);
                                 TestClass.SendObj.SendForawrd(id, mesg, new List<MsgJson> { new TextMsgJson(text) }, msgto);
                             }

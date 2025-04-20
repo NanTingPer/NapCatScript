@@ -18,7 +18,7 @@ public class ImageMesg
     /// <param name="user_id"> 目标ID </param>
     /// <param name="type"> 类型 默认来就行了 </param>
     /// <param name="fileUrl"> 文件链接 / base64 </param>
-    public ImageMesg(string user_id, MesgTo mestype, params string[] fileUrl)
+    public ImageMesg(string user_id, MsgTo mestype, params string[] fileUrl)
     {
         List<Message> mesList = new List<Message>();
         MsgType type = MsgType.image;
@@ -31,7 +31,7 @@ public class ImageMesg
         MesgObject = new Root(user_id, mesList);
         MesgJson = JsonSerializer.SerializeToDocument(MesgObject);
         MesgString = JsonSerializer.Serialize(MesgObject);
-        if(mestype == MesgTo.group) {
+        if(mestype == MsgTo.group) {
             string[] strings = MesgString.Split("user_id");
             StringBuilder sbuilder = new StringBuilder();
             sbuilder.Append(strings[0]);

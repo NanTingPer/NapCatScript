@@ -17,7 +17,7 @@ public class MesgHandle : BaseMsg
     /// </summary>
     /// <param name="user_id"> 用户id </param>
     /// <param name="text"> 要发送的消息 </param>
-    public MesgHandle(string user_id, MesgTo mestype, params BaseMsg[] mesgs)
+    public MesgHandle(string user_id, MsgTo mestype, params BaseMsg[] mesgs)
     {
         List<string> contents = [];
         foreach (var item in mesgs) {
@@ -34,14 +34,14 @@ public class MesgHandle : BaseMsg
 
     public class Root
     {
-        public Root(string user_id, List<string> message, MesgTo sendTo)
+        public Root(string user_id, List<string> message, MsgTo sendTo)
         {
             switch (sendTo) {
-                case MesgTo.group:
+                case MsgTo.group:
                     Group_id = user_id;
                     Message_Type = "group";
                     break;
-                case MesgTo.user:
+                case MsgTo.user:
                     User_id = user_id;
                     Message_Type = "private";
                     break;

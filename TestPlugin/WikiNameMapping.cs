@@ -32,7 +32,7 @@ public static class WikiNameMapping<T> where T : MapModel, new()
     /// </summary>
     /// <param name="mesg"> 消息引用 </param>
     /// <param name="httpURI"> 请求URI(例 http://127.0.0.1:6666) 不含API </param>
-    /// <param name="content"> 消息内容 </param>
+    /// <param name="content"> 消息内容(映射#xxx=>xxx) </param>
     /// <param name="contentList"> 内容集，如果给定集合中包含消息内容的物品才进行映射 </param>
     /// <returns></returns>
     public static async void AddAsync(MesgInfo mesg, string httpURI, string content, CancellationToken ct, params IEnumerable<string>[] contentList)
