@@ -1,5 +1,5 @@
 ﻿using SQLite;
-namespace NapCatScript.Model;
+namespace TestPlugin.Models;
 
 /// <summary>
 /// 灾厄WIKI别名映射

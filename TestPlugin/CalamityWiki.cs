@@ -1,11 +1,12 @@
 ﻿using NapCatScript.JsonFromat.Mesgs;
 using NapCatScript.MesgHandle.Parses;
 using System.Threading.Tasks;
+using TestPlugin.Models;
 using static TestPlugin.ContentList;
 
 namespace TestPlugin;
 
-public class WikiImage : PluginType
+public class CalamityWiki : PluginType
 {
     public override void Init()
     {
@@ -46,16 +47,16 @@ public class WikiImage : PluginType
             string txtContent;//消息内容 = mesgs[1]
             txtContent = mesgContent.Trim().Substring(1);
             if (txtContent.StartsWith("映射#")) {
-                WikiNameMapping.AddAsync(mesg, HttpUri, txtContent, CTokrn);
+                WikiNameMapping<MapModel>.AddAsync(mesg, HttpUri, txtContent, CTokrn);
                 //continue;
                 return;
             } else if (txtContent.StartsWith("查看全部映射#")) {
-                string mappings = await WikiNameMapping.GetMappings();
+                string mappings = await WikiNameMapping<MapModel>.GetMappings();
                 TextMsgJson json = new TextMsgJson(mappings);
                 Send.SendForawrd(mesg.GetId(), mesg, [json], mesg.GetMesgTo());
                 return;
             } else if (txtContent.StartsWith("删除映射#")) {
-                WikiNameMapping.DeleteAsync(mesg, HttpUri, txtContent, CTokrn);
+                WikiNameMapping<MapModel>.DeleteAsync(mesg, HttpUri, txtContent, CTokrn);
                 return;//continue;
             } else if (txtContent.StartsWith("FAQ#")) {
                 FAQI.AddAsync(mesg, HttpUri, txtContent, CTokrn);
@@ -79,13 +80,9 @@ public class WikiImage : PluginType
                 // continue;
                 return;
             }
-            txtContent = await WikiNameMapping.GetMap(txtContent);
+            txtContent = await WikiNameMapping<MapModel>.GetMap(txtContent);
             string calFilePath = Path.Combine(Environment.CurrentDirectory, "Cal", txtContent + ".png");
-//#if DEBUG
-//            string valFilePath = Path.Combine(@"D:\OpenSource\Create\灾厄WIKI\Val", txtContent + ".png");
-//#else
             string valFilePath = Path.Combine(Environment.CurrentDirectory, "Val", txtContent + ".png");
-//#endif
             string sendUrl = GetMsgURL(HttpUri, mesg, out MesgTo MESGTO);
             SendAsync(mesg, txtContent,  sendUrl, MESGTO, [calFilePath, valFilePath]);
             return;

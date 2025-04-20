@@ -1,8 +1,7 @@
-﻿using System.Threading.Tasks;
-using static TestPlugin.ContentList;
+﻿using TestPlugin.Models;
 namespace TestPlugin;
 
-public static class WikiNameMapping
+public static class WikiNameMapping<T> where T : MapModel, new()
 {
     /// <summary>
     /// .映射#头彩七=>头彩7
@@ -17,9 +16,9 @@ public static class WikiNameMapping
     /// <returns></returns>
     public static async Task<string> GetMap(string content)
     {
-        MapModel? t = null;
+        T? t = null;
         try {
-            t = await Service.Get<MapModel>(content);
+            t = await Service.Get<T>(content);
         } catch (Exception e){
             Console.WriteLine("发生错误: \r\n" + e.Message + "\r\n" + e.StackTrace);
         }
@@ -27,14 +26,16 @@ public static class WikiNameMapping
         return t.oldString;
     }
 
+    //TODO 此方法业务过载
     /// <summary>
     /// 添加映射
     /// </summary>
     /// <param name="mesg"> 消息引用 </param>
     /// <param name="httpURI"> 请求URI(例 http://127.0.0.1:6666) 不含API </param>
     /// <param name="content"> 消息内容 </param>
+    /// <param name="contentList"> 内容集，如果给定集合中包含消息内容的物品才进行映射 </param>
     /// <returns></returns>
-    public static async void AddAsync(MesgInfo mesg, string httpURI, string content, CancellationToken ct)
+    public static async void AddAsync(MesgInfo mesg, string httpURI, string content, CancellationToken ct, params IEnumerable<string>[] contentList)
     {
         try {
             string[] mapString = content.Split(MapSplit)[1].Split(MapSplit2);
@@ -45,30 +46,31 @@ public static class WikiNameMapping
             }
 
             string name = mapString[0];
-            bool pd1 = ItemName.FirstOrDefault(f => f.Equals(name)) != null;
-            bool pd2 = NPCName.FirstOrDefault(f => f.Equals(name)) != null;
-            bool vitem = VItems.FirstOrDefault(f => f.Equals(name)) != null;
-            bool vnpc = VNPCs.FirstOrDefault(f => f.Equals(name)) != null;
-            if (!pd1 && !pd2 && !vitem && !vnpc) {
-                SendTextAsync(mesg, httpURI, "你确定有这个玩意？", ct);
+            bool @bool = false; //为true就行可以映射
+            foreach (var worklist in contentList) {
+                @bool = worklist.FirstOrDefault(f => f.Equals(name)) != null || @bool;
+            }
+
+            if (!@bool) {
+                SendTextAsync(mesg, httpURI, "好像没有这个东西哦", ct);
                 return;
             }
             try {
-                await Service.CreateTable<MapModel>();
+                await Service.CreateTable<T>();
             } catch {
                 Console.WriteLine("创表失败");
                 return;
             }
-            await Service.Insert(new MapModel() { Key = mapString[1], oldString = mapString[0] , UserId = mesg.UserId, CreateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")});
+            await Service.Insert(new T() { Key = mapString[1], oldString = mapString[0] , UserId = mesg.UserId, CreateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")});
             SendTextAsync(mesg, httpURI, "ok啦，试试？", ct);
 
         } catch(Exception e) {
-            Console.WriteLine("错误！\r\n" + e.Message + "\r\n" + e.StackTrace);
             SendTextAsync(mesg, httpURI, "错误！\r\n" + e.Message + "\r\n" + e.StackTrace, ct);
             Log.Erro(e.Message, e.StackTrace);
         }
     }
 
+    //TODO 此方法业务过载
     /// <summary>
     /// 删除映射
     /// </summary>
@@ -78,7 +80,7 @@ public static class WikiNameMapping
     public static async void DeleteAsync(MesgInfo mesg, string httpURI, string content, CancellationToken ct)
     {
         string con = content.Split(DelSplit)[1];
-        await Service.Delete<MapModel>(con);
+        await Service.Delete<T>(con);
         SendTextAsync(mesg, httpURI, "删掉啦，当然可能根本没有哦" ,ct);
     }
 
@@ -87,7 +89,7 @@ public static class WikiNameMapping
     /// </summary>
     public static async Task<string> GetMappings()
     {
-        List<MapModel> mappings = await Service.GetAll<MapModel>();
+        List<T> mappings = await Service.GetAll<T>();
         var mapGroup = new Dictionary<string, List<string>>();
         foreach (var map in mappings) {
             if(mapGroup.TryGetValue(map.oldString, out var list)) { //存在
