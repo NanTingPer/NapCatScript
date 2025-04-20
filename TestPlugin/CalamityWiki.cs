@@ -23,7 +23,7 @@ public class CalamityWiki : PluginType
             string txtContent;//消息内容 = mesgs[1]
             txtContent = mesgContent.Trim().Substring(1);
             if (txtContent.StartsWith("映射#")) {
-                WikiNameMapping<MapModel>.AddAsync(mesg, HttpUri, txtContent, CTokrn);
+                WikiNameMapping<MapModel>.AddAsync(mesg, HttpUri, txtContent, CTokrn, [ItemName, NPCName]);
                 //continue;
                 return;
             } else if (txtContent.StartsWith("查看全部映射#")) {
