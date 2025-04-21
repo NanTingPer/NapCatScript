@@ -21,6 +21,9 @@ public class MapModel
     [Column("userid")]
     public string UserId { get; set; } = "";
 
+    [Column("username")]
+    public string UserName { get; set; } = "";
+
     [Column("createtime")]
     public string CreateTime { get; set; } = "";
 }

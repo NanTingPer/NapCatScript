@@ -61,7 +61,7 @@ public static class WikiNameMapping<T> where T : MapModel, new()
                 Console.WriteLine("创表失败");
                 return;
             }
-            await Service.Insert(new T() { Key = mapString[1], oldString = mapString[0] , UserId = mesg.UserId, CreateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")});
+            await Service.Insert(new T() { Key = mapString[1], oldString = mapString[0] , UserId = mesg.UserId, CreateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), UserName = mesg.UserName});
             SendTextAsync(mesg, httpURI, "ok啦，试试？", ct);
 
         } catch(Exception e) {
@@ -93,9 +93,9 @@ public static class WikiNameMapping<T> where T : MapModel, new()
         var mapGroup = new Dictionary<string, List<string>>();
         foreach (var map in mappings) {
             if(mapGroup.TryGetValue(map.oldString, out var list)) { //存在
-                list.Add(map.Key);
+                list.Add(map.Key + "  |  " + map.CreateTime + "  |  " + map.UserName);
             } else {
-                mapGroup.Add(map.oldString, [map.Key]);
+                mapGroup.Add(map.oldString, [map.Key + "  | " + map.CreateTime + "  |  " + map.UserName]);
             }
         }
 
@@ -103,7 +103,7 @@ public static class WikiNameMapping<T> where T : MapModel, new()
         foreach (var kv in mapGroup) {
             content.Append(kv.Key + ":\n");
             foreach (var map in kv.Value)
-                content.Append("    " + map + "\n");
+                content.Append("    - " + map + "\n");
         }
 
         return content.ToString();

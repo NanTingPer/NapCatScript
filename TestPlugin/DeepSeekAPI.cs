@@ -20,7 +20,13 @@ public class DeepSeekAPI
             await InitPrompt();
             init = true;
         }
+        try {
+            int time = int.Parse(DateTime.Now.ToString("HH"));
+            if(!(time >= 6 && time < 23)) //6 - 23 点运行
+                return;
+        } catch (Exception e) {
 
+        }
         string prompt2 = prompt;
         
 

@@ -59,7 +59,7 @@ public class VanillaWiki : PluginType
 
         string itemName = command;
         itemName = await WikiNameMapping<VanillaMapModel>.GetMap(itemName);
-        string itemPath = Path.Combine(Environment.CurrentDirectory, "Val","Items" ,itemName + ".png");
+        string itemPath = Path.Combine(Environment.CurrentDirectory, "Val" ,itemName + ".png");
         if (File.Exists(itemPath)) {
             ImageMesg image = new ImageMesg(mesg.GetId(), mesg.GetMsgTo(), itemPath);
             await SendMesg.Send(mesg.GetMsgToURL(httpUri), image.MesgString, null, CTokrn);
