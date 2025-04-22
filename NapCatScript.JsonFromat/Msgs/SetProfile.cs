@@ -1,4 +1,4 @@
-﻿namespace NapCatScript.JsonFromat.Mesgs;
+﻿namespace NapCatScript.JsonFromat.Msgs;
 /// <summary>
 /// 设置帐号信息
 /// </summary>

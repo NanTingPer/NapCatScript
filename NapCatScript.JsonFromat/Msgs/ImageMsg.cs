@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
-using static NapCatScript.JsonFromat.Mesgs.ImageMsgJson;
-using static NapCatScript.JsonFromat.Mesgs.TextMsgJson;
+using static NapCatScript.JsonFromat.Msgs.ImageJson;
+using static NapCatScript.JsonFromat.Msgs.TextJson;
 
-namespace NapCatScript.JsonFromat.Mesgs;
+namespace NapCatScript.JsonFromat.Msgs;
 
 public class ImageMsg : BaseMsg
 {
@@ -14,7 +14,7 @@ public class ImageMsg : BaseMsg
 
     public ImageMsg(string content)
     {
-        var jsonObject = new ImageMsgJson(new ImageMsgData(content));
+        var jsonObject = new ImageJson(new ImageMsgData(content));
         JsonText = JsonSerializer.Serialize(jsonObject);
         JsonElement = JsonSerializer.SerializeToElement(jsonObject);
         JsonDocument = JsonSerializer.SerializeToDocument(jsonObject);
@@ -27,20 +27,20 @@ public class ImageMsg : BaseMsg
 /// <summary>
 /// 图片消息的Json对象
 /// </summary>
-public class ImageMsgJson : MsgJson
+public class ImageJson : MsgJson
 {
     public static string ToBase64(string filePath)
     {
         byte[] imageBytes = File.ReadAllBytes(filePath);
         return Convert.ToBase64String(imageBytes);
     }
-    public ImageMsgJson(ImageMsgData imageData)
+    public ImageJson(ImageMsgData imageData)
     {
         Data = [imageData];
         JsonText = JsonSerializer.Serialize(this);
     }
 
-    public ImageMsgJson(IEnumerable<ImageMsgData> imageData)
+    public ImageJson(IEnumerable<ImageMsgData> imageData)
     {
         Data = [];
         foreach (var item in imageData) {
@@ -49,7 +49,7 @@ public class ImageMsgJson : MsgJson
         JsonText = JsonSerializer.Serialize(this);
     }
 
-    public ImageMsgJson(string imageBase64)
+    public ImageJson(string imageBase64)
     {
         Data = [];
         Data.Add(new ImageMsgData(imageBase64));

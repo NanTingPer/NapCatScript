@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Net.Http;
 
-namespace NapCatScript.MesgHandle.Parses;
+namespace NapCatScript.MesgHandle;
 public static class SendMesg
 {
     /// <summary>

@@ -1,11 +1,11 @@
 ﻿namespace NapCatScript.JsonFromat;
 
-public class SendMsgJson
+public class SendJson
 {
     [JsonIgnore]
     public string JsonText { get => JsonSerializer.Serialize(this);}
 
-    public SendMsgJson(string user_id, List<MsgJson> message, MsgTo sendTo)
+    public SendJson(string user_id, List<MsgJson> message, MsgTo sendTo)
     {
         switch (sendTo) {
             case MsgTo.group:

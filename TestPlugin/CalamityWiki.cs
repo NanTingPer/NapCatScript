@@ -1,5 +1,4 @@
-﻿using NapCatScript.JsonFromat.Mesgs;
-using NapCatScript.MesgHandle.Parses;
+﻿using NapCatScript.JsonFromat.Msgs;
 using System.Threading.Tasks;
 using TestPlugin.Models;
 using static TestPlugin.ContentList;
@@ -28,7 +27,7 @@ public class CalamityWiki : PluginType
                 return;
             } else if (txtContent.StartsWith("查看全部映射#")) {
                 string mappings = await WikiNameMapping<MapModel>.GetMappings();
-                TextMsgJson json = new TextMsgJson(mappings);
+                TextJson json = new TextJson(mappings);
                 Send.SendForawrd(mesg.GetId(), mesg, [json], mesg.GetMsgTo());
                 return;
             } else if (txtContent.StartsWith("删除映射#")) {
@@ -60,7 +59,7 @@ public class CalamityWiki : PluginType
                         3. 每次更新提示词需要删除上下文
                     """;
 
-                Send.SendForawrd(mesg.GetId(), mesg, [new TextMsgJson(help)], mesg.GetMsgTo());
+                Send.SendForawrd(mesg.GetId(), mesg, [new TextJson(help)], mesg.GetMsgTo());
                 // continue;
                 return;
             }

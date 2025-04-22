@@ -7,7 +7,7 @@ namespace NapCatScript.Services;
 public class SQLiteService
 {
     private static string DataBasePath = Path.Combine(Environment.CurrentDirectory, "data.db");
-    public static SQLiteService Service { get; } = new SQLiteService();
+    public static SQLiteService SQLService { get; } = new SQLiteService();
     public SQLiteAsyncConnection Connection;
     private SQLiteService()
     {
@@ -40,9 +40,9 @@ public class SQLiteService
         var keyValue = keyInfo.GetValue(data);
         if (keyValue is null) return;
 
-        T oldData;
+        T? oldData;
         try {
-            oldData = await Get<T>(keyValue.ToString());
+            oldData = await Get<T?>(keyValue!.ToString());
         } catch (Exception e) {
             Loging.Log.Erro("没有此数据: ", e.Message, e.StackTrace);
             return;

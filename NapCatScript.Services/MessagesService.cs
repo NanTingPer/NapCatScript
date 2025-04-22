@@ -5,7 +5,7 @@ namespace NapCatScript.Services;
 
 public class MessagesService
 {
-    private static SQLiteService sql { get; } = SQLiteService.Service;
+    private static SQLiteService sql { get; } = SQLiteService.SQLService;
     public static MessagesService MService { get; } = new MessagesService();
 
     private MessagesService() { }

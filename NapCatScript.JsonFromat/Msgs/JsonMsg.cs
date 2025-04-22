@@ -1,6 +1,6 @@
-﻿using static NapCatScript.JsonFromat.Mesgs.JsonMsgJson;
+﻿using static NapCatScript.JsonFromat.Msgs.JsonJson;
 
-namespace NapCatScript.JsonFromat.Mesgs;
+namespace NapCatScript.JsonFromat.Msgs;
 
 /// <summary>
 /// Json卡片消息
@@ -15,7 +15,7 @@ public class JsonMsg : BaseMsg
     public JsonMsg(string content)
     {
         JsonMsgData data = new JsonMsgData(content);
-        JsonMsgJson obj = new JsonMsgJson(data);
+        JsonJson obj = new JsonJson(data);
         JsonText = JsonSerializer.Serialize(obj);
         JsonElement = JsonSerializer.SerializeToElement(obj);
         JsonDocument = JsonSerializer.SerializeToDocument(obj);
@@ -26,11 +26,11 @@ public class JsonMsg : BaseMsg
 /// <summary>
 /// Json消息的Json对象
 /// </summary>
-public class JsonMsgJson : MsgJson
+public class JsonJson : MsgJson
 {
     [JsonIgnore]
     public override string JsonText { get; set; }
-    public JsonMsgJson(JsonMsgData data)
+    public JsonJson(JsonMsgData data)
     {
         Data = data;
         JsonText = JsonSerializer.Serialize(this);

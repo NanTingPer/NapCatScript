@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Nodes;
 
-namespace NapCatScript.JsonFromat.Mesgs;
+namespace NapCatScript.JsonFromat.Msgs;
 
 /// <summary>
 /// @(At)消息
@@ -13,7 +13,7 @@ public class AtMsg : BaseMsg
     public override dynamic JsonObject { get; set; }
     public AtMsg(string qqid)
     {
-        var jsonObject = new AtMsgJson(qqid);
+        var jsonObject = new AtJson(qqid);
         JsonText = JsonSerializer.Serialize(jsonObject);
         JsonElement = JsonSerializer.SerializeToElement(jsonObject);
         JsonDocument = JsonSerializer.SerializeToDocument(jsonObject);
@@ -22,7 +22,7 @@ public class AtMsg : BaseMsg
 
     public AtMsg(string name, string qqid)
     {
-        var jsonObject = new AtMsgJson(name, qqid);
+        var jsonObject = new AtJson(name, qqid);
         JsonText = JsonSerializer.Serialize(jsonObject);
         JsonElement = JsonSerializer.SerializeToElement(jsonObject);
         JsonDocument = JsonSerializer.SerializeToDocument(jsonObject);
@@ -33,17 +33,17 @@ public class AtMsg : BaseMsg
 /// <summary>
 /// at消息的json
 /// </summary>
-public class AtMsgJson : MsgJson
+public class AtJson : MsgJson
 {
     [JsonIgnore]
     public override string JsonText { get; set; }
-    public AtMsgJson(string qqid)
+    public AtJson(string qqid)
     {
         Data = new AtMsgData(qqid);
         JsonText = JsonSerializer.Serialize(this);
     }
 
-    public AtMsgJson(string name, string qqid)
+    public AtJson(string name, string qqid)
     {
         Data = new AtMsgData(name, qqid);
         JsonText = JsonSerializer.Serialize(this);

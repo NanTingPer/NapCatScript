@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Text;
 
-namespace NapCatScript.JsonFromat.Mesgs;
+namespace NapCatScript.JsonFromat.Msgs;
 /// <summary>
 /// 图片消息 Json构建
 /// <para> 使用MassageJsonObject字段取出string值 </para>

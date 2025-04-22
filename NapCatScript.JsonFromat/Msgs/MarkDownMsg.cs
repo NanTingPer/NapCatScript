@@ -1,17 +1,17 @@
-﻿using static NapCatScript.JsonFromat.Mesgs.TextMsgJson;
+﻿using static NapCatScript.JsonFromat.Msgs.MarkDownJson;
 
-namespace NapCatScript.JsonFromat.Mesgs;
+namespace NapCatScript.JsonFromat.Msgs;
 
-public class TextMsgBak : BaseMsg
+public class MarkDownMsg : BaseMsg
 {
     public override string JsonText { get; set; }
     public override JsonElement JsonElement { get; set; }
     public override JsonDocument JsonDocument { get; set; }
     public override dynamic JsonObject { get; set; }
 
-    public TextMsgBak(string content)
+    public MarkDownMsg(string content)
     {
-        var jsonObject = new TextMsgJson(new TextMsgData(content));
+        var jsonObject = new MarkDownJson(new MarkDownJsonData(content));
         JsonText = JsonSerializer.Serialize(jsonObject);
         JsonElement = JsonSerializer.SerializeToElement(jsonObject);
         JsonDocument = JsonSerializer.SerializeToDocument(jsonObject);
@@ -23,39 +23,39 @@ public class TextMsgBak : BaseMsg
 /// <summary>
 /// 文本消息的Json对象
 /// </summary>
-public class TextMsgJson : MsgJson
+public class MarkDownJson : MsgJson
 {
-    public TextMsgJson(TextMsgData data, string type = "text")
+    public MarkDownJson(MarkDownJsonData data)
     {
         Data = data;
-        Type = type;
         JsonText = JsonSerializer.Serialize(this);
     }
 
-    public TextMsgJson(string data, string type = "text")
+    public MarkDownJson(string content)
     {
-        Data = new TextMsgData(data);
-        Type = type;
+        Data = new MarkDownJsonData(content);
         JsonText = JsonSerializer.Serialize(this);
     }
+
 
     [JsonPropertyName("type")]
-    public string Type { get; set; } = "text";
+    public string Type { get; set; } = "markdown";
 
     [JsonPropertyName("data")]
-    public TextMsgData Data { get; set; } = new TextMsgData();
+    public MarkDownJsonData Data { get; set; } = new MarkDownJsonData();
+
     [JsonIgnore]
     public override string JsonText { get; set; }
 
-    public class TextMsgData
+    public class MarkDownJsonData
     {
-        public TextMsgData(string text = "unll")
+        public MarkDownJsonData(string content = "unll")
         {
-            Text = text;
+            Content = content;
         }
 
-        [JsonPropertyName("text")]
-        public string Text { get; set; } = "null";
+        [JsonPropertyName("content")]
+        public string Content { get; set; } = "null";
     }
 
 }

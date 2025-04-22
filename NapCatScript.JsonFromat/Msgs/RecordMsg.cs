@@ -1,6 +1,6 @@
-﻿using static NapCatScript.JsonFromat.Mesgs.RecordMsgJson;
+﻿using static NapCatScript.JsonFromat.Msgs.RecordJson;
 
-namespace NapCatScript.JsonFromat.Mesgs;
+namespace NapCatScript.JsonFromat.Msgs;
 
 /// <summary>
 /// 语音消息
@@ -16,7 +16,7 @@ public class RecordMsg : BaseMsg
     public RecordMsg(string content)
     {
         RecordMsgData data = new RecordMsgData(content);
-        RecordMsgJson obj = new RecordMsgJson(data);
+        RecordJson obj = new RecordJson(data);
         JsonText = JsonSerializer.Serialize(obj);
         JsonElement = JsonSerializer.SerializeToElement(obj);
         JsonDocument = JsonSerializer.SerializeToDocument(obj);
@@ -24,9 +24,9 @@ public class RecordMsg : BaseMsg
     }
 }
 
-public class RecordMsgJson : MsgJson
+public class RecordJson : MsgJson
 {
-    public RecordMsgJson(RecordMsgData data)
+    public RecordJson(RecordMsgData data)
     {
         Data = data;
         JsonText = JsonSerializer.Serialize(this);

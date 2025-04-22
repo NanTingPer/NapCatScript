@@ -4,7 +4,7 @@ namespace NapCatScript.Services;
 
 public class ConfigService
 {
-    private SQLiteService sql { get; } = SQLiteService.Service;
+    private SQLiteService sql { get; } = SQLiteService.SQLService;
     public static ConfigService Config { get; } = new ConfigService();
     private ConfigService(){}
 

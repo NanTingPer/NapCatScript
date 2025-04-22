@@ -1,7 +1,7 @@
 ﻿using NapCatScript.JsonFromat.EventJson;
 using System.Buffers;
 
-namespace NapCatScript.MesgHandle.Parses;
+namespace NapCatScript.MesgHandle;
 public static class ReceiveMesg
 {
     public static async Task<MesgInfo?> Receive(this ClientWebSocket socket, CancellationToken CToken)

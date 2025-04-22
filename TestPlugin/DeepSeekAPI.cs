@@ -1,5 +1,5 @@
 ﻿using NapCatScript.JsonFromat;
-using NapCatScript.JsonFromat.Mesgs;
+using NapCatScript.JsonFromat.Msgs;
 using NapCatScript.Start;
 using System.Text.Json.Serialization;
 using static NapCatScript.MesgHandle.Utils;
@@ -134,7 +134,7 @@ public class DeepSeekAPI
         };
 
         JsonDocument? document = null;
-        string sendContent = await NapCatScript.MesgHandle.Parses.SendMesg.Send("https://api.deepseek.com/chat/completions", jsonContent, null, Main_.CTokrn, hand);
+        string sendContent = await SendMesg.Send("https://api.deepseek.com/chat/completions", jsonContent, null, Main_.CTokrn, hand);
         if(sendContent == "Erro") {
             SendTextAsync(mesg, httpURI, "服务器挂掉惹，等等吧~", tk);
             活跃数--;
@@ -163,7 +163,7 @@ public class DeepSeekAPI
                             else {
                                 MsgTo msgto = TestClass.SendObj!.GetMesgTo(mesg, out var id);
                                 //TestClass.SendObj.SendMarkDown(id, text, msgto);
-                                TestClass.SendObj.SendForawrd(id, mesg, new List<MsgJson> { new TextMsgJson(text) }, msgto);
+                                TestClass.SendObj.SendForawrd(id, mesg, new List<MsgJson> { new TextJson(text) }, msgto);
                             }
                             await UpDownContent(recContent.GetString(), mesg);
                             AddGroupMesg(mesg, recContent.GetString()); //加入组
@@ -306,10 +306,10 @@ public class DeepSeekAPI
         }
         
         try {
-            List<DeepSeekModel> upDowns = await Service.GetAll<DeepSeekModel>();
+            List<DeepSeekModel> upDowns = await SQLService.GetAll<DeepSeekModel>();
             upDowns = GetMesg(upDowns, mesg);//过滤本群聊消息
             if (upDowns.Count == 0) {
-                await Service.Insert<DeepSeekModel>(dsm);
+                await SQLService.Insert<DeepSeekModel>(dsm);
                 return;
             }
 
@@ -317,9 +317,9 @@ public class DeepSeekAPI
             long maxKey = upDowns.Max(f => f.Key);
             long minKey = upDowns.Min(f => f.Key);
             if(maxKey - minKey > 20) {
-                await Service.Delete<DeepSeekModel>(minKey.ToString());
+                await SQLService.Delete<DeepSeekModel>(minKey.ToString());
             }
-            await Service.Insert<DeepSeekModel>(dsm);
+            await SQLService.Insert<DeepSeekModel>(dsm);
 
         } catch (Exception e) {
             Console.WriteLine($"更新上下文错误: {e.Message}" + "\r\n" + e.StackTrace);
@@ -334,7 +334,7 @@ public class DeepSeekAPI
     {
         List<T> upDowns;
         try {
-            upDowns = await Service.GetAll<T>();
+            upDowns = await SQLService.GetAll<T>();
         } catch (Exception e) {
             Console.WriteLine("获取上下文失败: " + e.Message);
             Log.Erro("获取上下文失败: ", e.Message, e.StackTrace);
@@ -361,10 +361,10 @@ public class DeepSeekAPI
     private static async Task DeleteUpDownContent<T>(MesgInfo mesg) where T : DeepSeekModel, new()
     {
         try {
-            List<T> mesgs = await Service.GetAll<T>();
+            List<T> mesgs = await SQLService.GetAll<T>();
             mesgs = GetMesg(mesgs, mesg);
 
-            await Service.DeleteRange(mesgs);
+            await SQLService.DeleteRange(mesgs);
             //await Service.DeleteALL<DeepSeekModel>();
         } catch(Exception e) {
             Console.WriteLine("删除上下文失败");
@@ -389,19 +389,19 @@ public class DeepSeekAPI
         }
 
         try {
-            List<DeepSeekGroupModel> mesgs = await Service.GetAll<DeepSeekGroupModel>();
+            List<DeepSeekGroupModel> mesgs = await SQLService.GetAll<DeepSeekGroupModel>();
             mesgs = GetMesg(mesgs, mesg);//有效消息
                                          //只保留二十条上下文
             if (mesgs.Count == 0) {
-                await Service.Insert<DeepSeekModel>(dsgm);
+                await SQLService.Insert<DeepSeekModel>(dsgm);
                 return;
             }
             long maxKey = mesgs.Max(f => f.Key);
             long minKey = mesgs.Min(f => f.Key);
             if (maxKey - minKey > 120) {
-                await Service.Delete<DeepSeekGroupModel>(minKey.ToString());
+                await SQLService.Delete<DeepSeekGroupModel>(minKey.ToString());
             }
-            await Service.Insert<DeepSeekGroupModel>(dsgm);
+            await SQLService.Insert<DeepSeekGroupModel>(dsgm);
         } catch (Exception e) {
             Console.WriteLine("添加组消息失败: " + e.Message + "\r\n" + e.StackTrace);
             Log.Erro("添加组消息失败: ", e.Message, e.StackTrace);

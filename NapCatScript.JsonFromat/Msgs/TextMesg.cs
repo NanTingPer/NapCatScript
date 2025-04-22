@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace NapCatScript.JsonFromat.Mesgs;
+namespace NapCatScript.JsonFromat.Msgs;
 /// <summary>
 /// 构建群聊文本消息与私聊文本消息
 /// </summary>

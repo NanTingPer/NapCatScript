@@ -1,5 +1,4 @@
-﻿using NapCatScript.JsonFromat.Mesgs;
-using NapCatScript.MesgHandle.Parses;
+﻿using NapCatScript.JsonFromat.Msgs;
 using TestPlugin.Models;
 
 namespace TestPlugin;
@@ -52,7 +51,7 @@ public class VanillaWiki : PluginType
                 return;
             case "查看全部映射":
                 string mappings = await WikiNameMapping<VanillaMapModel>.GetMappings();
-                MsgJson json = new TextMsgJson(mappings);
+                MsgJson json = new TextJson(mappings);
                 Send.SendForawrd(mesg.GetId(), mesg, [json], mesg.GetMsgTo());
                 return;
         }

@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace NapCatScript.JsonFromat.Mesgs;
+namespace NapCatScript.JsonFromat.Msgs;
 
 public class TwoForwardMsg : BaseMsg
 {
@@ -13,30 +13,30 @@ public class TwoForwardMsg : BaseMsg
 /// <summary>
 /// 二级合并转发消息的Json
 /// </summary>
-public class TwoForwardMsgJson : MsgJson
+public class TwoForwardJson : MsgJson
 {
-    public TwoForwardMsgJson(TwoForawrdMsgJsonData data)
+    public TwoForwardJson(TwoForawrdData data)
     {
         Data = data;
         JsonText = JsonSerializer.Serialize(this);
     }
 
-    public TwoForwardMsgJson(string user_id, string nickname, List<MsgJson> contents)
+    public TwoForwardJson(string user_id, string nickname, List<MsgJson> contents)
     {
-        Data = new TwoForawrdMsgJsonData(user_id, nickname, contents);
+        Data = new TwoForawrdData(user_id, nickname, contents);
         JsonText = JsonSerializer.Serialize(this);
     }
 
-    public TwoForwardMsgJson(string user_id, string nickname, MsgJson contents)
+    public TwoForwardJson(string user_id, string nickname, MsgJson contents)
     {
-        Data = new TwoForawrdMsgJsonData(user_id, nickname, [contents]);
+        Data = new TwoForawrdData(user_id, nickname, [contents]);
         JsonText = JsonSerializer.Serialize(this);
     }
 
 
-    public TwoForwardMsgJson(MsgJson content)
+    public TwoForwardJson(MsgJson content)
     {
-        Data = new TwoForawrdMsgJsonData(content);
+        Data = new TwoForawrdData(content);
         JsonText = JsonSerializer.Serialize(this);
     }
 
@@ -50,7 +50,7 @@ public class TwoForwardMsgJson : MsgJson
     /// 内容
     /// </summary>
     [JsonPropertyName("data")]
-    public TwoForawrdMsgJsonData Data { get; set; }
+    public TwoForawrdData Data { get; set; }
     [JsonIgnore]
     public override string JsonText { get; set; }
 }
@@ -58,7 +58,7 @@ public class TwoForwardMsgJson : MsgJson
 /// <summary>
 /// 二级合并转发消息Json的Data
 /// </summary>
-public class TwoForawrdMsgJsonData
+public class TwoForawrdData
 {
     public void SetDefualtValue()
     {
@@ -71,7 +71,7 @@ public class TwoForawrdMsgJsonData
     /// 构建空二级转发Data
     /// </summary>
     /// <param name="user_id"></param>
-    public TwoForawrdMsgJsonData(string user_id)
+    public TwoForawrdData(string user_id)
     {
         User_id = user_id;
         SetDefualtValue();
@@ -82,7 +82,7 @@ public class TwoForawrdMsgJsonData
     /// </summary>
     /// <param name="user_id"> 发起ID </param>
     /// <param name="nickname"> 发起Name </param>
-    public TwoForawrdMsgJsonData(string user_id, string nickname)
+    public TwoForawrdData(string user_id, string nickname)
     {
         User_id = user_id;
         NickName = nickname;
@@ -95,7 +95,7 @@ public class TwoForawrdMsgJsonData
     /// <param name="user_id"> 发起ID </param>
     /// <param name="nickname"> 发起名称 </param>
     /// <param name="msgJsons"> 消息内容 </param>
-    public TwoForawrdMsgJsonData(string user_id, string nickname, List<MsgJson> msgJsons)
+    public TwoForawrdData(string user_id, string nickname, List<MsgJson> msgJsons)
     {
         User_id = user_id;
         NickName = nickname;
@@ -105,7 +105,7 @@ public class TwoForawrdMsgJsonData
     /// <summary>
     /// 构建单个内容的二层合并转发消息，id与name会为默认值
     /// </summary>
-    public TwoForawrdMsgJsonData(MsgJson content)
+    public TwoForawrdData(MsgJson content)
     {
         Content = [content];
         SetDefualtValue();

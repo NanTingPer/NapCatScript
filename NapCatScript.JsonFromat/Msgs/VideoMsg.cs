@@ -1,11 +1,11 @@
-﻿using static NapCatScript.JsonFromat.Mesgs.VideoMsgJson;
+﻿using static NapCatScript.JsonFromat.Msgs.VideoJson;
 
-namespace NapCatScript.JsonFromat.Mesgs;
+namespace NapCatScript.JsonFromat.Msgs;
 
 /// <summary>
 /// 视频消息
 /// </summary>
-public class VideoMesg : BaseMsg
+public class VideoMsg : BaseMsg
 {
     public override string JsonText { get; set; }
     public override JsonElement JsonElement { get; set; }
@@ -13,10 +13,10 @@ public class VideoMesg : BaseMsg
     public override dynamic JsonObject { get; set; }
 
     /// <param name="file">本地路径或者网络路径, file://D:/a.mp4</param>
-    public VideoMesg(string file)
+    public VideoMsg(string file)
     {
         VideoMsgData data = new VideoMsgData(file);
-        VideoMsgJson obj = new VideoMsgJson(data);
+        VideoJson obj = new VideoJson(data);
         JsonText = JsonSerializer.Serialize(obj);
         JsonElement = JsonSerializer.SerializeToElement(obj);
         JsonDocument = JsonSerializer.SerializeToDocument(obj);
@@ -27,9 +27,9 @@ public class VideoMesg : BaseMsg
 /// <summary>
 /// 视频消息的Json对象
 /// </summary>
-public class VideoMsgJson : MsgJson
+public class VideoJson : MsgJson
 {
-    public VideoMsgJson(VideoMsgData data)
+    public VideoJson(VideoMsgData data)
     {
         Data = data;
         JsonText = JsonSerializer.Serialize(this);

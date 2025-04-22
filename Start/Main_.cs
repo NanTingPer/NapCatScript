@@ -1,11 +1,10 @@
-﻿using NapCatScript.MesgHandle.Parses;
-using System.Net.WebSockets;
-using static NapCatScript.MesgHandle.Parses.ReceiveMesg;
+﻿using System.Net.WebSockets;
+using static NapCatScript.MesgHandle.ReceiveMesg;
 using Config = NapCatScript.Services.Config;
 using System.Reflection;
 using NapCatScript.Services;
 using NapCatScript.MesgHandle;
-using NapCatScript.JsonFromat.Mesgs;
+using NapCatScript.JsonFromat.Msgs;
 using NapCatScript.JsonFromat;
 using System.Net.Sockets;
 using System;
@@ -137,8 +136,8 @@ public class Main_
     {
         var contents = new List<MsgJson>()
         {
-            new AtMsgJson("qqid"),
-            new TextMsgJson("sendMsgText"),
+            new AtJson("qqid"),
+            new TextJson("sendMsgText"),
         };
         send.SendMsg("qqid", MsgTo.user, contents);
     }

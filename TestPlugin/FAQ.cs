@@ -26,7 +26,7 @@ public class FAQ
         }
         var faq = new FAQModel() { Key = cons[0], Value = cons[1], CreateTime = DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss"), UserId = mesg.UserId, UserName = mesg.UserName };
         try {
-            await Service.Insert<FAQModel>(faq);
+            await SQLService.Insert<FAQModel>(faq);
         } catch (Exception e) {
             Log.Erro($"FAQ插入错误: {e.Message}\r\n {e.StackTrace}");
             return;
@@ -41,7 +41,7 @@ public class FAQ
     {
         FAQModel? co;
         try {
-            co = await Service.Get<FAQModel>(content);
+            co = await SQLService.Get<FAQModel>(content);
         } catch { return null; }
 
         return co;
@@ -52,6 +52,6 @@ public class FAQ
     /// </summary>
     public async void DeleteAsync(string content)
     {
-        await Service.Delete<FAQModel>(content.Split(SplitChars)[1]);
+        await SQLService.Delete<FAQModel>(content.Split(SplitChars)[1]);
     }
 }

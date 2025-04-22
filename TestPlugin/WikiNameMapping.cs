@@ -18,7 +18,7 @@ public static class WikiNameMapping<T> where T : MapModel, new()
     {
         T? t = null;
         try {
-            t = await Service.Get<T>(content);
+            t = await SQLService.Get<T>(content);
         } catch (Exception e){
             Console.WriteLine("发生错误: \r\n" + e.Message + "\r\n" + e.StackTrace);
         }
@@ -56,12 +56,12 @@ public static class WikiNameMapping<T> where T : MapModel, new()
                 return;
             }
             try {
-                await Service.CreateTable<T>();
+                await SQLService.CreateTable<T>();
             } catch {
                 Console.WriteLine("创表失败");
                 return;
             }
-            await Service.Insert(new T() { Key = mapString[1], oldString = mapString[0] , UserId = mesg.UserId, CreateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), UserName = mesg.UserName});
+            await SQLService.Insert(new T() { Key = mapString[1], oldString = mapString[0] , UserId = mesg.UserId, CreateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), UserName = mesg.UserName});
             SendTextAsync(mesg, httpURI, "ok啦，试试？", ct);
 
         } catch(Exception e) {
@@ -80,7 +80,7 @@ public static class WikiNameMapping<T> where T : MapModel, new()
     public static async void DeleteAsync(MesgInfo mesg, string httpURI, string content, CancellationToken ct)
     {
         string con = content.Split(DelSplit)[1];
-        await Service.Delete<T>(con);
+        await SQLService.Delete<T>(con);
         SendTextAsync(mesg, httpURI, "删掉啦，当然可能根本没有哦" ,ct);
     }
 
@@ -89,7 +89,7 @@ public static class WikiNameMapping<T> where T : MapModel, new()
     /// </summary>
     public static async Task<string> GetMappings()
     {
-        List<T> mappings = await Service.GetAll<T>();
+        List<T> mappings = await SQLService.GetAll<T>();
         var mapGroup = new Dictionary<string, List<string>>();
         foreach (var map in mappings) {
             if(mapGroup.TryGetValue(map.oldString, out var list)) { //存在
