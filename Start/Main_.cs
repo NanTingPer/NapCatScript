@@ -3,6 +3,7 @@ using static NapCatScript.Core.MsgHandle.ReceiveMesg;
 using Config = NapCatScript.Core.Services.Config;
 using System.Reflection;
 using System.Data;
+using NapCatScript.Core;
 
 namespace NapCatScript.Start;
 
@@ -23,10 +24,11 @@ public class Main_
     public static string BotId { get; set; } = "";
     public static ClientWebSocket Socket { get; private set; } = new ClientWebSocket();
     public static CancellationToken CTokrn { get; } = new CancellationToken();
+    public static Send SendObject { get; private set; }
     public static List<MsgInfo> NoPMesgList { get; } = [];
     public static bool IsConnection = false;
     public static Random rand = new Random();
-    public static List<PluginType> Plugins = [];
+    public static List<PluginType> Plugins;
     public static long lifeTime = 0;
     public static long oldLifeTime = 0;
     public static long seconds = 0;
@@ -35,37 +37,21 @@ public class Main_
     /// ws状态
     /// </summary>
     public static ConnectionState state = ConnectionState.Open;
-    public static Send SendObject { get; private set; }
-    static Main_()
-    {
-        string? useUri = GetConf(URI);
-        string? httpUri = GetConf(HttpURI);
-        BotId = GetConf(BootId) ?? "";
-        if (string.IsNullOrEmpty(useUri) || string.IsNullOrEmpty(httpUri)) {
-            Console.WriteLine("配置文件已生成，请检查Uri配置");
-            Console.ReadLine();
-            Environment.Exit(0);
-        }
-        SocketUri = useUri;
-        HttpUri = httpUri;
-        RootId = GetConf(Config.RootId) ?? "";
-        SendObject = new Send(HttpUri);
-    }
     static void Main(string[] args)
     {
-        LoadPlugin();
+        BotId = CoreConfigValueAndObject.BotId;
+        SocketUri = CoreConfigValueAndObject.SocketUri;
+        HttpUri = CoreConfigValueAndObject.HttpUri;
+        RootId = CoreConfigValueAndObject.RootId;
+        SendObject = CoreConfigValueAndObject.SendObject;
+        Plugins = CoreConfigValueAndObject.Plugins;
         try {
             //接收消息 并将有效消息存放到NoPMesgList
             Task.Run(Receive);
-#if DEBUG
-            //发送消息
-            Task.Run(Send);
-#endif
 
-#if RELEASE
             //发送消息
             Task.Run(Send);
-#endif
+
             //心跳
             Task.Run(LifeCycle);
 
@@ -133,30 +119,6 @@ public class Main_
             new TextJson("sendMsgText"),
         };
         send.SendMsg("qqid", MsgTo.user, contents);
-    }
-
-    private static void LoadPlugin()
-    {
-        string pluginDirectory = Path.Combine(Environment.CurrentDirectory, "Plugin");
-        if (!Directory.Exists(pluginDirectory))
-            Directory.CreateDirectory(pluginDirectory);
-        string[] plugins = Directory.GetDirectories(pluginDirectory); //给的是绝对路径
-        foreach (var pluginPath in plugins) {
-            string pluginName = new DirectoryInfo(pluginPath).Name;
-            string pluginDllPath = Path.Combine(pluginPath, pluginName + ".dll");
-            PluginLoad plugin = new PluginLoad(pluginDllPath);
-            Assembly ass = plugin.LoadFromAssemblyPath(pluginDllPath); //加载插件程序集
-            #region 初始化插件的全部PluginType
-            IEnumerable<Type> pluginStartTypes = ass.GetTypes().Where(f => typeof(PluginType) == f.BaseType);
-            foreach (var pluginStartType in pluginStartTypes) {
-                ConstructorInfo? pluginConstructor = pluginStartType.GetConstructors().FirstOrDefault(f => f.GetParameters().Length == 0);
-                if (pluginConstructor is null) return;
-                PluginType obj = (PluginType)pluginConstructor.Invoke(null);
-                obj.Init();
-                Plugins.Add(obj);
-            }
-            #endregion
-        }
     }
 
     /// <summary>

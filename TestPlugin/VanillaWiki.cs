@@ -1,4 +1,5 @@
-﻿using TestPlugin.Models;
+﻿using NapCatScript.Core;
+using TestPlugin.Models;
 
 namespace TestPlugin;
 
@@ -6,7 +7,6 @@ public class VanillaWiki : PluginType
 {
     public override void Init()
     {
-        Console.WriteLine("加载VanillaImage!");
         VNPCs = VNPCs.Distinct().ToList();
 
         VItems = VItems.Distinct().Select(f => {

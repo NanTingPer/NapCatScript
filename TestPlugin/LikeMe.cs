@@ -1,9 +1,12 @@
-﻿namespace TestPlugin;
+﻿using NapCatScript.Core;
+
+namespace TestPlugin;
 
 public class LikeMe : PluginType
 {
     public override void Init()
     {
+
     }
 
     public override async Task Run(MsgInfo mesg, string httpUri)

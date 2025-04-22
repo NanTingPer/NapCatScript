@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("NapCatScript.Core")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fda5a1701f457734f13d9f1f752d909a008a6c53")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+125395223950ab535d1590dc7c0a47f823c99738")]
 [assembly: System.Reflection.AssemblyProductAttribute("NapCatScript.Core")]
 [assembly: System.Reflection.AssemblyTitleAttribute("NapCatScript.Core")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

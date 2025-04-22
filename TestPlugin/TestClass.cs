@@ -1,4 +1,6 @@
-﻿namespace TestPlugin;
+﻿using NapCatScript.Core;
+
+namespace TestPlugin;
 
 public class TestClass : PluginType
 {
@@ -19,7 +21,6 @@ public class TestClass : PluginType
         StartString = $"[CQ:at,qq={BotId}]";
         StartString = Regex.Replace(StartString, @"\s", "");
         DeepSeekKey = GetConf(Config.DeepSeekKey) ?? "";
-        Console.WriteLine("Hello Is My Plugin!");
         SendObj = Send;
     }
 

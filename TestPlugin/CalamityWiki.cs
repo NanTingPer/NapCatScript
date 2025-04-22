@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using NapCatScript.Core;
+using System.Threading.Tasks;
 using TestPlugin.Models;
 using static TestPlugin.ContentList;
 
@@ -8,7 +9,6 @@ public class CalamityWiki : PluginType
 {
     public override void Init()
     {
-        Console.WriteLine("加载CalImage!");
     }
 
     public override async Task Run(MsgInfo mesg, string httpUri)

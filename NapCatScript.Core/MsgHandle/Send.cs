@@ -1,5 +1,4 @@
-﻿using NapCatScript.Core.Model;
-using System.Net;
+﻿using System.Net;
 
 namespace NapCatScript.Core.MsgHandle;
 public class Send
