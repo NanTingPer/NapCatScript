@@ -29,7 +29,7 @@ public class SendCN
     public void 设置个性签名(string 内容) => send.SetSelfLongnick(内容);
     public Task<bool> 上传私聊文件Async(string 用户ID, string 文件路径, string 名称) => send.UploadPrivateFileAsync(用户ID, 文件路径, 名称);
     public void 上传私聊文件(string 用户ID, string 文件路径, string 名称) => send.UploadPrivateFile(用户ID, 文件路径, 名称);
-    public void 发送MarkDown(string 目标, string 内容, MesgInfo 消息引用, MsgTo 去处) => send.SendMarkDown(目标, 内容, 消息引用, 去处);
+    public void 发送MarkDown(string 目标, string 内容, MsgInfo 消息引用, MsgTo 去处) => send.SendMarkDown(目标, 内容, 消息引用, 去处);
     /// <summary>
     /// 此方法发送的MarkDown用户id为123456. 昵称为 匿名
     /// </summary>
@@ -37,7 +37,7 @@ public class SendCN
     /// <param name="content"> 内容 </param>
     /// <param name="type"> 类型 </param>
     public void 发送MarkDown(string 目标, string 内容, MsgTo 去处) => send.SendMarkDown(目标, 内容, 去处);
-    public void 发送MarkDown(string 目标, MesgInfo 来源的方法引用, MsgTo 去处, params string[] 内容集) => send.SendMarkDown(目标, 来源的方法引用, 去处, 内容集);
-    public void 发送MarkDown(string 目标, MesgInfo 来源的方法引用, List<string> 内容集, MsgTo 去处) => send.SendMarkDown(目标, 来源的方法引用, 内容集, 去处);
+    public void 发送MarkDown(string 目标, MsgInfo 来源的方法引用, MsgTo 去处, params string[] 内容集) => send.SendMarkDown(目标, 来源的方法引用, 去处, 内容集);
+    public void 发送MarkDown(string 目标, MsgInfo 来源的方法引用, List<string> 内容集, MsgTo 去处) => send.SendMarkDown(目标, 来源的方法引用, 内容集, 去处);
 }
 

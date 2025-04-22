@@ -23,7 +23,7 @@ public class Main_
     public static string BotId { get; set; } = "";
     public static ClientWebSocket Socket { get; private set; } = new ClientWebSocket();
     public static CancellationToken CTokrn { get; } = new CancellationToken();
-    public static List<MesgInfo> NoPMesgList { get; } = [];
+    public static List<MsgInfo> NoPMesgList { get; } = [];
     public static bool IsConnection = false;
     public static Random rand = new Random();
     public static List<PluginType> Plugins = [];
@@ -86,7 +86,7 @@ public class Main_
         while (true) {
             await Task.Delay(1);
             try {
-                MesgInfo? mesg = await Socket.Receive(CTokrn); //收到的消息
+                MsgInfo? mesg = await Socket.Receive(CTokrn); //收到的消息
                 if (mesg is not null) {
                     if (mesg.lifeTime != 0)
                         SetLifeTime(mesg.lifeTime);
@@ -110,7 +110,7 @@ public class Main_
             await Task.Delay(1);
             if (NoPMesgList.Count <= 0)
                 continue;
-            MesgInfo mesg = NoPMesgList.First();
+            MsgInfo mesg = NoPMesgList.First();
             //interfaceTest(sned); // Test
             NoPMesgList.RemoveAt(0);
             Log.Info(mesg);

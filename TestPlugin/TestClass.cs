@@ -23,7 +23,7 @@ public class TestClass : PluginType
         SendObj = Send;
     }
 
-    public override async Task Run(MesgInfo mesg, string httpUri)
+    public override async Task Run(MsgInfo mesg, string httpUri)
     {
         string mesgContent = mesg.MessageContent;
         mesgContent = Regex.Replace(mesgContent, @"\s", "");

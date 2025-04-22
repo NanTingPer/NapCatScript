@@ -9,7 +9,7 @@ public class MessagesService
 
     private MessagesService() { }
 
-    public async void SetAsync(MesgInfo mesg)
+    public async void SetAsync(MsgInfo mesg)
     {
         await sql.Insert(mesg.ToMesgInfo());
     }
@@ -22,7 +22,7 @@ public class MessagesService
 
 static class MesgExt
 {
-    public static SQLMesgInfo ToMesgInfo(this MesgInfo mesg)
+    public static SQLMesgInfo ToMesgInfo(this MsgInfo mesg)
     {
         var obj = new SQLMesgInfo();
         obj.Key = Guid.NewGuid().ToString("N");

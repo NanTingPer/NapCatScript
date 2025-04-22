@@ -11,7 +11,7 @@ public class CalamityWiki : PluginType
         Console.WriteLine("加载CalImage!");
     }
 
-    public override async Task Run(MesgInfo mesg, string httpUri)
+    public override async Task Run(MsgInfo mesg, string httpUri)
     {
         await Task.Delay(0);
         string mesgContent = mesg.MessageContent;
@@ -71,7 +71,7 @@ public class CalamityWiki : PluginType
         }
     }
 
-    public static async void/*Task<string>*/ SendAsync(MesgInfo mesg, string fileName, string sendUrl, MsgTo MESGTO, params string[] filePaths)
+    public static async void/*Task<string>*/ SendAsync(MsgInfo mesg, string fileName, string sendUrl, MsgTo MESGTO, params string[] filePaths)
     {
         if (string.IsNullOrEmpty(fileName))
             fileName = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
@@ -108,7 +108,7 @@ public class CalamityWiki : PluginType
         #endregion
     }
 
-    private static async Task<bool> SendImage(MesgInfo mesg, string filePath, string sendUrl, MsgTo MESGTO)
+    private static async Task<bool> SendImage(MsgInfo mesg, string filePath, string sendUrl, MsgTo MESGTO)
     {
         if (File.Exists(filePath)) {
             ImageMesg sendMesg = new ImageMesg(GetUserId(mesg), MESGTO, filePath);

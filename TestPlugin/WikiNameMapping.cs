@@ -35,7 +35,7 @@ public static class WikiNameMapping<T> where T : MapModel, new()
     /// <param name="content"> 消息内容(映射#xxx=>xxx) </param>
     /// <param name="contentList"> 内容集，如果给定集合中包含消息内容的物品才进行映射 </param>
     /// <returns></returns>
-    public static async void AddAsync(MesgInfo mesg, string httpURI, string content, CancellationToken ct, params IEnumerable<string>[] contentList)
+    public static async void AddAsync(MsgInfo mesg, string httpURI, string content, CancellationToken ct, params IEnumerable<string>[] contentList)
     {
         try {
             string[] mapString = content.Split(MapSplit)[1].Split(MapSplit2);
@@ -77,7 +77,7 @@ public static class WikiNameMapping<T> where T : MapModel, new()
     /// <param name="mesg"> 消息引用 </param>
     /// <param name="httpURI"> 基础URI http://127.0.0.1:6666 </param>
     /// <param name="content"> 要被删的段 </param>
-    public static async void DeleteAsync(MesgInfo mesg, string httpURI, string content, CancellationToken ct)
+    public static async void DeleteAsync(MsgInfo mesg, string httpURI, string content, CancellationToken ct)
     {
         string con = content.Split(DelSplit)[1];
         await SQLService.Delete<T>(con);

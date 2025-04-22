@@ -125,6 +125,6 @@ public static class Config
         foreach (var cr in value) {
             bytes.Add(Convert.ToByte(cr));
         }
-        return bytes.ToArray();
+        return [.. bytes];
     }
 }

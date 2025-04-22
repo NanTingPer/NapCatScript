@@ -7,7 +7,7 @@ public static class Utils
     ///获取Msg消息URL 基本消息(API访问链接)
     ///<para> uri是原始链接 例如: http://127.0.0.1:6666 </para>
     ///</summary>
-    public static string GetMsgToURL(this MesgInfo message, string uri)
+    public static string GetMsgToURL(this MsgInfo message, string uri)
     {
         if (message.MessageType == "group") {
             if (uri.EndsWith('/')) return uri + API.GroupMsgNoX;
@@ -25,14 +25,14 @@ public static class Utils
     /// 获取目标ID
     /// <para>如果是群消息，返回群ID</para>
     /// </summary>
-    public static string GetUserId(MesgInfo mesg)
+    public static string GetUserId(MsgInfo mesg)
     {
         if (mesg.GroupId != string.Empty)
             return mesg.GroupId;
         return mesg.UserId;
     }
 
-    public static MsgTo GetMsgTo(this MesgInfo info)
+    public static MsgTo GetMsgTo(this MsgInfo info)
     {
         if (info.MessageType == "group")
             return MsgTo.group;
@@ -47,7 +47,7 @@ public static class Utils
     /// <param name="httpURI"> 目标基础uri 例: http://127.0.0.1:6666 </param>
     /// <param name="content"> 消息内容 </param>
     /// <returns></returns>
-    public static async void SendTextAsync(MesgInfo mesg, string httpURI, string content, CancellationToken ct)
+    public static async void SendTextAsync(MsgInfo mesg, string httpURI, string content, CancellationToken ct)
     {
         string sendUri = mesg.GetMsgToURL(httpURI);
         TextMesg r = new TextMesg(GetUserId(mesg), mesg.GetMsgTo(), content);

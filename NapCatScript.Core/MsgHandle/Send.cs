@@ -4,6 +4,14 @@ using System.Net;
 namespace NapCatScript.Core.MsgHandle;
 public class Send
 {
+    public Send(string httpURI)
+    {
+        if (httpURI.EndsWith('/'))
+            HttpURI = httpURI;
+        else HttpURI = httpURI + '/';
+    }
+
+    #region API
     public string ArkShareGroupAPI { get => HttpURI + nameof(ArkShareGroup); }
     public string ArkSharePeerAPI { get => HttpURI + nameof(ArkSharePeer); }
     public string CreateCollectionAPI { get => HttpURI + nameof(create_collection); }
@@ -22,13 +30,9 @@ public class Send
     public string SendGroupMsgAPI { get => HttpURI + "send_group_msg"; }
     public string SendMsgAPI { get => HttpURI + "send_msg"; }
     public string HttpURI { get; set; } = "";
-    public Send(string httpURI)
-    {
-        if (httpURI.EndsWith('/'))
-            HttpURI = httpURI;
-        else HttpURI = httpURI + '/';
-    }
+    #endregion API
 
+    #region 辅助方法
     ///<summary>
     ///获取Msg消息URL 基本消息(API访问链接)
     ///<para> uri是原始链接 例如: http://127.0.0.1:6666 </para>
@@ -44,7 +48,7 @@ public class Send
         return "";
     }
 
-    public MsgTo GetMesgTo(MesgInfo mesginfo, out string id)
+    public MsgTo GetMesgTo(MsgInfo mesginfo, out string id)
     {
         if (mesginfo.MessageType == "group") {
             id = mesginfo.GroupId;
@@ -54,7 +58,18 @@ public class Send
             return MsgTo.user;
         }
     }
+    #endregion
+
     #region 上传私聊文件 upload_private_file
+
+    /// <summary>
+    /// 上传私聊文件，通过info中的消息类型决定用户id
+    /// </summary>
+    /// <param name="info"> 消息信息 </param>
+    /// <param name="file"> 文件路径 </param>
+    /// <param name="name"> 目标名称 </param>
+    public async void UploadPrivateFileAsync(MsgInfo info, string file, string name) => await UploadPrivateFileAsync(info.GetId(), file, name);
+
     /// <summary>
     /// 上传私聊文件
     /// </summary>
@@ -239,11 +254,17 @@ public class Send
     public async void SendLike(string user_id, int num)
     {
         try {
-            await SendMesg.Send(SendLikeAPI, new send_like(user_id, num).JsonText);
+            //await SendMesg.Send(SendLikeAPI, new send_like(user_id, num).JsonText);
+            await SendLikeAsync(user_id, num);
         } catch (Exception e) {
             Log.Erro(e.Message, e.StackTrace);
         }
     }
+
+    /// <summary>
+    /// 给info中的UserId点赞
+    /// </summary>
+    public async void SendLike(MsgInfo info, int num) => await SendLikeAsync(info.UserId, num);
     #endregion
 
     #region 获取帐号信息 get_stranger_info
@@ -461,7 +482,7 @@ public class Send
     /// <param name="id"> 群ID / 个人ID </param>
     /// <param name="content"> 内容 </param>
     /// <param name="type"> 类型 </param>
-    public async void SendMarkDown(string id, string content, MesgInfo mesg, MsgTo type)
+    public async void SendMarkDown(string id, string content, MsgInfo mesg, MsgTo type)
     {
         var MarkDownJson = new MarkDownJson(content);
         var 二级转发消息 = new TwoForwardJson(mesg.UserId, mesg.UserName, MarkDownJson);
@@ -474,7 +495,7 @@ public class Send
         await postReturnContent.Content.ReadAsStringAsync();
     }
 
-    public async void SendMarkDown(string id, MesgInfo mesg, List<string> markdownContents, MsgTo type)
+    public async void SendMarkDown(string id, MsgInfo mesg, List<string> markdownContents, MsgTo type)
     {
         List<MsgJson> contents = new List<MsgJson>();
         foreach (var content in markdownContents)
@@ -490,17 +511,18 @@ public class Send
         await postReturnContent.Content.ReadAsStringAsync();
     }
 
-    public void SendMarkDown(string id, MesgInfo mesg, MsgTo type, params string[] markdownContents) => SendMarkDown(id, mesg, markdownContents.ToList(), type);
+    public void SendMarkDown(string id, MsgInfo mesg, MsgTo type, params string[] markdownContents) => SendMarkDown(id, mesg, markdownContents.ToList(), type);
     #endregion
 
+    #region 合并转发消息
     /// <summary>
-    /// 合并转发消息
+    /// 发送，合并转发消息
     /// </summary>
-    /// <param name="id"></param>
+    /// <param name="id"> 目标 </param>
     /// <param name="mesgInfo"></param>
     /// <param name="msgs"></param>
     /// <param name="mesgTo"></param>
-    public async void SendForawrd(string id, MesgInfo mesgInfo, IEnumerable<MsgJson> msgs, MsgTo mesgTo)
+    public async void SendForawrd(string id, MsgInfo mesgInfo, IEnumerable<MsgJson> msgs, MsgTo mesgTo)
     {
         List<ForwardData> fd = new List<ForwardData>();
         foreach (var json in msgs) {
@@ -515,6 +537,14 @@ public class Send
             Log.Erro(e.Message, e.StackTrace);
         }
     }
+
+    /// <summary>
+    /// 发送合并转发消息，根据info中的id决定消息去处
+    /// </summary>
+    /// <param name="info"> 消息引用 </param>
+    /// <param name="msgJsons"> 合并转发消息的内容，没一条就是一条消息 </param>
+    public void SendForawrd(MsgInfo info, IEnumerable<MsgJson> msgJsons) => SendForawrd(info.GetId(), info, msgJsons, info.GetMsgTo());
+    #endregion
 
     #region 发送消息
     /// <summary>
@@ -546,7 +576,22 @@ public class Send
         HttpResponseMessage message = await SendMesg.Send(requestUri, postJson.JsonText);
         string content = await message.Content.ReadAsStringAsync();
     }
+
+    /// <summary>
+    /// 发送消息，根据info中的属性判断消息去向
+    /// </summary>
+    /// <param name="info"> 消息引用 </param>
+    /// <param name="contents"> 消息内容 </param>
+    public void SendMsg(MsgInfo info, IEnumerable<MsgJson> contents) => SendMsg(info.GetId(), info.GetMsgTo(), contents.ToList());
     #endregion
+
+    #region 发送图片消息
+    /// <summary>
+    /// 发送图片消息
+    /// </summary>
+    /// <param name="id"> 发往的id </param>
+    /// <param name="mesgTo"> 是发群里还是私聊 </param>
+    /// <param name="filePath"> 文件路径 </param>
 
     public void SendImage(string id, MsgTo mesgTo, string filePath)
     {
@@ -554,4 +599,12 @@ public class Send
         ImageJson img = new ImageJson(fileBase64);
         SendMsg(id, mesgTo, img);
     }
+
+    /// <summary>
+    /// 发送图片消息，根据info内属性，判断消息去处
+    /// </summary>
+    /// <param name="info"> 消息引用 </param>
+    /// <param name="filePath"> 文件路径 </param>
+    public void SendImage(MsgInfo info, string filePath) => SendImage(info.GetId(), info.GetMsgTo(), filePath);
+    #endregion
 }

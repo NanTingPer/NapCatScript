@@ -2,7 +2,7 @@
 /// <summary>
 /// 数据信息 仅适用于接收消息
 /// </summary>
-public class MesgInfo
+public class MsgInfo
 {
     /// <summary>
     /// 用户ID

@@ -5,7 +5,7 @@ using System.Buffers;
 namespace NapCatScript.Core.MsgHandle;
 public static class ReceiveMesg
 {
-    public static async Task<MesgInfo?> Receive(this ClientWebSocket socket, CancellationToken CToken)
+    public static async Task<MsgInfo?> Receive(this ClientWebSocket socket, CancellationToken CToken)
     {
         if (socket.State != WebSocketState.Open)
             return null;
@@ -48,12 +48,12 @@ public static class ReceiveMesg
                 if(time == 0 && json != null)
                     return json?.GetMesgInfo()/*?.ToString()*/;
                 if (time != 0 && json == null) {
-                    MesgInfo mesg = new MesgInfo();
+                    MsgInfo mesg = new MsgInfo();
                     mesg.lifeTime = time;
                     return mesg;
                 }
                 if (time != 0 && json != null) {
-                    MesgInfo mesg = json?.GetMesgInfo()!;
+                    MsgInfo mesg = json?.GetMesgInfo()!;
                     mesg!.lifeTime = time;
                     return mesg;
                 }
@@ -72,7 +72,7 @@ public static class ReceiveMesg
     /// <summary>
     /// 使用已经过滤的Json主体，获取MesgInfo
     /// </summary>
-    private static MesgInfo? GetMesgInfo(this JsonElement json)
+    private static MsgInfo? GetMesgInfo(this JsonElement json)
     {
         bool message_type_bool = json.TryGetProperty("message_type", out JsonElement message_type);
         JsonElement user_id = new JsonElement();
@@ -89,7 +89,7 @@ public static class ReceiveMesg
             if (sender.TryGetProperty("nickname", out JsonElement value))
                 user_name = value.GetString();
         }
-        return new MesgInfo() { MessageContent = message.GetString()!, MessageType = message_type.GetString()!, UserId = user_id.GetUInt64().ToString(), GroupId = group_id_bool ? group_id.GetUInt64().ToString() : string.Empty, UserName = user_name is null ? "" : user_name };
+        return new MsgInfo() { MessageContent = message.GetString()!, MessageType = message_type.GetString()!, UserId = user_id.GetUInt64().ToString(), GroupId = group_id_bool ? group_id.GetUInt64().ToString() : string.Empty, UserName = user_name is null ? "" : user_name };
     }
 
 

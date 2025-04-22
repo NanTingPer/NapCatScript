@@ -10,7 +10,7 @@ public class DeepSeekAPI
     private static bool init = false;
     private static string promptPath { get; } = Path.Combine(Environment.CurrentDirectory, "Prompt.txt");
     private static string standardPath { get; } = Path.Combine(Environment.CurrentDirectory, "Standard.txt");
-    public static async void SendAsync(MesgInfo mesg, string httpURI, string content, CancellationToken tk)
+    public static async void SendAsync(MsgInfo mesg, string httpURI, string content, CancellationToken tk)
     {
         if (!init) {
             await InitPrompt();
@@ -254,7 +254,7 @@ public class DeepSeekAPI
     /// 指令判断并执行
     /// </summary>
     /// <returns></returns>
-    private static async Task<GoTo> Command(MesgInfo mesg, string[] temp ,string httpURI , CancellationToken tk)
+    private static async Task<GoTo> Command(MsgInfo mesg, string[] temp ,string httpURI , CancellationToken tk)
     {
         try {
             if (temp.Length == 3) {
@@ -292,7 +292,7 @@ public class DeepSeekAPI
     /// <summary>
     /// 更新上下文, int传入任意值表示不是ai自己说的话
     /// </summary>
-    private static async Task UpDownContent(string content,MesgInfo mesg, int? b = null)
+    private static async Task UpDownContent(string content,MsgInfo mesg, int? b = null)
     {
         DeepSeekModel? dsm;
         if (b is not null) {
@@ -326,7 +326,7 @@ public class DeepSeekAPI
     /// <summary>
     /// 获取属于此消息的上下文 (每个群聊与会话有做分离)
     /// </summary>
-    private static async Task<string> GetUpDownContent<T>(MesgInfo mesg) where T : DeepSeekModel, new()
+    private static async Task<string> GetUpDownContent<T>(MsgInfo mesg) where T : DeepSeekModel, new()
     {
         List<T> upDowns;
         try {
@@ -354,7 +354,7 @@ public class DeepSeekAPI
     /// <typeparam name="T"></typeparam>
     /// <param name="mesg"></param>
     /// <returns></returns>
-    private static async Task DeleteUpDownContent<T>(MesgInfo mesg) where T : DeepSeekModel, new()
+    private static async Task DeleteUpDownContent<T>(MsgInfo mesg) where T : DeepSeekModel, new()
     {
         try {
             List<T> mesgs = await SQLService.GetAll<T>();
@@ -372,7 +372,7 @@ public class DeepSeekAPI
     /// 添加组消息
     /// </summary>
     /// <returns></returns>
-    public static async void AddGroupMesg(MesgInfo mesg, string content = "")
+    public static async void AddGroupMesg(MsgInfo mesg, string content = "")
     {
         DeepSeekGroupModel? dsgm;
         try {
@@ -407,7 +407,7 @@ public class DeepSeekAPI
     /// <summary>
     /// 给定全部消息，返回只属于本消息的内容
     /// </summary>
-    private static List<T> GetMesg<T>(List<T> mesgs, MesgInfo mesg) where T : DeepSeekModel, new()
+    private static List<T> GetMesg<T>(List<T> mesgs, MsgInfo mesg) where T : DeepSeekModel, new()
     {
         if (mesg.MessageType == "group") {
             return mesgs.Where(f => f.MesgType == mesg.MessageType && f.GroupId == mesg.GroupId).ToList();

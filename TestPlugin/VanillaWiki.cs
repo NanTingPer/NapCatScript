@@ -33,7 +33,7 @@ public class VanillaWiki : PluginType
         }).Distinct().ToList();
     }
 
-    public override async Task Run(MesgInfo mesg, string httpUri)
+    public override async Task Run(MsgInfo mesg, string httpUri)
     {
         string nullTrim = mesg.MessageContent.Trim();
         if (!nullTrim.StartsWith('*'))

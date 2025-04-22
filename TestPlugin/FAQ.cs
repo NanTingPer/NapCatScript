@@ -13,7 +13,7 @@ public class FAQ
     /// <param name="httpURI"> 请求URI(例 http://127.0.0.1:6666) 不含API </param>
     /// <param name="content"> 消息内容 </param>
     /// <returns></returns>
-    public async void AddAsync(MesgInfo mesg, string httpURI, string content, CancellationToken ct)
+    public async void AddAsync(MsgInfo mesg, string httpURI, string content, CancellationToken ct)
     {
         //如果要设置权限的话，可以在这里进行
         string[] cons = content.Split(SplitChars)[1].Split(SplitChars2);

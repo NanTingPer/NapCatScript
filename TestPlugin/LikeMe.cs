@@ -6,7 +6,7 @@ public class LikeMe : PluginType
     {
     }
 
-    public override async Task Run(MesgInfo mesg, string httpUri)
+    public override async Task Run(MsgInfo mesg, string httpUri)
     {
         string mesgContent = mesg.MessageContent.Trim();
         if (mesgContent.StartsWith("#md#")) {
