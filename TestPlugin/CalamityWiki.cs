@@ -1,5 +1,4 @@
-﻿using NapCatScript.JsonFromat.Msgs;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using TestPlugin.Models;
 using static TestPlugin.ContentList;
 

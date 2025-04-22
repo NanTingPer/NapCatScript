@@ -1,7 +1,4 @@
-﻿using NapCatScript.Model;
-using static NapCatScript.MesgHandle.Utils;
-using static NapCatScript.Services.SQLiteService;
-namespace NapCatScript.Start;
+﻿namespace TestPlugin;
 
 public class FAQ
 {
@@ -26,7 +23,7 @@ public class FAQ
         }
         var faq = new FAQModel() { Key = cons[0], Value = cons[1], CreateTime = DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss"), UserId = mesg.UserId, UserName = mesg.UserName };
         try {
-            await SQLService.Insert<FAQModel>(faq);
+            await SQLService.Insert(faq);
         } catch (Exception e) {
             Log.Erro($"FAQ插入错误: {e.Message}\r\n {e.StackTrace}");
             return;

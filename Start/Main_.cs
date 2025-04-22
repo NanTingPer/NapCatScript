@@ -1,14 +1,7 @@
 ﻿using System.Net.WebSockets;
-using static NapCatScript.MesgHandle.ReceiveMesg;
-using Config = NapCatScript.Services.Config;
+using static NapCatScript.Core.MsgHandle.ReceiveMesg;
+using Config = NapCatScript.Core.Services.Config;
 using System.Reflection;
-using NapCatScript.Services;
-using NapCatScript.MesgHandle;
-using NapCatScript.JsonFromat.Msgs;
-using NapCatScript.JsonFromat;
-using System.Net.Sockets;
-using System;
-using System.Threading.Tasks;
 using System.Data;
 
 namespace NapCatScript.Start;

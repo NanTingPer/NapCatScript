@@ -1,18 +1,19 @@
-﻿global using NapCatScript.Model;
-global using NapCatScript.JsonFromat;
-global using NapCatScript.Services;
+﻿global using NapCatScript.Core.Model;
+global using NapCatScript.Core.JsonFormat;
+global using NapCatScript.Core.JsonFormat.JsonModel;
+global using NapCatScript.Core.JsonFormat.Msgs;
+global using NapCatScript.Core.Services;
 global using NapCatScript.Start;
-global using NapCatScript.MesgHandle;
+global using NapCatScript.Core.MsgHandle;
 
-global using static NapCatScript.Services.Config;
-global using static NapCatScript.Services.Loging;
-global using static NapCatScript.Services.MessagesService;
-global using static NapCatScript.Services.SQLiteService;
+global using static NapCatScript.Core.Services.Config;
+global using static NapCatScript.Core.Services.Loging;
+global using static NapCatScript.Core.Services.MessagesService;
+global using static NapCatScript.Core.Services.SQLiteService;
 global using static TestPlugin.ContentList;
 global using static NapCatScript.Start.Main_;
-global using static NapCatScript.Start.FAQ;
-global using static NapCatScript.MesgHandle.Utils;
-global using HUtils = NapCatScript.MesgHandle.Utils;
+global using static TestPlugin.FAQ;
+global using static NapCatScript.Core.MsgHandle.Utils;
 
 global using static TestPlugin.TestClass;
 

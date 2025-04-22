@@ -1,5 +1,4 @@
-﻿using NapCatScript.JsonFromat.Msgs;
-using TestPlugin.Models;
+﻿using TestPlugin.Models;
 
 namespace TestPlugin;
 

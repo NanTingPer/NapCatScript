@@ -1,5 +1,5 @@
-﻿using NapCatScript.MesgHandle;
-using NapCatScript.Services;
+﻿using NapCatScript.Core.Services;
+using NapCatScript.Core.MsgHandle;
 
 namespace NapCatScript.Start;
 

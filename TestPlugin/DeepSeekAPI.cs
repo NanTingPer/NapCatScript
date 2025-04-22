@@ -1,8 +1,4 @@
-﻿using NapCatScript.JsonFromat;
-using NapCatScript.JsonFromat.Msgs;
-using NapCatScript.Start;
-using System.Text.Json.Serialization;
-using static NapCatScript.MesgHandle.Utils;
+﻿using System.Text.Json.Serialization;
 
 namespace TestPlugin;
 
