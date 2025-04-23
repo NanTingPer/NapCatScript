@@ -3,7 +3,7 @@ using TestPlugin.Models;
 
 namespace TestPlugin;
 
-public class VanillaWiki : PluginType
+public class VanillaWiki : NapCatScript.Core.PluginType
 {
     public override void Init()
     {

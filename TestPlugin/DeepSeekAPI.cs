@@ -81,6 +81,9 @@ public class DeepSeekAPI
         systemContent.Append("。当前时间:");
         systemContent.Append(DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss"));
         RequestJson rjson = new RequestJson(systemContent.ToString(), content);
+        if(int.TryParse(MaxTokens, out int tokens)) {
+            rjson.Max_Tokens = tokens;
+        }
         string jsonContent;
         try {
             jsonContent = JsonSerializer.Serialize(rjson);

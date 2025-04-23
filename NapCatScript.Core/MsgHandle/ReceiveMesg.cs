@@ -29,34 +29,8 @@ public static class ReceiveMesg
             memResult.Dispose();
             memResult.Close();
 
-            #region 心跳
-            //try {
-            //    if (lifeCycle != null) {
-            //        var msg = new MesgInfo();
-            //        if (!long.TryParse(lifeCycle.Time, out long lifetime))
-            //            return null;
-            //        msg.lifeTime = lifetime;
-            //        return msg;
-            //    }
-            //} catch (Exception e) {
-            //    Log.Erro(e.Message, e.StackTrace);
-            //}
-            #endregion
-
-
-            if (ValidData(mesgString, out var json, out long time)) {
-                if(time == 0 && json != null)
-                    return json?.GetMesgInfo()/*?.ToString()*/;
-                if (time != 0 && json == null) {
-                    MsgInfo mesg = new MsgInfo();
-                    mesg.lifeTime = time;
-                    return mesg;
-                }
-                if (time != 0 && json != null) {
-                    MsgInfo mesg = json?.GetMesgInfo()!;
-                    mesg!.lifeTime = time;
-                    return mesg;
-                }
+            if (ValidData(mesgString, out var json)) {
+                return json?.GetMesgInfo()/*?.ToString()*/;
             }
             return null;
         } catch (Exception e) {
@@ -96,10 +70,9 @@ public static class ReceiveMesg
     /// <summary>
     /// 判断数据是否是消息，返回json主体
     /// </summary>
-    private static bool ValidData(string data, out JsonElement? json, out long time)
+    private static bool ValidData(string data, out JsonElement? json)
     {
         json = null;
-        time = 0;
         Utf8JsonReader read = new Utf8JsonReader(new ReadOnlySpan<byte>(Encoding.UTF8.GetBytes(data)));
         //整个json对象
         //JsonDocument jsonObject = JsonSerializer.SerializeToDocument(data); //这样得到的是json字符串
@@ -108,8 +81,6 @@ public static class ReceiveMesg
         try {
             //post_type
             if (jsonRoot is not null) {
-                if (jsonRoot.Value.TryGetProperty("time", out var value))
-                    if (value.TryGetInt64(out time)) { }
                 if (jsonRoot.Value.TryGetProperty("post_type", out JsonElement type)) {//此属性决定是不是消息
                     if (type.ToString() == "message") {
                         json = jsonRoot;

@@ -2,18 +2,21 @@
 
 namespace TestPlugin;
 
-public class TestClass : PluginType
+public class TestClass : NapCatScript.Core.PluginType
 {
     public const string SKNAME = "DeepSeekRes";
     public static string DeepSeekKey { get; set; } = "";
     public static string StartString { get; set; } = "";
     public static Send? SendObj { get; private set; }
     public static string SkName { get; set; }
+    public static string MaxTokens { get; set; }
 
     static TestClass()
     {
         SkName = Config.GetConf(SKNAME) ?? "亭亭";
         SkName = SkName == "" ? "亭亭" : SkName;
+        MaxTokens = GetConf(nameof(MaxTokens)) ?? "2500";
+        MaxTokens = MaxTokens == "" ? "2500" : MaxTokens;
     }
 
     public override void Init()

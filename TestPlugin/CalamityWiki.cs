@@ -5,7 +5,7 @@ using static TestPlugin.ContentList;
 
 namespace TestPlugin;
 
-public class CalamityWiki : PluginType
+public class CalamityWiki : NapCatScript.Core.PluginType
 {
     public override void Init()
     {

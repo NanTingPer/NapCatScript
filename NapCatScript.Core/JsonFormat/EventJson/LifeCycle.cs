@@ -1,22 +1,43 @@
 ﻿namespace NapCatScript.Core.JsonFormat.EventJson;
 
 /// <summary>
-/// ws心跳包
+/// 心跳事件
 /// </summary>
-public class LifeCycle
+public sealed class LifeCycle : Event
 {
-    [JsonPropertyName("time")]
-    public string Time { get; set; }
-
-    [JsonPropertyName("self_id")]
-    public string SelfId { get; set; }
-
-    [JsonPropertyName("post_type")]
-    public string PostType { get; set; }
 
     [JsonPropertyName("meta_event_type")]
     public string MetaEventType { get; set; }
 
-    [JsonPropertyName("sub_type")]
-    public string SubType { get; set; }
+    /// <summary>
+    /// 状态对象
+    /// </summary>
+    [JsonPropertyName("status")]
+    public LifeCycleStatus Status { get; set; }
+
+    /// <summary>
+    /// 间隔
+    /// </summary>
+    [JsonPropertyName("interval")]
+    public int Interval { get; set; }
+
+    [JsonPropertyName("time")]
+    public override long Time { get; set; }
+
+    [JsonPropertyName("self_id")]
+    public override long SelfId { get; set; }
+
+    [JsonPropertyName("post_type")]
+    public override string PostType { get; set; }
+}
+public sealed class LifeCycleStatus
+{
+    /// <summary>
+    /// 在线状态
+    /// </summary>
+    [JsonPropertyName("online")]
+    public bool Online { get; set; }
+
+    [JsonPropertyName("good")]
+    public bool Good { get; set; }
 }

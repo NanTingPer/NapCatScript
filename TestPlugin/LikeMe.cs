@@ -2,7 +2,7 @@
 
 namespace TestPlugin;
 
-public class LikeMe : PluginType
+public class LikeMe : NapCatScript.Core.PluginType
 {
     public override void Init()
     {
