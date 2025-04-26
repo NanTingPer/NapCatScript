@@ -15,20 +15,20 @@ public class Main_
     /// <summary>
     /// 用户配置的Uri，这个决定WebSocket链接
     /// </summary>
-    public static string SocketUri { get; private set; } = "";
+    public static string SocketUri => CoreConfigValueAndObject.SocketUri;
     /// <summary>
     /// 基础请求uri http://127.0.0.1:6666
     /// </summary>
-    public static string HttpUri { get; set; } = "";
-    public static string RootId { get; set; } = "";
-    public static string BotId { get; set; } = "";
+    public static string HttpUri => CoreConfigValueAndObject.HttpUri;
+    public static string RootId /*{ get; set; } = "";*/ => CoreConfigValueAndObject.RootId;
+    public static string BotId /*{ get; set; } = "";*/ => CoreConfigValueAndObject.BotId;
     public static ClientWebSocket Socket { get; private set; } = new ClientWebSocket();
     public static CancellationToken CTokrn { get; } = new CancellationToken();
-    public static Send SendObject { get; private set; }
+    public static Send SendObject => CoreConfigValueAndObject.SendObject;
     public static List<MsgInfo> NoPMesgList { get; } = [];
     public static bool IsConnection = false;
     public static Random rand = new Random();
-    public static List<PluginType> Plugins;
+    public static List<PluginType> Plugins => CoreConfigValueAndObject.Plugins;
     public static long lifeTime = 0;
     public static long oldLifeTime = 0;
     public static long seconds = 0;
@@ -39,12 +39,6 @@ public class Main_
     public static ConnectionState state = ConnectionState.Open;
     static void Main(string[] args)
     {
-        BotId = CoreConfigValueAndObject.BotId;
-        SocketUri = CoreConfigValueAndObject.SocketUri;
-        HttpUri = CoreConfigValueAndObject.HttpUri;
-        RootId = CoreConfigValueAndObject.RootId;
-        SendObject = CoreConfigValueAndObject.SendObject;
-        Plugins = CoreConfigValueAndObject.Plugins;
         try {
             //接收消息 并将有效消息存放到NoPMesgList
             Task.Run(Receive);
@@ -68,7 +62,7 @@ public class Main_
     /// </summary>
     private static async void Receive()
     {
-        await 建立连接(Socket, SocketUri ??= "1");
+        await 建立连接(Socket, SocketUri);
         while (true) {
             await Task.Delay(1);
             try {
@@ -126,10 +120,12 @@ public class Main_
     /// </summary>
     public static void AddString(StringBuilder sbuilder, params IEnumerable<string>[] ies)
     {
+        //string.Join(", ", ies);
         foreach (var ie in ies) {
-            foreach (var str in ie) {
-                sbuilder.Append(str + ", ");
-            }
+            sbuilder.Append(string.Join(", ", ie) + " | ");
+            //foreach (var str in ie) {
+            //    sbuilder.Append(str + ", ");
+            //}
         }
     }
 

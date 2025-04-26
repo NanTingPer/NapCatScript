@@ -68,8 +68,10 @@ public static class Config
     public static string? GetConf(string confName)
     {
         LoadConf();
-        if (AConfig.TryGetValue(confName, out string? confsizer)) 
+        if (AConfig.TryGetValue(confName, out string? confsizer)) {
+            Console.WriteLine(confName + " => " + confsizer);
             return confsizer ??= string.Empty;
+        }
         CreateConf(confName);
         return string.Empty;
     }

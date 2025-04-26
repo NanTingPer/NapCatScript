@@ -32,10 +32,6 @@ public class TestClass : NapCatScript.Core.PluginType
         string mesgContent = mesg.MessageContent;
         mesgContent = Regex.Replace(mesgContent, @"\s", "");
 
-        if(mesg.MessageContent.Contains("总结群消息")) {
-            int a = 0;
-        }
-
         var co = await FAQI.Get(mesgContent);
         if (co is not null) {
             string faq = co.Value.Replace("\\n", "\n");

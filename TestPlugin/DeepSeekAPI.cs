@@ -261,7 +261,7 @@ public class DeepSeekAPI
     {
         try {
             if (temp.Length == 3) {
-                if (temp[1] == "亭更新提示词") {
+                if (temp[1] == "更新DeepSeek提示词") {
                     UpDatePrompt(temp[2]);
                     SendTextAsync(mesg, httpURI, "改完啦", tk);
                     return GoTo.None;

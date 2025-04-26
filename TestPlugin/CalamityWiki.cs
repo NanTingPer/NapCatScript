@@ -40,13 +40,16 @@ public class CalamityWiki : NapCatScript.Core.PluginType
                 SendTextAsync(mesg, HttpUri, "好啦好啦，删掉啦", CTokrn);
                 return;//continue;
             } else if (txtContent.StartsWith("help#")) {
-                string help = 
+                string help =
                     """
                     对于灾厄Wiki: 
                         1. 使用"." + 物品名称 可以获得对应物品的wiki页, 例 .震波炸弹
                         2. 使用".映射#" 可以设置对应物品映射, 例   .映射#神明吞噬者=>神吞
                         3. 使用".删除映射#" 可以删除对应映射, 例   .删除映射#神吞
                     原版Wiki将 '.' 换成 '*'
+
+                    FargeWiki特有:
+                        1. 使用 "触发字符" + 更改触发字符 + "#" + "新触发字符"
 
                     对于FAQ:
                         1. 使用".FAQ#" 可以创建FAQ     例      .FAQ#灾厄是什么###灾厄是一个模组
@@ -64,9 +67,9 @@ public class CalamityWiki : NapCatScript.Core.PluginType
             }
             txtContent = await WikiNameMapping<MapModel>.GetMap(txtContent);
             string calFilePath = Path.Combine(Environment.CurrentDirectory, "Cal", txtContent + ".png");
-            string valFilePath = Path.Combine(Environment.CurrentDirectory, "Val", txtContent + ".png");
+            //string valFilePath = Path.Combine(Environment.CurrentDirectory, "Val", txtContent + ".png");
             string sendUrl = mesg.GetMsgToURL(HttpUri);
-            SendAsync(mesg, txtContent,  sendUrl, mesg.GetMsgTo(), [calFilePath, valFilePath]);
+            SendAsync(mesg, txtContent,  sendUrl, mesg.GetMsgTo(), [calFilePath]);
             return;
         }
     }

@@ -31,6 +31,7 @@ public static class CoreConfigValueAndObject
             Environment.Exit(0);
         }
         SocketUri = useUri;
+        SocketUri ??= "1";
         HttpUri = httpUri;
         RootId = GetConf(Config.RootId) ?? "";
         SendObject = new Send(HttpUri);
