@@ -33,6 +33,7 @@ public class Send
     private string SendMsgAPI { get => HttpURI + "send_msg"; }
     private string GroupBanAPI { get => HttpURI + nameof(set_group_ban); }
     private string GroupKickAPI { get => HttpURI + nameof(set_group_kick); }
+    private string PoKeAPI { get => HttpURI + nameof(send_poke); }
     private string HttpURI { get; set; } = "";
     #endregion API
 
@@ -666,6 +667,41 @@ public class Send
         if (string.IsNullOrEmpty(groupid))
             return false;
         return true;
+    }
+    #endregion
+
+    #region 戳一戳
+    /// <summary>
+    /// 戳一戳
+    /// </summary>
+    public void Poke(string userId, int @for = 1)
+    {
+        var json = new send_poke(userId);
+        for(int i = 0; i < @for; i++) {
+            Send(PoKeAPI, json.JsonText);
+        }
+    }
+
+    /// <summary>
+    /// 群戳一戳
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="for"></param>
+    public void Poke(string groupid, string userId, int @for = 1)
+    {
+        var json = new send_poke(groupid, userId);
+        for (int i = 0; i < @for; i++) {
+            Send(PoKeAPI, json.JsonText);
+        }
+    }
+
+    public void Poke(MsgInfo info, int @for = 1)
+    {
+        if (TrueGroupMsg(info.GroupId)) {
+            Poke(info.GroupId, info.UserId, @for);
+        } else {
+            Poke(info.UserId, @for);
+        }
     }
     #endregion
 }
