@@ -79,7 +79,7 @@ public class Send
     {
         HttpResponseMessage httpc;
         try {
-            httpc = await SendMesg.Send(UploadPrivateFileAPI, new upload_private_file(user_id, file, name).JsonText);
+            httpc = await MsgHandle.SendMsg.Send(UploadPrivateFileAPI, new upload_private_file(user_id, file, name).JsonText);
             if (httpc.StatusCode == HttpStatusCode.OK)
                 return true;
             return false;
@@ -97,7 +97,7 @@ public class Send
     public async void UploadPrivateFile(string user_id, string file, string name)
     {
         try {
-            await SendMesg.Send(UploadPrivateFileAPI, new upload_private_file(user_id, file, name).JsonText);
+            await MsgHandle.SendMsg.Send(UploadPrivateFileAPI, new upload_private_file(user_id, file, name).JsonText);
         } catch (Exception e) {
             Log.Erro("上传私聊文件", e.Message, e.StackTrace);
         }
@@ -112,7 +112,7 @@ public class Send
     {
         HttpResponseMessage httpc;
         try {
-            httpc = await SendMesg.Send(SetSelfLongnickAPI, new set_self_longnick(content).JsonText);
+            httpc = await MsgHandle.SendMsg.Send(SetSelfLongnickAPI, new set_self_longnick(content).JsonText);
             if (httpc.StatusCode == HttpStatusCode.OK)
                 return true;
             return false;
@@ -127,7 +127,7 @@ public class Send
     public async void SetSelfLongnick(string content)
     {
         try {
-            await SendMesg.Send(SetSelfLongnickAPI, new set_self_longnick(content).JsonText);
+            await MsgHandle.SendMsg.Send(SetSelfLongnickAPI, new set_self_longnick(content).JsonText);
         } catch (Exception e) {
             Log.Erro("设置个性签名", e.Message, e.StackTrace);
         }
@@ -142,7 +142,7 @@ public class Send
     {
         HttpResponseMessage httpc;
         try {
-            httpc = await SendMesg.Send(SetQQAvatarAPI, new set_qq_avatar(path).JsonText);
+            httpc = await MsgHandle.SendMsg.Send(SetQQAvatarAPI, new set_qq_avatar(path).JsonText);
             if (httpc.StatusCode == HttpStatusCode.OK)
                 return true;
             return false;
@@ -157,7 +157,7 @@ public class Send
     public async void SetQQAvatar(string path)
     {
         try {
-            await SendMesg.Send(SetQQAvatarAPI, new set_qq_avatar(path).JsonText);
+            await MsgHandle.SendMsg.Send(SetQQAvatarAPI, new set_qq_avatar(path).JsonText);
         } catch (Exception e) {
             Log.Erro("设置QQ头像", e.Message, e.StackTrace);
         }
@@ -172,7 +172,7 @@ public class Send
     {
         HttpResponseMessage httpc;
         try {
-            httpc = await SendMesg.Send(SetOnlineStatusAPI, new set_online_status(type).JsonText);
+            httpc = await MsgHandle.SendMsg.Send(SetOnlineStatusAPI, new set_online_status(type).JsonText);
             if (httpc.StatusCode == HttpStatusCode.OK)
                 return true;
             return false;
@@ -187,7 +187,7 @@ public class Send
     public async void SetOnlineStatus(set_online_status.OnlineType type)
     {
         try {
-            await SendMesg.Send(SetOnlineStatusAPI, new set_online_status(type).JsonText);
+            await MsgHandle.SendMsg.Send(SetOnlineStatusAPI, new set_online_status(type).JsonText);
         } catch (Exception e) {
             Log.Erro("设置在线状态", e.Message, e.StackTrace);
         }
@@ -205,7 +205,7 @@ public class Send
     {
         HttpResponseMessage httpc;
         try {
-            httpc = await SendMesg.Send(SetFriendAddRequestAPI, new set_friend_add_request(flag, approve, remark).JsonText);
+            httpc = await MsgHandle.SendMsg.Send(SetFriendAddRequestAPI, new set_friend_add_request(flag, approve, remark).JsonText);
             if (httpc.StatusCode == HttpStatusCode.OK)
                 return true;
             return false;
@@ -223,7 +223,7 @@ public class Send
     public async void SetFriendAddRequest(string flag, bool approve, string remark)
     {
         try {
-            await SendMesg.Send(SetFriendAddRequestAPI, new set_friend_add_request(flag, approve, remark).JsonText);
+            await MsgHandle.SendMsg.Send(SetFriendAddRequestAPI, new set_friend_add_request(flag, approve, remark).JsonText);
         } catch (Exception e) {
             Log.Erro("处理好友请求", e.Message, e.StackTrace);
         }
@@ -238,7 +238,7 @@ public class Send
     {
         HttpResponseMessage httpc;
         try {
-            httpc = await SendMesg.Send(SendLikeAPI, new send_like(user_id, num).JsonText);
+            httpc = await MsgHandle.SendMsg.Send(SendLikeAPI, new send_like(user_id, num).JsonText);
             if (httpc.StatusCode == HttpStatusCode.OK)
                 return true;
             return false;
@@ -274,7 +274,7 @@ public class Send
     {
         HttpResponseMessage httpc;
         try {
-            httpc = await SendMesg.Send(GetStrangerInfoAPI, new get_stranger_info(user_id).JsonText);
+            httpc = await MsgHandle.SendMsg.Send(GetStrangerInfoAPI, new get_stranger_info(user_id).JsonText);
             if ((int)httpc.StatusCode != 200)
                 return null;
             return JsonSerializer.Deserialize<get_stranger_infoReturn>(await httpc.Content.ReadAsStringAsync());
@@ -293,7 +293,7 @@ public class Send
     {
         HttpResponseMessage httpc;
         try {
-            httpc = await SendMesg.Send(GetProFileLikeAPI, "{}");
+            httpc = await MsgHandle.SendMsg.Send(GetProFileLikeAPI, "{}");
             if ((int)httpc.StatusCode != 200)
                 return null;
             return JsonSerializer.Deserialize<get_profile_like>(await httpc.Content.ReadAsStringAsync());
@@ -312,7 +312,7 @@ public class Send
     {
         HttpResponseMessage httpc;
         try {
-            httpc = await SendMesg.Send(GetFriendsWithCategoryAPI, "{}");
+            httpc = await MsgHandle.SendMsg.Send(GetFriendsWithCategoryAPI, "{}");
             if ((int)httpc.StatusCode != 200)
                 return null;
             return JsonSerializer.Deserialize<get_friends_with_category>(await httpc.Content.ReadAsStringAsync());
@@ -331,7 +331,7 @@ public class Send
     {
         HttpResponseMessage httpc;
         try {
-            httpc = await SendMesg.Send(GetFriendListAPI, new get_friend_list().JsonText);
+            httpc = await MsgHandle.SendMsg.Send(GetFriendListAPI, new get_friend_list().JsonText);
             if ((int)httpc.StatusCode != 200)
                 return null;
             return JsonSerializer.Deserialize<get_friend_listReturn>(await httpc.Content.ReadAsStringAsync());
@@ -352,7 +352,7 @@ public class Send
         HttpResponseMessage? httpc = null;
         try {
             var requestJson = new ArkShareGroup(group_id).ToString();
-            httpc = await SendMesg.Send(ArkShareGroupAPI, requestJson, null);
+            httpc = await MsgHandle.SendMsg.Send(ArkShareGroupAPI, requestJson, null);
         } catch (Exception e) {
             Log.Erro(e.Message, e.StackTrace);
             return null;
@@ -371,7 +371,7 @@ public class Send
     {
         HttpResponseMessage? httpc = null;
         try {
-            httpc = await SendMesg.Send(ArkSharePeerAPI, new ArkSharePeer(id, type).ToString(), null);
+            httpc = await MsgHandle.SendMsg.Send(ArkSharePeerAPI, new ArkSharePeer(id, type).ToString(), null);
         } catch (Exception e) {
             Log.Erro(e.Message, e.StackTrace);
             return null;
@@ -391,7 +391,7 @@ public class Send
     public async void CreateCollection(string bried, string rowdata)
     {
         try {
-            _ = await SendMesg.Send(CreateCollectionAPI, new create_collection(bried, rowdata).JsonText);
+            _ = await MsgHandle.SendMsg.Send(CreateCollectionAPI, new create_collection(bried, rowdata).JsonText);
         } catch (Exception e) {
             Log.Erro(e.Message, e.StackTrace);
         }
@@ -406,7 +406,7 @@ public class Send
     {
         HttpResponseMessage httpc;
         try {
-            httpc = await SendMesg.Send(CreateCollectionAPI, new create_collection(bried, rowdata).JsonText);
+            httpc = await MsgHandle.SendMsg.Send(CreateCollectionAPI, new create_collection(bried, rowdata).JsonText);
             if ((int)httpc.StatusCode != 200)
                 return false;
             return true;
@@ -428,7 +428,7 @@ public class Send
     public async void DeleteFriend(string user_id, bool tempBlock, bool tempBothDel)
     {
         try {
-            _ = await SendMesg.Send(DeleteFriendAPI, new delete_friend(user_id, tempBlock, tempBothDel).JsonText);
+            _ = await MsgHandle.SendMsg.Send(DeleteFriendAPI, new delete_friend(user_id, tempBlock, tempBothDel).JsonText);
         } catch (Exception e) {
             Log.Erro(e.Message, e.StackTrace);
         }
@@ -444,7 +444,7 @@ public class Send
     {
         HttpResponseMessage httpc;
         try {
-            httpc = await SendMesg.Send(DeleteFriendAPI, new delete_friend(user_id, tempBlock, tempBothDel).JsonText);
+            httpc = await MsgHandle.SendMsg.Send(DeleteFriendAPI, new delete_friend(user_id, tempBlock, tempBothDel).JsonText);
             if ((int)httpc.StatusCode != 200)
                 return false;
             return true;
@@ -471,7 +471,7 @@ public class Send
         string postContents = JsonSerializer.Serialize(postContent);
 
         string POSTURI = HttpURI + "send_forward_msg";
-        HttpResponseMessage? postReturnContent = await SendMesg.Send(POSTURI, postContents);
+        HttpResponseMessage? postReturnContent = await MsgHandle.SendMsg.Send(POSTURI, postContents);
         await postReturnContent.Content.ReadAsStringAsync();
     }
 
@@ -490,7 +490,7 @@ public class Send
         string postContents = JsonSerializer.Serialize(postContent);
 
         string POSTURI = HttpURI + "send_forward_msg";
-        HttpResponseMessage? postReturnContent = await SendMesg.Send(POSTURI, postContents);
+        HttpResponseMessage? postReturnContent = await MsgHandle.SendMsg.Send(POSTURI, postContents);
         await postReturnContent.Content.ReadAsStringAsync();
     }
 
@@ -506,7 +506,7 @@ public class Send
         string postContents = JsonSerializer.Serialize(postContent);
 
         string POSTURI = HttpURI + "send_forward_msg";
-        HttpResponseMessage? postReturnContent = await SendMesg.Send(POSTURI, postContents);
+        HttpResponseMessage? postReturnContent = await MsgHandle.SendMsg.Send(POSTURI, postContents);
         await postReturnContent.Content.ReadAsStringAsync();
     }
 
@@ -531,7 +531,7 @@ public class Send
         string RequtContent = JsonSerializer.Serialize(fmj);
         string POSTURI = HttpURI + "send_forward_msg";
         try {
-            await SendMesg.Send(POSTURI, RequtContent);
+            await MsgHandle.SendMsg.Send(POSTURI, RequtContent);
         } catch (Exception e) {
             Log.Erro(e.Message, e.StackTrace);
         }
@@ -572,7 +572,7 @@ public class Send
     {
         SendJson postJson = new SendJson(id, contents, type);
         string requestUri = GetMsgSendToURI(type);
-        HttpResponseMessage message = await SendMesg.Send(requestUri, postJson.JsonText);
+        HttpResponseMessage message = await MsgHandle.SendMsg.Send(requestUri, postJson.JsonText);
         string content = await message.Content.ReadAsStringAsync();
     }
 

@@ -11,27 +11,24 @@ public class ImageJson : MsgJson
         byte[] imageBytes = File.ReadAllBytes(filePath);
         return Convert.ToBase64String(imageBytes);
     }
-    public ImageJson(ImageMsgData imageData)
+    public ImageJson(ImageJsonData imageData)
     {
-        Data = [imageData];
-        JsonText = JsonSerializer.Serialize(this);
-    }
-
-    public ImageJson(IEnumerable<ImageMsgData> imageData)
-    {
-        Data = [];
-        foreach (var item in imageData) {
-            Data.Add(item);
-        }
+        Data = imageData;
         JsonText = JsonSerializer.Serialize(this);
     }
 
     public ImageJson(string imageBase64)
     {
-        Data = [];
-        Data.Add(new ImageMsgData(imageBase64));
+        Data = new ImageJsonData(imageBase64);
         JsonText = JsonSerializer.Serialize(this);
     }
+
+    /// <summary>
+    /// 使用文件路径创建ImageJson
+    /// </summary>
+    /// <param name="filePath"></param>
+    /// <returns></returns>
+    public static ImageJson Create(string filePath) => new ImageJson(ImageToBase64(filePath));
 
     [JsonIgnore]
     public override string JsonText { get; set; }
@@ -40,15 +37,15 @@ public class ImageJson : MsgJson
     public string Type { get; } = "image";
 
     [JsonPropertyName("data")]
-    public List<ImageMsgData> Data { get; set; }
+    public ImageJsonData Data { get; set; }
 
-    public class ImageMsgData
+    public class ImageJsonData
     {
-        public ImageMsgData(string fileBase64)
+        public ImageJsonData(string fileBase64)
         {
             File = "base64://" + fileBase64;
         }
-        public ImageMsgData(string fileBase64, string summary)
+        public ImageJsonData(string fileBase64, string summary)
         {
             File = "base64://" + fileBase64;
             Summary = summary;

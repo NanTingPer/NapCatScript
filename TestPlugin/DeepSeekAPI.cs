@@ -133,7 +133,7 @@ public class DeepSeekAPI
         };
 
         JsonDocument? document = null;
-        string sendContent = await SendMesg.Send("https://api.deepseek.com/chat/completions", jsonContent, null, Main_.CTokrn, hand);
+        string sendContent = await SendMsg.Send("https://api.deepseek.com/chat/completions", jsonContent, null, Main_.CTokrn, hand);
         if(sendContent == "Erro") {
             SendTextAsync(mesg, httpURI, "服务器挂掉惹，等等吧~", tk);
             活跃数--;

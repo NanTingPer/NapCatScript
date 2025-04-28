@@ -4,6 +4,7 @@ using Config = NapCatScript.Core.Services.Config;
 using System.Reflection;
 using System.Data;
 using NapCatScript.Core;
+using System.Threading.Tasks;
 
 namespace NapCatScript.Start;
 
@@ -41,13 +42,13 @@ public class Main_
     {
         try {
             //接收消息 并将有效消息存放到NoPMesgList
-            Task.Run(Receive);
+            _ = Task.Run(Receive);
 
             //发送消息
-            Task.Run(Send);
+            _ = Task.Run(Send);
 
             //心跳
-            Task.Run(LifeCycle);
+            _ = Task.Run(LifeCycle);
 
             while (true) {
                 _ = Console.ReadLine();
@@ -68,8 +69,6 @@ public class Main_
             try {
                 MsgInfo? mesg = await Socket.Receive(CTokrn); //收到的消息
                 if (mesg is not null) {
-                    if (mesg.lifeTime != 0)
-                        SetLifeTime(mesg.lifeTime);
                     NoPMesgList.Add(mesg);
                     //Console.WriteLine(mesg);
                 }
@@ -85,6 +84,7 @@ public class Main_
     /// </summary>
     private static async void Send()
     {
+        Console.WriteLine("awdawfawf");
         Send sned = new Send(HttpUri);
         while (true) {
             await Task.Delay(1);
@@ -97,7 +97,7 @@ public class Main_
             MService.SetAsync(mesg);
             foreach (var pType in Plugins) {
                 try {
-                    pType.Run(mesg, HttpUri);
+                    _ = pType.Run(mesg, HttpUri);
                 } catch (Exception e) {
                     Log.Erro($"插件:{pType.GetType().FullName}", e.Message, e.StackTrace);
                 }

@@ -60,7 +60,7 @@ public class VanillaWiki : NapCatScript.Core.PluginType
         string itemPath = Path.Combine(Environment.CurrentDirectory, "Val" ,itemName + ".png");
         if (File.Exists(itemPath)) {
             ImageMesg image = new ImageMesg(mesg.GetId(), mesg.GetMsgTo(), itemPath);
-            await SendMesg.Send(mesg.GetMsgToURL(httpUri), image.MesgString, null, CTokrn);
+            await SendMsg.Send(mesg.GetMsgToURL(httpUri), image.MesgString, null, CTokrn);
             return;
         }
 

@@ -2,7 +2,7 @@
 using System.Net.Http;
 
 namespace NapCatScript.Core.MsgHandle;
-public static class SendMesg
+public static class SendMsg
 {
     /// <summary>
     /// 发送消息，返回回应消息

@@ -52,6 +52,6 @@ public static class Utils
         string sendUri = mesg.GetMsgToURL(httpURI);
         TextMesg r = new TextMesg(GetUserId(mesg), mesg.GetMsgTo(), content);
         string conet = r.MesgString;
-        await SendMesg.Send(sendUri, conet, null, ct);
+        await SendMsg.Send(sendUri, conet, null, ct);
     }
 }

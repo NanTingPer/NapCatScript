@@ -15,7 +15,7 @@ public class SendJson
                 User_id = user_id;
                 break;
         }
-        Message = message;
+        Messages = message;
     }
 
     [JsonPropertyName("user_id")]
@@ -27,5 +27,11 @@ public class SendJson
     public string? Group_id { get; set; } = null;
 
     [JsonPropertyName("message")]
-    public List<MsgJson> Message { get; set; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public List<MsgJson>? Messages { get; set; }
+
+    public override string ToString()
+    {
+        return JsonText;
+    }
 }

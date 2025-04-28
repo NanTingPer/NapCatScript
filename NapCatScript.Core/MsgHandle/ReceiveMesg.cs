@@ -28,7 +28,10 @@ public static class ReceiveMesg
             fStream.Close();
             memResult.Dispose();
             memResult.Close();
-
+            if (mesgString.Contains("发送小花")) {
+                Console.WriteLine(mesgString);
+                int a = 0;
+            }
             if (ValidData(mesgString, out var json)) {
                 return json?.GetMesgInfo()/*?.ToString()*/;
             }
@@ -83,6 +86,12 @@ public static class ReceiveMesg
             if (jsonRoot is not null) {
                 if (jsonRoot.Value.TryGetProperty("post_type", out JsonElement type)) {//此属性决定是不是消息
                     if (type.ToString() == "message") {
+                        json = jsonRoot;
+                        return true;
+                    }
+
+                    //上报自身消息
+                    if(type.ToString() == "message_sent") {
                         json = jsonRoot;
                         return true;
                     }
