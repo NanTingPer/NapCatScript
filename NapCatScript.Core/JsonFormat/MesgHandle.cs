@@ -3,6 +3,7 @@
 /// <summary>
 /// 最终消息类
 /// </summary>
+[Obsolete(message: "改用MsgJson", true)]
 public class MesgHandle : BaseMsg
 {
     public override string JsonText { get; set; }

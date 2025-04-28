@@ -20,6 +20,7 @@
 ///     获取单向好友列表 /get_unidirectional_friend_list
 ///     设置自定义在线状态 /set_diy_online_status
 /// </summary>
+[Obsolete("", true)]
 public abstract class BaseMsg
 {
     public abstract string JsonText { get; set; }

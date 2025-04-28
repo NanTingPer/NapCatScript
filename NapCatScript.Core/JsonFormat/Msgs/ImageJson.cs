@@ -1,28 +1,4 @@
-﻿using NapCatScript.Core.JsonFormat;
-using System;
-using System.IO;
-using static NapCatScript.Core.JsonFormat.Msgs.ImageJson;
-using static NapCatScript.Core.JsonFormat.Msgs.TextJson;
-
-namespace NapCatScript.Core.JsonFormat.Msgs;
-
-public class ImageMsg : BaseMsg
-{
-    public override string JsonText { get; set; }
-    public override JsonElement JsonElement { get; set; }
-    public override JsonDocument JsonDocument { get; set; }
-    public override dynamic JsonObject { get; set; }
-
-    public ImageMsg(string content)
-    {
-        var jsonObject = new ImageJson(new ImageMsgData(content));
-        JsonText = JsonSerializer.Serialize(jsonObject);
-        JsonElement = JsonSerializer.SerializeToElement(jsonObject);
-        JsonDocument = JsonSerializer.SerializeToDocument(jsonObject);
-        JsonObject = jsonObject;
-    }
-
-}
+﻿namespace NapCatScript.Core.JsonFormat.Msgs;
 
 //message
 /// <summary>

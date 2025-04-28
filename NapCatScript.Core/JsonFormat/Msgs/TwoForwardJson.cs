@@ -1,16 +1,4 @@
-﻿using NapCatScript.Core.JsonFormat;
-using System.Text;
-
-namespace NapCatScript.Core.JsonFormat.Msgs;
-
-public class TwoForwardMsg : BaseMsg
-{
-    public override string JsonText { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
-    public override JsonElement JsonElement { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
-    public override JsonDocument JsonDocument { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
-    public override dynamic JsonObject { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
-}
-
+﻿namespace NapCatScript.Core.JsonFormat.Msgs;
 /// <summary>
 /// 二级合并转发消息的Json
 /// </summary>

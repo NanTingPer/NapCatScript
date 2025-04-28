@@ -1,28 +1,7 @@
-﻿using NapCatScript.Core.JsonFormat;
-using static NapCatScript.Core.JsonFormat.Msgs.MarkDownJson;
-
-namespace NapCatScript.Core.JsonFormat.Msgs;
-
-public class MarkDownMsg : BaseMsg
-{
-    public override string JsonText { get; set; }
-    public override JsonElement JsonElement { get; set; }
-    public override JsonDocument JsonDocument { get; set; }
-    public override dynamic JsonObject { get; set; }
-
-    public MarkDownMsg(string content)
-    {
-        var jsonObject = new MarkDownJson(new MarkDownJsonData(content));
-        JsonText = JsonSerializer.Serialize(jsonObject);
-        JsonElement = JsonSerializer.SerializeToElement(jsonObject);
-        JsonDocument = JsonSerializer.SerializeToDocument(jsonObject);
-        JsonObject = jsonObject;
-    }
-
-}
+﻿namespace NapCatScript.Core.JsonFormat.Msgs;
 
 /// <summary>
-/// 文本消息的Json对象
+/// MarkDown消息的Json对象
 /// </summary>
 public class MarkDownJson : MsgJson
 {

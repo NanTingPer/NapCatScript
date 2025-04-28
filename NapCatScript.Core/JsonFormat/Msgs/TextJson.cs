@@ -1,25 +1,4 @@
-﻿using NapCatScript.Core.JsonFormat;
-using static NapCatScript.Core.JsonFormat.Msgs.TextJson;
-
-namespace NapCatScript.Core.JsonFormat.Msgs;
-
-public class TextMsgBak : BaseMsg
-{
-    public override string JsonText { get; set; }
-    public override JsonElement JsonElement { get; set; }
-    public override JsonDocument JsonDocument { get; set; }
-    public override dynamic JsonObject { get; set; }
-
-    public TextMsgBak(string content)
-    {
-        var jsonObject = new TextJson(new TextMsgData(content));
-        JsonText = JsonSerializer.Serialize(jsonObject);
-        JsonElement = JsonSerializer.SerializeToElement(jsonObject);
-        JsonDocument = JsonSerializer.SerializeToDocument(jsonObject);
-        JsonObject = jsonObject;
-    }
-
-}
+﻿namespace NapCatScript.Core.JsonFormat.Msgs;
 
 /// <summary>
 /// 文本消息的Json对象
