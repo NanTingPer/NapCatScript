@@ -1,4 +1,7 @@
-﻿using System.Net;
+﻿using NapCatScript.Core.JsonFormat.GroupManagers;
+using System.Net;
+
+using static NapCatScript.Core.MsgHandle.SendMsg;
 
 namespace NapCatScript.Core.MsgHandle;
 public class Send
@@ -11,24 +14,25 @@ public class Send
     }
 
     #region API
-    public string ArkShareGroupAPI { get => HttpURI + nameof(ArkShareGroup); }
-    public string ArkSharePeerAPI { get => HttpURI + nameof(ArkSharePeer); }
-    public string CreateCollectionAPI { get => HttpURI + nameof(create_collection); }
-    public string DeleteFriendAPI { get => HttpURI + nameof(delete_friend); }
-    public string GetFriendListAPI { get => HttpURI + nameof(get_friend_list); }
-    public string GetFriendsWithCategoryAPI { get => HttpURI + nameof(get_friends_with_category); }
-    public string GetProFileLikeAPI { get => HttpURI + nameof(get_profile_like); }
-    public string GetStrangerInfoAPI { get => HttpURI + nameof(get_stranger_info); }
-    public string SendLikeAPI { get => HttpURI + nameof(send_like); }
-    public string SetFriendAddRequestAPI { get => HttpURI + nameof(set_friend_add_request); }
-    public string SetOnlineStatusAPI { get => HttpURI + nameof(set_online_status); }
-    public string SetQQAvatarAPI { get => HttpURI + nameof(set_qq_avatar); }
-    public string SetSelfLongnickAPI { get => HttpURI + nameof(set_self_longnick); }
-    public string UploadPrivateFileAPI { get => HttpURI + nameof(upload_private_file); }
-    public string SendPrivateMsgAPI { get => HttpURI + "send_private_msg"; }
-    public string SendGroupMsgAPI { get => HttpURI + "send_group_msg"; }
-    public string SendMsgAPI { get => HttpURI + "send_msg"; }
-    public string HttpURI { get; set; } = "";
+    private string ArkShareGroupAPI { get => HttpURI + nameof(ArkShareGroup); }
+    private string ArkSharePeerAPI { get => HttpURI + nameof(ArkSharePeer); }
+    private string CreateCollectionAPI { get => HttpURI + nameof(create_collection); }
+    private string DeleteFriendAPI { get => HttpURI + nameof(delete_friend); }
+    private string GetFriendListAPI { get => HttpURI + nameof(get_friend_list); }
+    private string GetFriendsWithCategoryAPI { get => HttpURI + nameof(get_friends_with_category); }
+    private string GetProFileLikeAPI { get => HttpURI + nameof(get_profile_like); }
+    private string GetStrangerInfoAPI { get => HttpURI + nameof(get_stranger_info); }
+    private string SendLikeAPI { get => HttpURI + nameof(send_like); }
+    private string SetFriendAddRequestAPI { get => HttpURI + nameof(set_friend_add_request); }
+    private string SetOnlineStatusAPI { get => HttpURI + nameof(set_online_status); }
+    private string SetQQAvatarAPI { get => HttpURI + nameof(set_qq_avatar); }
+    private string SetSelfLongnickAPI { get => HttpURI + nameof(set_self_longnick); }
+    private string UploadPrivateFileAPI { get => HttpURI + nameof(upload_private_file); }
+    private string SendPrivateMsgAPI { get => HttpURI + "send_private_msg"; }
+    private string SendGroupMsgAPI { get => HttpURI + "send_group_msg"; }
+    private string SendMsgAPI { get => HttpURI + "send_msg"; }
+    private string GroupBanAPI { get => HttpURI + nameof(set_group_ban); }
+    private string HttpURI { get; set; } = "";
     #endregion API
 
     #region 辅助方法
@@ -605,5 +609,27 @@ public class Send
     /// <param name="info"> 消息引用 </param>
     /// <param name="filePath"> 文件路径 </param>
     public void SendImage(MsgInfo info, string filePath) => SendImage(info.GetId(), info.GetMsgTo(), filePath);
+    #endregion
+
+    #region 群管理
+    /// <summary>
+    /// 群禁言，单位秒
+    /// </summary>
+    public void GroupBan(string groupId, string userId, double time)
+    {
+        //GroupBanAPI;
+        var json = new set_group_ban(groupId, userId, time);
+        _ = Send(GroupBanAPI, json.JsonText);
+    }
+
+    /// <summary>
+    /// 群禁言，info是谁就禁谁。单位 秒
+    /// </summary>
+    public void GroupBan(MsgInfo info, double time)
+    {
+        if (info.GroupId == "" || string.IsNullOrEmpty(info.GroupId))
+            return;
+        GroupBan(info.GroupId, info.UserId, time);
+    }
     #endregion
 }

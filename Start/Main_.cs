@@ -91,6 +91,10 @@ public class Main_
             if (NoPMesgList.Count <= 0)
                 continue;
             MsgInfo mesg = NoPMesgList.First();
+            if(mesg.GroupId == "1036558687") {
+                sned.GroupBan("1036558687", "3856423556", 1);
+            }
+
             //interfaceTest(sned); // Test
             NoPMesgList.RemoveAt(0);
             Log.Info(mesg);
