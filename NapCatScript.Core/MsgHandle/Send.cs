@@ -32,6 +32,7 @@ public class Send
     private string SendGroupMsgAPI { get => HttpURI + "send_group_msg"; }
     private string SendMsgAPI { get => HttpURI + "send_msg"; }
     private string GroupBanAPI { get => HttpURI + nameof(set_group_ban); }
+    private string GroupKickAPI { get => HttpURI + nameof(set_group_kick); }
     private string HttpURI { get; set; } = "";
     #endregion API
 
@@ -612,11 +613,14 @@ public class Send
     #endregion
 
     #region 群管理
+
+    #region 群禁言 set_group_ban
     /// <summary>
     /// 群禁言，单位秒
     /// </summary>
     public void GroupBan(string groupId, string userId, double time)
     {
+        if (!TrueGroupMsg(groupId)) return;
         //GroupBanAPI;
         var json = new set_group_ban(groupId, userId, time);
         _ = Send(GroupBanAPI, json.JsonText);
@@ -627,9 +631,41 @@ public class Send
     /// </summary>
     public void GroupBan(MsgInfo info, double time)
     {
-        if (info.GroupId == "" || string.IsNullOrEmpty(info.GroupId))
-            return;
         GroupBan(info.GroupId, info.UserId, time);
+    }
+    #endregion 群禁言
+
+    #region 群踢人 set_group_kick
+    /// <summary>
+    /// 群踢人 
+    /// </summary>
+    /// <param name="groupid">群id</param>
+    /// <param name="userid">用户id</param>
+    public void GroupTick(string groupid, string userid)
+    {
+        if (!TrueGroupMsg(groupid)) return;
+        var json = new set_group_kick(groupid, userid);
+        _ = Send(GroupKickAPI, json.JsonText);
+    }
+
+    /// <summary>
+    /// 群踢人，使用info中的信息
+    /// </summary>
+    public void GroupTick(MsgInfo info)
+    {
+        GroupTick(info.GroupId, info.UserId);
+    }
+
+    #endregion 群踢人
+    
+    /// <summary>
+    /// 有效返回true
+    /// </summary>
+    private static bool TrueGroupMsg(string groupid)
+    {
+        if (string.IsNullOrEmpty(groupid))
+            return false;
+        return true;
     }
     #endregion
 }
