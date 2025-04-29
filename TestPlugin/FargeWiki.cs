@@ -58,7 +58,7 @@ public class FargeWiki : NapCatScript.Core.PluginType
         }
 
         string itemName = command;
-        itemName = await WikiNameMapping<VanillaMapModel>.GetMap(itemName);
+        itemName = await WikiNameMapping<FargeMapModel>.GetMap(itemName);
         string itemPath = Path.Combine(Environment.CurrentDirectory, "Farge" ,itemName + ".png");
         if (File.Exists(itemPath)) {
             ImageMesg image = new ImageMesg(mesg.GetId(), mesg.GetMsgTo(), itemPath);
