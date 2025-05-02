@@ -7,11 +7,20 @@ namespace NapCatScript.Core.Services;
 public class SQLiteService
 {
     private static string DataBasePath = Path.Combine(Environment.CurrentDirectory, "data.db");
+
+    /// <summary>
+    /// 公共数据库
+    /// </summary>
     public static SQLiteService SQLService { get; } = new SQLiteService();
     public SQLiteAsyncConnection Connection;
     private SQLiteService()
     {
         Connection = new SQLiteAsyncConnection(DataBasePath);
+    }
+
+    public SQLiteService(string dataBasePath)
+    {
+        Connection = new SQLiteAsyncConnection(dataBasePath);
     }
 
     /// <summary>

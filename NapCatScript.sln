@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestPlugin", "TestPlugin\Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NapCatScript.Core", "NapCatScript.Core\NapCatScript.Core.csproj", "{4A6F5B8F-667B-43AC-8802-A89880622ADA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyWordBan", "KeyWordBan\KeyWordBan.csproj", "{63D51463-4482-440D-BEE5-C14229B730B9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +34,10 @@ Global
 		{4A6F5B8F-667B-43AC-8802-A89880622ADA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4A6F5B8F-667B-43AC-8802-A89880622ADA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4A6F5B8F-667B-43AC-8802-A89880622ADA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63D51463-4482-440D-BEE5-C14229B730B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63D51463-4482-440D-BEE5-C14229B730B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63D51463-4482-440D-BEE5-C14229B730B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63D51463-4482-440D-BEE5-C14229B730B9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
