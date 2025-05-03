@@ -27,12 +27,15 @@ public class SQLiteService
     /// <para> 使用Key获取值,这个Key是给定类型代表数据库数据的Key </para> 
     /// <para> 如果给定类型的数据库不存在，会创建，如果不存在返回 default </para>
     /// </summary>
-    public async Task<T?> Get<T>(object key) where T : new()
+    public async Task<T?> Get<T>(object primaryKey) where T : new()
     {
         await CreateTable<T>();
-        if (typeof(T).GetProperty("Key") == null)
-            return default;
-        return await Connection.GetAsync<T>(key);
+        return await Connection.GetAsync<T>(primaryKey);
+    }
+
+    public async Task<T?> TestGet<T>(object primaryKey) where T : new()
+    {
+        return await Connection.GetAsync<T>(primaryKey);
     }
 
     public async Task CreateTable<T>() where T : new()
@@ -40,11 +43,11 @@ public class SQLiteService
         await Connection.CreateTableAsync<T>();
     }
 
-    public async Task Update<T>(T data) where T : new()
+    public async Task Update<T>(T data, string keyName = "Key") where T : new()
     {
         await CreateTable<T>();
         Type dataType = typeof(T);
-        Key keyInfo = dataType.GetProperty("Key")!;
+        Key keyInfo = dataType.GetProperty(keyName)!;
         if (keyInfo == null) return;
         var keyValue = keyInfo.GetValue(data);
         if (keyValue is null) return;
@@ -53,7 +56,7 @@ public class SQLiteService
         try {
             oldData = await Get<T?>(keyValue!.ToString());
         } catch (Exception e) {
-            Log.Erro("没有此数据: ", e.Message, e.StackTrace);
+            Log.Erro(e.Message, e.StackTrace);
             return;
         }
 
@@ -67,24 +70,18 @@ public class SQLiteService
 
     public async Task Delete<T>(object key) where T : new()
     {
-        var propty = typeof(T).GetProperty("Key");
-        if (propty == null)
-            return;
         await CreateTable<T>();
         await Connection.DeleteAsync<T>(key);
     }
     public async Task DeleteALL<T>() where T : new()
     {
-        var propty = typeof(T).GetProperty("Key");
-        if (propty == null)
-            return;
         await CreateTable<T>();
         await Connection.DeleteAllAsync<T>();
     }
 
-    public async Task DeleteRange<T>(List<T> delectObj) where T : new()
+    public async Task DeleteRange<T>(List<T> delectObj, string keyName = "Key") where T : new()
     {
-        var propty = typeof(T).GetProperty("Key");
+        var propty = typeof(T).GetProperty(keyName);
         if (propty == null)
             return;
         await CreateTable<T>();
@@ -92,7 +89,7 @@ public class SQLiteService
             try {
                 await Delete<T>(propty.GetValue(obj));
             } catch (Exception e) {
-                Log.Erro("数据删除失败:  " + e.Message, e.StackTrace);
+                Log.Erro(e.Message, e.StackTrace);
             }
         }
     }
@@ -109,11 +106,11 @@ public class SQLiteService
         return await Connection.Table<T>().Where(expr).ToListAsync();
     }
 
-    public async Task Insert<T>(T obj) where T : new()
+    public async Task Insert<T>(T obj, string keyName = "Key") where T : new()
     {
         try {
             await CreateTable<T>();
-            var keyProperty = typeof(T).GetProperty("Key");
+            var keyProperty = typeof(T).GetProperty(keyName);
             if (keyProperty == null) {
                 return;
             }
@@ -122,9 +119,10 @@ public class SQLiteService
             if (existing == null) {
                 await Connection.InsertAsync(obj);
             } else {
+                await Update(obj);
             }
         } catch (Exception ex) {
-            Log.Erro($"数据插入失败: {ex.Message}", ex.StackTrace);
+            Log.Erro(ex.Message, ex.StackTrace);
         }
 
         //try {
