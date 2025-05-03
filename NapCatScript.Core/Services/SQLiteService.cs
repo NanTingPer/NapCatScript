@@ -6,7 +6,7 @@ namespace NapCatScript.Core.Services;
 
 public class SQLiteService
 {
-    private static string DataBasePath = Path.Combine(Environment.CurrentDirectory, "data.db");
+    private static readonly string DataBasePath = Path.Combine(Environment.CurrentDirectory, "data.db");
 
     /// <summary>
     /// 公共数据库
