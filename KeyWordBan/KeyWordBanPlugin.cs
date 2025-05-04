@@ -30,8 +30,9 @@ public class KeyWordBanPlugin : PluginType
                 await register.Delete(kw);
                 try {
                     listWords.Remove(listWords.FirstOrDefault(f => f.KeyWord == kw.KeyWord));
-                } catch {
-
+                } catch(Exception e) {
+                    SendTextAsync(msg, httpUri, "失败！" + e.Message, new CancellationToken());
+                    return;
                 }
                 SendTextAsync(msg, httpUri, "删除: " + kw.KeyWord, new CancellationToken());
                 return;

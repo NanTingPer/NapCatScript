@@ -29,6 +29,11 @@ public class CalamityWiki : NapCatScript.Core.PluginType
                 TextJson json = new TextJson(mappings);
                 Send.SendForawrd(mesg.GetId(), mesg, [json], mesg.GetMsgTo());
                 return;
+            } else if (txtContent.StartsWith("查看全部FAQ#")) {
+                string faqstrings = await FAQI.GetALL();
+                TextJson json = new TextJson(faqstrings);
+                Send.SendForawrd(mesg.GetId(), mesg, [json], mesg.GetMsgTo());
+                return;
             } else if (txtContent.StartsWith("删除映射#")) {
                 WikiNameMapping<MapModel>.DeleteAsync(mesg, HttpUri, txtContent, CTokrn);
                 return;//continue;

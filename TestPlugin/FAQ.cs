@@ -51,4 +51,23 @@ public class FAQ
     {
         await SQLService.Delete<FAQModel>(content.Split(SplitChars)[1]);
     }
+
+    public async Task<string> GetALL()
+    {
+        List<FAQModel> list = await SQLService.GetAll<FAQModel>();
+        StringBuilder strb = new();
+        foreach (var item in list) {
+            strb.Append("问题: ");
+            strb.Append(item.Key);
+            strb.AppendLine();
+            strb.Append("回答: ");
+            strb.Append(item.Value);
+            strb.AppendLine();
+            strb.Append("创建人: ");
+            strb.Append(item.UserName);
+            strb.AppendLine();
+            strb.AppendLine();
+        }
+        return strb.ToString();
+    }
 }
