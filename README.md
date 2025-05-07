@@ -3,13 +3,13 @@
 
 # 插件开发
 
-目前，`NapCatScript`可以加载基于`NapCatScript`开发的插件，具体如何开发可以查看源码[TestPlugin](https://github.com/NanTingPer/NapCatScript/blob/main/TestPlugin/TestClass.cs)
+目前，`NapCatScript`可以加载基于`NapCatScript`开发的插件，具体如何开发可以查看源码[KeyWordBanPlugin](https://github.com/NanTingPer/NapCatScript/blob/main/KeyWordBan%2FKeyWordBanPlugin.cs)
 
 1. 下载源码
 
 2. 创建项目
 
-3. 添加项目引用，引用本项目的`Start` (`NapCatScript.Start`)
+3. 添加项目引用，引用本项目的`Core` (`NapCatScript.Core`)
 
 4. 创建类，继承`PluginType`，此类位于 `NapCatScript.Start.PluginType`
 
@@ -46,12 +46,3 @@ HttpServerUri=http://127.0.0.1:9998/
 设置完成后再次打开即可
 
 日志位于应用根目录的`Log.log`中
-
-对于其他配置项目，都是可选项
-
-
-
-# 灾厄Wiki页
-
-对于灾厄Wiki的支持，需要将灾厄Wiki页面存放在程序根目录的`Cal`下，对于灾厄Wiki图片的获取，需要自行解决
-或者使用`https://github.com/NanTingPer/Learning-Notes/blob/master/codeor/Cshps/HTML2JPG/Program.cs` 截取网页，最终全部文件需要统一存放到根目录`Cal`下
