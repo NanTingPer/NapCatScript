@@ -25,29 +25,31 @@ public class LogViewModel : ViewModelBase
     public async void GetLog()
     {
         await foreach (string? logc in Utils.GetLoging("http://127.0.0.1:6099", "6099", "napcat")){
-            if (logc != null) {
-                if (logc is string st && !string.IsNullOrEmpty(st))
-                {
-                    try{
-                        if (logc.Trim().Substring("data:".Length).GetJsonElement(out var json)){
-                            if (json.TryGetPropertyValue("level", out var propValue)) {
-                                if (propValue.GetString() != "info") {
-                                    continue;
-                                }
-                            }
-
-                            if (json.TryGetPropertyValue("message", out var msg)) {
-                                Avalonia.Threading.Dispatcher.UIThread.Post(() =>
-                                {
-                                    LogString += msg.GetString() + "\r\n";
-                                    //Log.Insert(0, logc);
-                                });
+            if (logc == null)
+                continue;
+            if (logc is string st && !string.IsNullOrEmpty(st)) {
+                try {
+                    if (logc.Trim().Substring("data:".Length).GetJsonElement(out var json)) {
+                        if (json.TryGetPropertyValue("level", out var propValue)) {
+                            if (propValue.GetString() != "info") {
+                                continue;
                             }
                         }
+
+                        if (json.TryGetPropertyValue("message", out var msg)) {
+                            Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+                            {
+                                LogString += msg.GetString() + "\r\n";
+                                while (LogString.Length > 1000) {
+                                    LogString = LogString.Substring(1);
+                                }
+                                //Log.Insert(0, logc);
+                            });
+                        }
                     }
-                    catch (Exception e){
-                        
-                    }
+                }
+                catch (Exception e) {
+
                 }
             }
         }
