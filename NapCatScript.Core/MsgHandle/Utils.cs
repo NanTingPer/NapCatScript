@@ -1,6 +1,11 @@
 ﻿using NapCatScript.Core.Model;
+using System.Net.Http.Headers;
 
 namespace NapCatScript.Core.MsgHandle;
+/// <summary>
+/// /api/OB11Config/SetConfig => 设置网络配置 需要 authorization Post
+/// 
+/// </summary>
 public static class Utils
 {
     ///<summary>
@@ -54,4 +59,48 @@ public static class Utils
         string conet = r.MesgString;
         await SendMsg.PostSend(sendUri, conet, null, ct);
     }
+
+    private static async Task<string> GetClientkey(string httpUri)
+    {
+        var cookies = await SendMsg.PostSend(httpUri + "/get_clientkey", "");
+        return await cookies.Content.ReadAsStringAsync();
+    }
+
+    /// <summary>
+    /// 获取部分api需要的Authentication
+    /// </summary>
+    /// <param name="httpUri"> 例: http://127.0.0.1:9999 </param>
+    /// <param name="webport"> napcat的web端口 </param>
+    /// <param name="token"> web登录密码 </param>
+    /// <returns></returns>
+    public static async Task<string> GetAuthentication(string httpUri, string webport, string token)
+    {
+        string httpuri = string.Join(":", httpUri.Split(":")[..2]) + $":{webport}";
+        string uri = httpuri + "/api/auth/login";
+        string json = $$"""{"token":"{{token}}"}""";
+        HttpClient client = new HttpClient();
+        var r = await client.PostAsync(uri, new StringContent(json, Encoding.UTF8, "application/json"));
+        string con = await r.Content.ReadAsStringAsync();
+        if (con.GetJsonElement(out var je)) {
+            if (je.TryGetPropertyValue("Credential", out je)) {
+                return je.GetString()!;
+            }
+        }
+        return "";
+    }
+
+    private static async Task GetLoging(string authentication)
+    {
+        var hc = new HttpClient();
+        hc.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("text/event-stream"));
+        hc.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authentication);
+        var r = await hc.GetAsync("http://127.0.0.1:6099/api/Log/GetLogRealTime", HttpCompletionOption.ResponseHeadersRead);
+        var stream = new StreamReader(r.Content.ReadAsStream());
+        string? getStr;
+        while (!stream.EndOfStream) {
+            getStr = stream.ReadLine();
+            Console.WriteLine(getStr);
+        }
+    }
+
 }
