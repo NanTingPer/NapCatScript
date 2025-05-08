@@ -89,17 +89,22 @@ public static class Utils
         return "";
     }
 
-    private static async Task GetLoging(string authentication)
+    public static async IAsyncEnumerable<string?> GetLoging(string httpUri, string webPort, string webToken)
     {
+        string httpuri = string.Join(":", httpUri.Split(":")[..2]) + $":{webPort}";
+        string rquUri = httpuri + "/api/Log/GetLogRealTime";
+        string aut = await GetAuthentication(httpuri, webPort, webToken);
+        
         var hc = new HttpClient();
         hc.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("text/event-stream"));
-        hc.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authentication);
-        var r = await hc.GetAsync("http://127.0.0.1:6099/api/Log/GetLogRealTime", HttpCompletionOption.ResponseHeadersRead);
+        hc.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", aut);
+        
+        var r = await hc.GetAsync(rquUri, HttpCompletionOption.ResponseHeadersRead);
         var stream = new StreamReader(r.Content.ReadAsStream());
         string? getStr;
         while (!stream.EndOfStream) {
             getStr = stream.ReadLine();
-            Console.WriteLine(getStr);
+            yield return getStr;
         }
     }
 

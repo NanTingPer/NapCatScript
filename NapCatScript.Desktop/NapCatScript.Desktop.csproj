@@ -25,4 +25,8 @@
     </PackageReference>
     <PackageReference Include="Avalonia.ReactiveUI" Version="11.2.7" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NapCatScript.Core\NapCatScript.Core.csproj" />
+  </ItemGroup>
 </Project>

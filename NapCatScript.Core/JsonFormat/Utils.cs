@@ -21,12 +21,19 @@ public static class Utils
 
     public static bool GetJsonElement(this string str, out JsonElement element)
     {
-        var d = new Utf8JsonReader(new ReadOnlySpan<byte>(Encoding.UTF8.GetBytes(str)));
-        if(JsonDocument.TryParseValue(ref d, out JsonDocument? jsonDoc)) {
-            element = jsonDoc.RootElement;
-            return true;
-        }
         element = new JsonElement();
+        try
+        {
+            var d = new Utf8JsonReader(new ReadOnlySpan<byte>(Encoding.UTF8.GetBytes(str)));
+            if(JsonDocument.TryParseValue(ref d, out JsonDocument? jsonDoc)) {
+                element = jsonDoc.RootElement;
+                return true;
+            }
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
         return false;
     }
     public static bool TryGetPropertyValue(this JsonElement element, string propertyname, out JsonElement rvalue)
