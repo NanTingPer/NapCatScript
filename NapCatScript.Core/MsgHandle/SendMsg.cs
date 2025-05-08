@@ -8,7 +8,7 @@ public static class SendMsg
     /// 发送消息，返回回应消息
     /// </summary>
     /// <returns></returns>
-    public static async Task<string> Send(string httpUri, string msg, Encoding? enc, CancellationToken ctoken, Dictionary<string, string>? hands = null, string contentType = "application/json")
+    public static async Task<string> PostSend(string httpUri, string msg, Encoding? enc, CancellationToken ctoken, Dictionary<string, string>? hands = null, string contentType = "application/json")
     {
         enc ??= Encoding.UTF8;
         var httpClient = new HttpClient();
@@ -39,7 +39,7 @@ public static class SendMsg
     /// httpURI是请求接口, mesg是ConetntJson
     /// </summary>
     /// <returns></returns>
-    public static Task<HttpResponseMessage> Send(string httpuri, string msg, Encoding? enc = null, Dictionary<string, string>? hands = null, string contentType = "application/json")
+    public static Task<HttpResponseMessage> PostSend(string httpuri, string msg, Encoding? enc = null, Dictionary<string, string>? hands = null, string contentType = "application/json")
     {
         enc ??= Encoding.UTF8;
         var httpClient = new HttpClient();

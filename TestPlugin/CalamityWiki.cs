@@ -111,7 +111,7 @@ public class CalamityWiki : NapCatScript.Core.PluginType
         //}
         AddString(猜你想找, contentNpc, contentItem/*, 随机.AsEnumerable()*/);
         TextMesg tmesg = new TextMesg(GetUserId(mesg), MESGTO, 猜你想找.ToString().Substring(0, 猜你想找.Length - 2));
-        await SendMsg.Send(sendUrl, tmesg.MesgString, null, CTokrn);
+        await SendMsg.PostSend(sendUrl, tmesg.MesgString, null, CTokrn);
         return;
         #endregion
     }
@@ -120,7 +120,7 @@ public class CalamityWiki : NapCatScript.Core.PluginType
     {
         if (File.Exists(filePath)) {
             ImageMesg sendMesg = new ImageMesg(GetUserId(mesg), MESGTO, filePath);
-            await SendMsg.Send(sendUrl, sendMesg.MesgString, null, CTokrn);
+            await SendMsg.PostSend(sendUrl, sendMesg.MesgString, null, CTokrn);
             return true;
         }
         return false;

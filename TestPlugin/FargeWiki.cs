@@ -62,7 +62,7 @@ public class FargeWiki : NapCatScript.Core.PluginType
         string itemPath = Path.Combine(Environment.CurrentDirectory, "Farge" ,itemName + ".png");
         if (File.Exists(itemPath)) {
             ImageMesg image = new ImageMesg(mesg.GetId(), mesg.GetMsgTo(), itemPath);
-            await SendMsg.Send(mesg.GetMsgToURL(httpUri), image.MesgString, null, CTokrn);
+            await SendMsg.PostSend(mesg.GetMsgToURL(httpUri), image.MesgString, null, CTokrn);
             return;
         }
 

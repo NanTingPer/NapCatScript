@@ -1,5 +1,6 @@
 ﻿using System.Net.WebSockets;
 using static NapCatScript.Core.MsgHandle.ReceiveMesg;
+using System.Net.Http.Headers;
 using Config = NapCatScript.Core.Services.Config;
 using System.Reflection;
 using System.Data;
@@ -84,8 +85,11 @@ public class Main_
     /// </summary>
     private static async void Send()
     {
-        Console.WriteLine("awdawfawf");
         Send sned = new Send(HttpUri);
+        _ = Task.Run(async () => {
+            Console.WriteLine("aaa");
+            var r = await GetAuthentication("6099");
+        });
         while (true) {
             await Task.Delay(1);
             if (NoPMesgList.Count <= 0)
@@ -102,6 +106,42 @@ public class Main_
                     Log.Erro($"插件:{pType.GetType().FullName}", e.Message, e.StackTrace);
                 }
             }
+        }
+    }
+
+    private static async Task<string> GetClientkey()
+    {
+        var cookies = await SendMsg.PostSend(HttpUri + "/get_clientkey", "");
+        return await cookies.Content.ReadAsStringAsync();
+    }
+
+    private static async Task<string> GetAuthentication(string webport)
+    {
+        string httpuri = string.Join(":",HttpUri.Split(":")[.. 2]) + $":{webport}";
+        string uri = httpuri + "/api/auth/login";
+        string json = $$"""{"token":"napcat"}""";
+        HttpClient client = new HttpClient();
+        var r = await client.PostAsync(uri, new StringContent(json, Encoding.UTF8, "application/json"));
+        string con = await r.Content.ReadAsStringAsync();
+        if (con.GetJsonElement(out var je)) {
+            if (je.TryGetPropertyValue("Credential", out je)) {
+                return je.GetString()!;
+            }
+        }
+        return "";
+    }
+
+    private static async Task GetLoging(string authentication)
+    {
+        var hc = new HttpClient();
+        hc.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("text/event-stream"));
+        hc.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authentication);
+        var r = await hc.GetAsync("http://127.0.0.1:6099/api/Log/GetLogRealTime", HttpCompletionOption.ResponseHeadersRead);
+        var stream = new StreamReader(r.Content.ReadAsStream());
+        string? getStr;
+        while (!stream.EndOfStream) {
+            getStr = stream.ReadLine();
+            Console.WriteLine(getStr);
         }
     }
 
