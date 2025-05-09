@@ -1,25 +1,35 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Threading;
 using static NapCatScript.Core.JsonFormat.Utils;
 using NapCatScript.Core.MsgHandle;
 using ReactiveUI;
-using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace NapCatScript.Desktop.ViewModels;
 
-public class LogViewModel : ViewModelBase
+public class LogViewModel : ViewModelBase, IDisposable
 {
     private ObservableCollection<string> _log = new ObservableCollection<string>();
     private string _logString = "";
     public ObservableCollection<string> Log { get => _log; private set => this.RaiseAndSetIfChanged(ref _log, value); }
     public string LogString { get => _logString; private set => this.RaiseAndSetIfChanged(ref _logString, value); }
-    
+    private CancellationTokenSource CancellationTokenSource { get;} = new CancellationTokenSource();
+    private CancellationToken CToken {get => CancellationTokenSource.Token;}
     public LogViewModel()
     {
-        _ = Task.Run(GetLog);
+        _ = Task.Run(GetLog, CToken);
+    }
+
+    ~LogViewModel()
+    {
+        Debug.WriteLine("解构");
+    }
+
+    public void Dispose()
+    {
+        CancellationTokenSource.Cancel();
     }
 
     public async void GetLog()
@@ -27,7 +37,8 @@ public class LogViewModel : ViewModelBase
         await foreach (string? logc in Utils.GetLoging("http://127.0.0.1:6099", "6099", "napcat")){
             if (logc == null)
                 continue;
-            if (logc is string st && !string.IsNullOrEmpty(st)) {
+            if (string.IsNullOrEmpty(logc)) 
+                continue;
                 try {
                     if (logc.Trim().Substring("data:".Length).GetJsonElement(out var json)) {
                         if (json.TryGetPropertyValue("level", out var propValue)) {
@@ -51,7 +62,7 @@ public class LogViewModel : ViewModelBase
                 catch (Exception e) {
 
                 }
-            }
+            
         }
     }
 }

@@ -19,16 +19,21 @@
         -->
         <vm:MainWindowViewModel />
     </Design.DataContext>
-    <SplitView
+    <Grid ColumnDefinitions="1*,9*" RowDefinitions="*">
+        <ListBox Grid.Column="0" ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem}" />
+        <ContentControl Grid.Column="1" Content="{Binding CurrView}"/>
+    </Grid>
+    
+    <!--<SplitView
         Background="AliceBlue"
         IsPaneOpen="False"
         OpenPaneLength="50"
         PaneBackground="Aqua">
         <SplitView.Pane>
-            <ListBox ItemsSource="{Binding Items}" />
+            
         </SplitView.Pane>
         <SplitView.Content>
-            <ContentControl Content="{Binding CurrView}"/>
+            
         </SplitView.Content>
-    </SplitView>
+    </SplitView>-->
 </Window>
