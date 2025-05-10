@@ -1,5 +1,6 @@
 ﻿using NapCatScript.Core.Model;
 using System.Net.Http.Headers;
+using NapCatScript.Core.Services;
 
 namespace NapCatScript.Core.MsgHandle;
 /// <summary>
@@ -108,4 +109,28 @@ public static class Utils
         }
     }
 
+    public static async Task<string> GetNetWorkConfig(string webPort, string webToken)
+    {
+        // http://127.0.0.1:6099/api/OB11Config/GetConfig
+        string aut = await GetAuthentication(CoreConfigValueAndObject.HttpUri, webPort, webToken);
+        if(aut.Length < 40)
+            return "";
+        var hc = new HttpClient();
+        hc.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", aut);
+        var result = await hc.PostAsync(CoreConfigValueAndObject.HttpUri.JsonUrlProtApi(webPort, "/api/OB11Config/GetConfig"), null);
+        try {
+            return await result.Content.ReadAsStringAsync();
+        }
+        catch (Exception e) {
+            Log.Erro(e.Message, e.StackTrace);
+            return e.Message;
+        }
+        
+    }
+
+    private static string JsonUrlProtApi(this string url, string port, string api)
+    {
+        string httpuri = string.Join(":", url.Split(":")[..2]) + $":{port}";
+        return httpuri + api;
+    }
 }

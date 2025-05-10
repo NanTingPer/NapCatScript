@@ -1,9 +1,11 @@
+using NapCatScript.Core.NetWork.NetWorkModel;
 using ReactiveUI;
 
 namespace NapCatScript.Desktop.ViewModels.NetWorkModels;
 
 public class HttpServerViewModel : ViewModelBase
 {
+    public static Interaction<HttpServerViewModel, HttpServer> CreateServerInteraction = new Interaction<HttpServerViewModel, HttpServer>();
     private string _name = "HttpServer";
     private bool _enable = false;
     private int _port = 9998;
@@ -23,4 +25,5 @@ public class HttpServerViewModel : ViewModelBase
     public string MessagePostFormat { get => _messagePostFormat; set => this.RaiseAndSetIfChanged(ref _messagePostFormat, value); }
     public string Token { get => _token; set => this.RaiseAndSetIfChanged(ref _token, value); }
     public bool Debug { get => _debug; set => this.RaiseAndSetIfChanged(ref _debug, value); }
+    
 }

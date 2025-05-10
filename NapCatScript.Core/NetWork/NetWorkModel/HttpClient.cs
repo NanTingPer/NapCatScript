@@ -15,6 +15,7 @@ public class HttpClient
 
     [JsonPropertyName("enable")]
     public bool Enable { get; set; } = false;
+    
     [JsonPropertyName("url")]
     public string Url { get; set; } = "http://127.0.0.1:8080";
 
