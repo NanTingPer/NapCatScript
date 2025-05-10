@@ -1,0 +1,22 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:mv="clr-namespace:NapCatScript.Desktop.ViewModels.NetWorkModels"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="mv:HttpServerViewModel"
+             x:Class="NapCatScript.Desktop.Views.NetWorkViews.CreateViews.CreateHttpServerView">
+    <UserControl.Styles>
+        <StyleInclude Source="../../Styles/NetWorkViewStyle.axaml"/>
+    </UserControl.Styles>
+    <ScrollViewer>
+        <StackPanel>
+            <WrapPanel>
+                <Grid ColumnDefinitions="5*, 5*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+                    <Label Content="启用" HorizontalAlignment="Left" Grid.Row="0" Grid.Column="0"/>
+                    <Button Content="启用" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="0"/>
+                </Grid>
+            </WrapPanel>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

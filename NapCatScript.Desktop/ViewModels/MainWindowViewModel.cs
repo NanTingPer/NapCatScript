@@ -1,12 +1,6 @@
 ﻿using System;
-using Avalonia.Controls;
 using ReactiveUI;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Reactive;
-using System.Windows.Input;
-using Avalonia;
-using Action = System.Action;
 
 namespace NapCatScript.Desktop.ViewModels
 {
@@ -15,7 +9,7 @@ namespace NapCatScript.Desktop.ViewModels
         private ViewModelBase currView;
         private string _selectedItem;
         
-        public ICommand ListBoxPropertyChangedCommand {get; private set; }
+        public IReactiveCommand ListBoxPropertyChangedCommand {get; private set; }
         public LogViewModel LogViewModel {get; init; }
         public ObservableCollection<string> Items { get; } = [];
         public string SelectedItem { get => _selectedItem; set => this.RaiseAndSetIfChanged(ref _selectedItem, value); }

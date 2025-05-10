@@ -1,0 +1,37 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mv="clr-namespace:NapCatScript.Desktop.ViewModels.NetWorkModels"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="mv:ListViewModel"
+             x:Class="NapCatScript.Desktop.Views.NetWorkViews.ListView">
+    <StackPanel>
+        <!--<Grid ColumnDefinitions="1*, 1.8*, 1.8*, 1.8*, 1.8*, 1.8*"-->
+        <Grid ColumnDefinitions="Auto, Auto, Auto, Auto, Auto, Auto" RowDefinitions="5*, 5*">
+            <Button Grid.Column="0" Grid.Row="1" Content="全部"/>
+            <Button Grid.Column="1" Grid.Row="1" Content="Http服务器"/>
+            <Button Grid.Column="2" Grid.Row="1" Content="Http客户端"/>
+            <Button Grid.Column="3" Grid.Row="1" Content="Http SSE服务器"/>
+            <Button Grid.Column="4" Grid.Row="1" Content="Web Socket服务器"/>
+            <Button Grid.Column="5" Grid.Row="1" Content="Web Socket客户端"/>
+        </Grid>
+        <ScrollViewer>
+            <WrapPanel>
+                <ItemsControl ItemsSource="{Binding NetWorkConfig}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Margin="5"></WrapPanel>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemContainerTheme>
+                        <!--ContentPresenter 单个控件项-->
+                        <ControlTheme TargetType="ContentPresenter">
+                            <Setter Property="Margin" Value="8"></Setter>
+                        </ControlTheme>
+                    </ItemsControl.ItemContainerTheme>
+                </ItemsControl>
+            </WrapPanel>
+        </ScrollViewer>
+    </StackPanel>
+</UserControl>

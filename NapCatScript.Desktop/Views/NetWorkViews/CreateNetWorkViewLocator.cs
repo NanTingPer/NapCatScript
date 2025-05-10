@@ -6,17 +6,19 @@ using NapCatScript.Desktop.ViewModels;
 using NapCatScript.Desktop.ViewModels.NetWorkModels;
 using NapCatScript.Desktop.Views;
 using NapCatScript.Desktop.Views.NetWorkViews;
-using NapCatScript.Desktop.Views.NetWorkViews.MiniViews;
+using NapCatScript.Desktop.Views.NetWorkViews.CreateViews;
 using ViewType = System.Type;
 using ViewModelType = System.Type;
 
-namespace NapCatScript.Desktop;
+namespace NapCatScript.Desktop.Views.NetWorkViews;
 
-public class ViewLocator : IDataTemplate
+public class CreateNetWorkViewLocator : IDataTemplate
 {
-    static ViewLocator()
+    static CreateNetWorkViewLocator()
     {
-        ViewModelMap.Add(typeof(HttpServerViewModel), typeof(HttpServerView));
+        ViewModelMap.Add(typeof(HttpServerViewModel), typeof(CreateHttpServerView));
+        ViewModelMap.Add(typeof(ListViewModel), typeof(ListView));
+        ViewModelMap.Add(typeof(NetWorkCreateViewModel), typeof(NetWorkCreateView));
     }
 
     public static Dictionary<ViewModelType, ViewType> ViewModelMap { get;} = new Dictionary<Type, Type>();
@@ -28,15 +30,7 @@ public class ViewLocator : IDataTemplate
         if (ViewModelMap.TryGetValue(viewType, out var view)) {
             return (Control)Activator.CreateInstance(view)!;
         }
-        
-        var name = viewType.FullName!.Replace("ViewModel", "View", StringComparison.Ordinal);
-        var type = Type.GetType(name);
-
-        if (type != null) {
-            return (Control)Activator.CreateInstance(type)!;
-        }
-        
-        return new TextBlock { Text = "Not Found: " + name };
+        return new TextBlock { Text = "Not Found: " + viewType.FullName };
     }
 
     public bool Match(object? data)

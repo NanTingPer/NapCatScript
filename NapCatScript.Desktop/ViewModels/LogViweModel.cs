@@ -6,6 +6,7 @@ using static NapCatScript.Core.JsonFormat.Utils;
 using NapCatScript.Core.MsgHandle;
 using ReactiveUI;
 using System.Threading.Tasks;
+using NapCatScript.Core.Services;
 
 namespace NapCatScript.Desktop.ViewModels;
 
@@ -34,35 +35,32 @@ public class LogViewModel : ViewModelBase, IDisposable
 
     public async void GetLog()
     {
-        await foreach (string? logc in Utils.GetLoging("http://127.0.0.1:6099", "6099", "napcat")){
+        await foreach (string? logc in Utils.GetLoging("http://127.0.0.1:6099", "6099", "napcat")) {
             if (logc == null)
                 continue;
-            if (string.IsNullOrEmpty(logc)) 
+            if (string.IsNullOrEmpty(logc))
                 continue;
-                try {
-                    if (logc.Trim().Substring("data:".Length).GetJsonElement(out var json)) {
-                        if (json.TryGetPropertyValue("level", out var propValue)) {
-                            if (propValue.GetString() != "info") {
-                                continue;
-                            }
-                        }
-
-                        if (json.TryGetPropertyValue("message", out var msg)) {
-                            Avalonia.Threading.Dispatcher.UIThread.Post(() =>
-                            {
-                                LogString += msg.GetString() + "\r\n";
-                                while (LogString.Length > 1000) {
-                                    LogString = LogString.Substring(1);
-                                }
-                                //Log.Insert(0, logc);
-                            });
+            try {
+                if (logc.Trim().Substring("data:".Length).GetJsonElement(out var json)) {
+                    if (json.TryGetPropertyValue("level", out var propValue)) {
+                        if (propValue.GetString() != "info") {
+                            continue;
                         }
                     }
-                }
-                catch (Exception e) {
 
+                    if (json.TryGetPropertyValue("message", out var msg)) {
+                        Avalonia.Threading.Dispatcher.UIThread.Post(() => {
+                            LogString += msg.GetString() + "\r\n";
+                            while (LogString.Length > 1000) {
+                                LogString = LogString.Substring(1);
+                            }
+                            //Log.Insert(0, logc);
+                        });
+                    }
                 }
-            
+            } catch (Exception e) {
+                Loging.Log.Erro(e.Message, e.StackTrace);
+            }
         }
     }
 }

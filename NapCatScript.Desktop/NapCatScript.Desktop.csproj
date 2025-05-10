@@ -32,4 +32,15 @@
   <ItemGroup>
     <Folder Include="Models\" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Views\NetWorkViews\MiniViews\HttpServerView.axaml.cs">
+      <DependentUpon>HttpServerView.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\NetWorkViews\NetWorkView.axaml.cs">
+      <DependentUpon>NetWorkView.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
 </Project>
