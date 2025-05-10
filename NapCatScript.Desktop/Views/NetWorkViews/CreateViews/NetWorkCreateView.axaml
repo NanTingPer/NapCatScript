@@ -19,7 +19,7 @@
     <ScrollViewer>
         <StackPanel>
             <WrapPanel>
-                <ListBox ItemsSource="{Binding CreateList}">
+                <ListBox SelectedItem="{Binding SelectItem}" ItemsSource="{Binding CreateList}">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
                             <WrapPanel></WrapPanel>
@@ -27,7 +27,7 @@
                     </ListBox.ItemsPanel>
                 </ListBox>
             </WrapPanel>
-            <UserControl></UserControl>
+            <UserControl Content="{Binding CurrentView}"></UserControl>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

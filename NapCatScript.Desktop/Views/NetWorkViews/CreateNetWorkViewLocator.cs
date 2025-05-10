@@ -4,8 +4,6 @@ using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using NapCatScript.Desktop.ViewModels;
 using NapCatScript.Desktop.ViewModels.NetWorkModels;
-using NapCatScript.Desktop.Views;
-using NapCatScript.Desktop.Views.NetWorkViews;
 using NapCatScript.Desktop.Views.NetWorkViews.CreateViews;
 using ViewType = System.Type;
 using ViewModelType = System.Type;
