@@ -11,6 +11,18 @@ namespace NapCatScript.Desktop.ViewModels
         
         public IReactiveCommand ListBoxPropertyChangedCommand {get; private set; }
         public LogViewModel LogViewModel {get; init; }
+        
+        private ViewModelBase? _netWorkModel;
+        public ViewModelBase NetWorkModel
+        {
+            get {
+                if (_netWorkModel is null) {
+                    _netWorkModel = new NetWorkViewModel();
+                }
+                return _netWorkModel;
+            }
+        }
+
         public ObservableCollection<string> Items { get; } = [];
         public string SelectedItem { get => _selectedItem; set => this.RaiseAndSetIfChanged(ref _selectedItem, value); }
         public ViewModelBase CurrView { get => currView; set => this.RaiseAndSetIfChanged(ref currView, value); }
@@ -34,7 +46,7 @@ namespace NapCatScript.Desktop.ViewModels
             CurrView = null;
             GC.Collect();
             if(str == "网络")
-                CurrView = new NetWorkViewModel();
+                CurrView = NetWorkModel;
             if(str == "日志")
                 CurrView = LogViewModel;
         }
