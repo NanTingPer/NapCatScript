@@ -1,3 +1,4 @@
+using NapCatScript.Core.NetWork.NetWorkModel;
 using NapCatScript.Desktop.ViewModels.NetWorkModels;
 using ReactiveUI;
 
@@ -5,6 +6,7 @@ namespace NapCatScript.Desktop.ViewModels;
 
 public class NetWorkViewModel : ViewModelBase
 {
+    public static Interaction<HttpServer, HttpServerViewModel> CreateHttpServerInteraction = new ();
     private ViewModelBase _currView;
     public IReactiveCommand OpenNewNetWorkConfigCommand { get; set; }
     public IReactiveCommand OpenWorkListCommand { get; set; }

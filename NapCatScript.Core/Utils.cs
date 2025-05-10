@@ -1,4 +1,6 @@
-﻿namespace NapCatScript.Tool;
+﻿using System.Reflection;
+
+namespace NapCatScript.Core;
 
 public static class Utils
 {
@@ -10,7 +12,6 @@ public static class Utils
     public static TarGet TypeMap<Source, TarGet>(Source source, TarGet tarGet)
         where TarGet : Source
     {
-
         System.Reflection.BindingFlags BIP = System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public;
         var sourceProperts = typeof(Source).GetProperties(BIP);
         var targetProperts = typeof(TarGet).GetProperties(BIP);
@@ -23,5 +24,29 @@ public static class Utils
             }
         }
         return tarGet;
+    }
+    
+    public static void TypeMap(Type thisType, Type serverType, object thisObject, object serverObject)
+    {
+        IEnumerable<PropertyInfo> Props1 = thisType.GetProperties();
+        HashSet<string> proName = [];
+        foreach (var propertyInfo in Props1) {
+            proName.Add(propertyInfo.Name);
+        }
+        IEnumerable<PropertyInfo> Props2 = serverType.GetProperties();
+        try {
+            foreach (var thisInfo in Props2) {
+                if (proName.Contains(thisInfo.Name)) {//httpserver有
+                    foreach (var httpInfo in Props1) {
+                        if (httpInfo.Name == thisInfo.Name) {
+                            thisInfo.SetValue(thisObject, httpInfo.GetValue(serverObject));
+                            break;
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            Log.Erro(e.Message, e.StackTrace);
+        }
     }
 }
