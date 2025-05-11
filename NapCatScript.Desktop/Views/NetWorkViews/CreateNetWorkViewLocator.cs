@@ -10,6 +10,9 @@ using ViewModelType = System.Type;
 
 namespace NapCatScript.Desktop.Views.NetWorkViews;
 
+/// <summary>
+/// 对于MinViews 需要去 ViewLocator进行注册 ， 因为其属于根界面
+/// </summary>
 public class CreateNetWorkViewLocator : IDataTemplate
 {
     static CreateNetWorkViewLocator()

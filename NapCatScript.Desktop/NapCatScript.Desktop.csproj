@@ -45,5 +45,9 @@
       <DependentUpon>NetWorkView.axaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\NetWorkViews\MiniViews\HttpClientView.axaml.cs">
+      <DependentUpon>HttpClientView.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 </Project>

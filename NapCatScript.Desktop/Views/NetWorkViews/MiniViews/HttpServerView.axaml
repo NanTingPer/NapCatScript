@@ -17,7 +17,7 @@
             <!--主机 && 端口-->
             <Grid Margin="2" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" ColumnDefinitions="2.5*, 2.5*, 2.5*, 2.5*">
                 <Label Grid.Column="0" Content="{Binding Name}" />
-                <Button Content="启用" Grid.Column="3"/>
+                <ToggleSwitch Grid.Column="3" IsChecked="{Binding Enable}" OnContent="" OffContent=""/>
             </Grid>
             
             

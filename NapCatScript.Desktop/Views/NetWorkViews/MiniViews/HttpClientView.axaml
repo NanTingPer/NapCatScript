@@ -1,0 +1,36 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="clr-namespace:NapCatScript.Desktop.ViewModels.NetWorkModels"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="200"
+             Width="300"
+             x:DataType="vm:HttpClientViewModel"
+             x:Class="NapCatScript.Desktop.Views.NetWorkViews.MiniViews.HttpClientView">
+    <UserControl.Styles>
+        <StyleInclude Source="../../Styles/NetWorkViewStyle.axaml"></StyleInclude>
+    </UserControl.Styles>
+    
+    <StackPanel>
+        <Label FontSize="20" Content="HTTP客户端"/>
+        <WrapPanel>
+            <Label Margin="0 0 60 0" Content="{Binding Name}" />
+            <ToggleSwitch IsChecked="{Binding Enable}" OnContent="" OffContent=""/>
+        </WrapPanel>
+        
+        <WrapPanel>
+            <Label Margin="0" Content="URL" />
+            <TextBox Text="{Binding Url}"/>
+        </WrapPanel>
+        
+        <WrapPanel>
+            <Label Margin="0" Content="消息格式" />
+            <ComboBox ItemsSource="{Binding FormatValue}" SelectedItem="{Binding MessagePostFormat}"/>
+        </WrapPanel>
+        
+        <WrapPanel>
+            <Label Margin="0 0 60 0" Content="是否上报自身消息" />
+            <ToggleSwitch IsChecked="{Binding ReportSelfMessage}" OnContent="" OffContent=""/>
+        </WrapPanel>
+    </StackPanel>
+</UserControl>

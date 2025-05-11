@@ -66,18 +66,7 @@
                 <Grid Margin="5" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" ColumnDefinitions="Auto, 5*, Auto" RowDefinitions="Auto, Auto">
                     <Label Grid.Row="0" Grid.Column="1" Content="消息格式" x:Name="NetFormat" HorizontalAlignment="Left"/>
                     <Label Grid.Row="1" Grid.Column="1" Content="设置消息格式" Foreground="CornflowerBlue" FontSize="{Binding #NetFormat.FontSize, Converter={StaticResource ValueConverter}, ConverterParameter=2}"   HorizontalAlignment="Left"/>
-                    <ListBox Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" SelectedItem="{Binding MessagePostFormat}">
-                        <MenuItem Header="string"/>
-                        <MenuItem Header="array"/>
-                    </ListBox>
-                    <!--<ToggleSplitButton x:Name="Format" Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Content="{Binding MessagePostFormat}">
-                        <ToggleSplitButton.Flyout>
-                            <MenuFlyout Placement="Bottom">~1~下@1@
-                                <MenuItem Header="string"/>
-                                <MenuItem Header="array"/>
-                            </MenuFlyout>
-                        </ToggleSplitButton.Flyout>
-                    </ToggleSplitButton>-->
+                    <ComboBox Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" ItemsSource="{Binding FormatValue}" SelectedItem="{Binding MessagePostFormat}"/>
                 </Grid>
                 
                 <!--Token-->

@@ -1,4 +1,5 @@
-﻿using NapCatScript.Core.NetWork.NetWorkModel;
+﻿using System.Collections.ObjectModel;
+using NapCatScript.Core.NetWork.NetWorkModel;
 using ReactiveUI;
 using System.Text.Json.Serialization;
 
@@ -13,7 +14,6 @@ public class HttpClientViewModel : ConfigModel<HttpClientViewModel, NapCatScript
     private bool _reportSelfMessage;
     private string _token;
     private bool _debug;
-
     public string Name { get => _name; set => this.RaiseAndSetIfChanged(ref _name, value); }
     public bool Enable { get => _enable; set => this.RaiseAndSetIfChanged(ref _enable, value); }
     public string Url { get => _url; set => this.RaiseAndSetIfChanged(ref _url, value); }
@@ -21,10 +21,4 @@ public class HttpClientViewModel : ConfigModel<HttpClientViewModel, NapCatScript
     public bool ReportSelfMessage { get => _reportSelfMessage; set => this.RaiseAndSetIfChanged(ref _reportSelfMessage, value); }
     public string Token { get => _token; set => this.RaiseAndSetIfChanged(ref _token, value); }
     public bool Debug { get => _debug; set => this.RaiseAndSetIfChanged(ref _debug, value); }
-
-    public HttpClientViewModel(){}
-    public HttpClientViewModel(HttpClient httpClient) : this()
-    {
-        Core.Utils.TypeMap(ServerType, Type, httpClient, this);
-    }
 }

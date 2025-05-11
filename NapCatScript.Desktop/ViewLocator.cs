@@ -17,6 +17,7 @@ public class ViewLocator : IDataTemplate
     static ViewLocator()
     {
         ViewModelMap.Add(typeof(HttpServerViewModel), typeof(HttpServerView));
+        ViewModelMap.Add(typeof(HttpClientViewModel), typeof(HttpClientView));
     }
 
     public static Dictionary<ViewModelType, ViewType> ViewModelMap { get;} = new Dictionary<Type, Type>();

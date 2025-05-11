@@ -28,6 +28,7 @@ public class ListViewModel : ViewModelBase
     private static List<ViewModelType> s_viewModelTypes =
     [
         typeof(HttpServerViewModel),
+        typeof(HttpClientViewModel)
     ];
     
     private static List<PropertyInfo> s_netWorksPropInfo = [];
@@ -82,7 +83,8 @@ public class ListViewModel : ViewModelBase
         System.Net.Http.HttpClient hc = new System.Net.Http.HttpClient();
         hc.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", await Core.MsgHandle.Utils.GetAuthentication(CoreConfigValueAndObject.HttpUri, "6099", "napcat"));
         var jsonValue = JsonSerializer.Serialize(json);
-        _ = await SendMsg.PostSend(hc, api, jsonValue, null);
+        var r = await SendMsg.PostSend(hc, api, jsonValue, null);
+        var requStr = r.Content.ReadAsStringAsync();
     }
 
     public async void SetConifg()

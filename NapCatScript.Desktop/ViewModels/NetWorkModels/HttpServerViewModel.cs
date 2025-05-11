@@ -12,9 +12,6 @@ namespace NapCatScript.Desktop.ViewModels.NetWorkModels;
 
 public class HttpServerViewModel : ConfigModel<HttpServerViewModel, HttpServer>
 {
-    [JsonIgnore]
-    public IReactiveCommand AddNetWorkCommand { get; set; }
-
     private string _name = "HttpServer";
     private bool _enable = false;
     private int _port = 9998;
@@ -25,7 +22,6 @@ public class HttpServerViewModel : ConfigModel<HttpServerViewModel, HttpServer>
     private string _token = "";
     private bool _debug = false;
     
-    
     public string Name { get => _name; set => this.RaiseAndSetIfChanged(ref _name, value); } 
     public bool Enable { get => _enable; set => this.RaiseAndSetIfChanged(ref _enable, value); }
     public int Port { get => _port; set => this.RaiseAndSetIfChanged(ref _port, value); }
@@ -35,13 +31,4 @@ public class HttpServerViewModel : ConfigModel<HttpServerViewModel, HttpServer>
     public string MessagePostFormat { get => _messagePostFormat; set => this.RaiseAndSetIfChanged(ref _messagePostFormat, value); }
     public string Token { get => _token; set => this.RaiseAndSetIfChanged(ref _token, value); }
     public bool Debug { get => _debug; set => this.RaiseAndSetIfChanged(ref _debug, value); }
-
-    public HttpServerViewModel()
-    {
-        AddNetWorkCommand = ReactiveCommand.Create(CreateNetWork);
-    }
-    public HttpServerViewModel(HttpServer httpServer) : this()
-    {
-        Utils.TypeMap(ServerType, Type, httpServer, this);
-    }
 }
