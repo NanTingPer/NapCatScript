@@ -117,7 +117,7 @@ public static class Utils
             return "";
         var hc = new HttpClient();
         hc.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", aut);
-        var result = await hc.PostAsync(CoreConfigValueAndObject.HttpUri.JsonUrlProtApi(webPort, "/api/OB11Config/GetConfig"), null);
+        var result = await hc.PostAsync(CoreConfigValueAndObject.HttpUri.JoinUrlProtApi(webPort, "/api/OB11Config/GetConfig"), null);
         try {
             return await result.Content.ReadAsStringAsync();
         }
@@ -128,7 +128,13 @@ public static class Utils
         
     }
 
-    private static string JsonUrlProtApi(this string url, string port, string api)
+    private static string JoinUrlProtApi(this string url, string port, string api)
+    {
+        string httpuri = string.Join(":", url.Split(":")[..2]) + $":{port}";
+        return httpuri + api;
+    }
+
+    public static string JoinUrlProtAPI(string url, string port, string api)
     {
         string httpuri = string.Join(":", url.Split(":")[..2]) + $":{port}";
         return httpuri + api;

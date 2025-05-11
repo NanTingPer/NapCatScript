@@ -50,6 +50,10 @@ public class WebsocketServer
 
     [JsonPropertyName("token")]
     public string Token { get; set; } = "";
+
+    [JsonPropertyName("enableForcePushEvent")]
+    public bool EnableForcePushEvent { get; set; }
+
     [JsonPropertyName("debug")]
     public bool Debug { get; set; } = false;
     [JsonPropertyName("heartInterval")]

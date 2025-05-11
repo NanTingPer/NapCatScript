@@ -13,11 +13,19 @@ using BindingFlags = System.Reflection.BindingFlags;
 using ViewModelType = System.Type;
 using ServerType = System.Type;
 using System.Collections;
+using NapCatScript.Core;
+using System.Net.Http;
+using System.Threading.Tasks;
+using NapCatScript.Core.MsgHandle;
 
 namespace NapCatScript.Desktop.ViewModels.NetWorkModels;
 
 public class ListViewModel : ViewModelBase
 {
+    private string _musicSignUrl = "";
+    private bool _enableLocalFile2Url = false;
+    private bool _parseMultMsg = false;
+
     private static List<ViewModelType> s_viewModelTypes =
     [
         typeof(HttpServerViewModel),
@@ -48,10 +56,10 @@ public class ListViewModel : ViewModelBase
         Add(input.obj, input.type);
         interaction.SetOutput(Unit.Default);
 
-        UpdateListWeb(input.obj, input.type);
+        _ = UpdateListWeb(input.obj, input.type);
     }
 
-    public void UpdateListWeb(object obj, ServerType type)
+    public async Task UpdateListWeb(object obj, ServerType type)
     {
         if (_netWorks is null) SetConifg();
         if (_netWorks is null) return;
@@ -61,6 +69,21 @@ public class ListViewModel : ViewModelBase
         IList? netWorkList = (IList?)targetInfo.GetValue(_netWorks);
         if (netWorkList is null) return;
         netWorkList.Add(obj);
+
+        var confJsonValue = new NetWorkSetConfigValue()
+        {
+            EnableLocalFile2Url = _enableLocalFile2Url,
+            MusicSignUrl = _musicSignUrl,
+            ParseMultMsg = _parseMultMsg,
+            NetWork = _netWorks
+        };
+        var json = new NetWorkSetConf() { Config = JsonSerializer.Serialize(confJsonValue) };
+
+        string api = Core.MsgHandle.Utils.JoinUrlProtAPI(CoreConfigValueAndObject.HttpUri, "6099", "/api/OB11Config/SetConfig");
+        System.Net.Http.HttpClient hc = new System.Net.Http.HttpClient();
+        hc.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", await Core.MsgHandle.Utils.GetAuthentication(CoreConfigValueAndObject.HttpUri, "6099", "napcat"));
+        var jsonValue = JsonSerializer.Serialize(json);
+        _ = await SendMsg.PostSend(hc, api, jsonValue, null);
     }
 
     public async void SetConifg()
@@ -70,6 +93,15 @@ public class ListViewModel : ViewModelBase
             return;
         if(!netWorkJson.TryGetPropertyValue("network", out var network))
             return;
+
+        if (netWorkJson.TryGetPropertyValue("musicSignUrl", out var musicSign))
+            _musicSignUrl = musicSign.GetString() ?? "";
+        if (netWorkJson.TryGetPropertyValue("enableLocalFile2Url", out var enableLocalFile2Url))
+            _enableLocalFile2Url = enableLocalFile2Url.GetBoolean();
+        if (netWorkJson.TryGetPropertyValue("parseMultMsg", out var parseMultMsg))
+            _parseMultMsg = parseMultMsg.GetBoolean();
+
+
         try {
             _netWorks = network.Deserialize<NetWorks>()!;
         } catch (Exception e) {

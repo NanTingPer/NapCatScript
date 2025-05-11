@@ -43,6 +43,11 @@ public static class SendMsg
     {
         enc ??= Encoding.UTF8;
         var httpClient = new HttpClient();
+        return PostSend(httpClient, httpuri, msg, enc, hands, contentType);
+    }
+
+    public static Task<HttpResponseMessage> PostSend(HttpClient httpClient, string httpuri, string msg, Encoding? enc = null, Dictionary<string, string>? hands = null, string contentType = "application/json")
+    {
         if (hands != null) {
             foreach (var hand in hands)
                 httpClient.DefaultRequestHeaders.Add(hand.Key, hand.Value);
