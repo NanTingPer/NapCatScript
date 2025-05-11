@@ -10,14 +10,11 @@ using ReactiveUI;
 
 namespace NapCatScript.Desktop.ViewModels.NetWorkModels;
 
-public class HttpServerViewModel : ViewModelBase
+public class HttpServerViewModel : ConfigModel<HttpServerViewModel, HttpServer>
 {
     [JsonIgnore]
-    private readonly Type _httpServerType = HttpServer.Type;
-    [JsonIgnore]
-    public static Type Type { get; } = typeof(HttpServerViewModel);
-    [JsonIgnore]
     public IReactiveCommand AddNetWorkCommand { get; set; }
+
     private string _name = "HttpServer";
     private bool _enable = false;
     private int _port = 9998;
@@ -45,14 +42,6 @@ public class HttpServerViewModel : ViewModelBase
     }
     public HttpServerViewModel(HttpServer httpServer) : this()
     {
-        Utils.TypeMap(_httpServerType, Type, httpServer, this);
-    }
-    
-    public void CreateNetWork()
-    {
-        HttpServer config = new HttpServer();
-        Type type = _httpServerType;
-        Utils.TypeMap(Type, type, this,config);
-        NetWorkInteraction.CreateServerInteraction.Handle((config, type)).Subscribe();
+        Utils.TypeMap(ServerType, Type, httpServer, this);
     }
 }

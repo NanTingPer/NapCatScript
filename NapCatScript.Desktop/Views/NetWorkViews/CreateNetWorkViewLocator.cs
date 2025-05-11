@@ -14,6 +14,7 @@ public class CreateNetWorkViewLocator : IDataTemplate
 {
     static CreateNetWorkViewLocator()
     {
+        ViewModelMap.Add(HttpClientViewModel.Type, typeof(CreateHttpClientView));
         ViewModelMap.Add(typeof(HttpServerViewModel), typeof(CreateHttpServerView));
         ViewModelMap.Add(typeof(ListViewModel), typeof(ListView));
         ViewModelMap.Add(typeof(NetWorkCreateViewModel), typeof(NetWorkCreateView));

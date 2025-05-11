@@ -31,6 +31,8 @@ public class NetWorkCreateViewModel : ViewModelBase
     {
         if (viewName == "Http服务器") {
             CurrentView = new HttpServerViewModel();
+        }else if(viewName == "Http客户端") {
+            CurrentView = new HttpClientViewModel();
         }
     }
         

@@ -34,6 +34,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Views\NetWorkViews\CreateViews\CreateHttpClientView.axaml.cs">
+      <DependentUpon>CreateHttpClientView.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\NetWorkViews\MiniViews\HttpServerView.axaml.cs">
       <DependentUpon>HttpServerView.axaml</DependentUpon>
       <SubType>Code</SubType>

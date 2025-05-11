@@ -14,7 +14,6 @@ using ViewModelType = System.Type;
 using ServerType = System.Type;
 using System.Collections;
 using NapCatScript.Core;
-using System.Net.Http;
 using System.Threading.Tasks;
 using NapCatScript.Core.MsgHandle;
 
