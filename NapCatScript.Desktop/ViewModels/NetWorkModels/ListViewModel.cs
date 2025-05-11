@@ -18,22 +18,13 @@ namespace NapCatScript.Desktop.ViewModels.NetWorkModels;
 
 public class ListViewModel : ViewModelBase
 {
-    private enum ServerTypes
-    {
-        HttpServer,
-        HttpSseServer,
-        HttpClient,
-        WebSocketClient,
-        WebsocketServer
-    }
-
     private static List<ViewModelType> s_viewModelTypes =
     [
         typeof(HttpServerViewModel),
     ];
 
     private static List<PropertyInfo> s_netWorksPropInfo = [];
-
+    private NetWorks? _netWorks;
     public ObservableCollection<object> NetWorkConfig { get; set; } = [];
 
     public ListViewModel()
@@ -58,15 +49,6 @@ public class ListViewModel : ViewModelBase
         interaction.SetOutput(Unit.Default);
 
         UpdateListWeb(input.obj, input.type);
-        //switch (input.type.Name) {
-        //    case nameof(ServerTypes.HttpClient):
-        //        break;
-        //    case nameof(ServerTypes.HttpServer):
-        //        break;
-        //    case nameof(ServerTypes.WebSocketClient):
-        //        break;
-        //    case nameof()
-        //}
     }
 
     public void UpdateListWeb(object obj, ServerType type)
@@ -81,7 +63,6 @@ public class ListViewModel : ViewModelBase
         netWorkList.Add(obj);
     }
 
-    private NetWorks? _netWorks;
     public async void SetConifg()
     {
         string s = await Core.MsgHandle.Utils.GetNetWorkConfig("6099", "napcat");
@@ -100,7 +81,7 @@ public class ListViewModel : ViewModelBase
 
     private void Add<T>(T obj) => AddAll([obj]);
     private void Add(object obj, Type type) => AddAll([obj], type.Name, type);
-    private void AddAll<T>(List<T> list, string? typeName_ = null, Type? type_ = null)
+    private void AddAll<T>(List<T> list, string? typeName_ = null, ServerType? type_ = null)
     {
         list.ForEach(f =>
         {
@@ -108,9 +89,11 @@ public class ListViewModel : ViewModelBase
             if (typeName_ == null)
                 typeName = typeof(T).Name;
             else typeName = typeName_;
+
             ViewModelType? viewType = s_viewModelTypes.FirstOrDefault(f => f.Name.Contains(typeName));
             if (viewType is null)
                 return;
+
             ConstructorInfo ctorInfo = viewType.GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public, [])!;
             object viewModelObj;
             try {
