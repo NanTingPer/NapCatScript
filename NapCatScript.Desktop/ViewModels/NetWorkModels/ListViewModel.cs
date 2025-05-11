@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reactive;
 using System.Reflection;
 using System.Text.Json;
 using NapCatScript.Core.JsonFormat;
 using NapCatScript.Core.NetWork.NetWorkModel;
 using NapCatScript.Core.Services;
+using ReactiveUI;
 using BindingFlags = System.Reflection.BindingFlags;
 using ViewModelType = System.Type;
 
@@ -23,12 +25,23 @@ public class ListViewModel : ViewModelBase
 
     public ListViewModel()
     {
+        NetWorkInteraction.CreateServerInteraction.RegisterHandler(ReceiveAddList);
         SetConifg();
     }
 
+    public void ReceiveAddList(IInteractionContext<(object, Type), Unit> interaction)
+    {
+        //Handel =>  ‰≥ˆ
+        //RegionHandel =>  ‰»Î
+        (object obj, Type type) input = interaction.Input;
+        Add(input.obj, input.type);
+        interaction.SetOutput(Unit.Default);
+    }
+
+
     public async void SetConifg()
     {
-        string s = await NapCatScript.Core.MsgHandle.Utils.GetNetWorkConfig("6099", "napcat");
+        string s = await Core.MsgHandle.Utils.GetNetWorkConfig("6099", "napcat");
         if(!s.GetJsonElement(out var netWorkJson))
             return;
         if(!netWorkJson.TryGetPropertyValue("network", out var network))
@@ -37,19 +50,24 @@ public class ListViewModel : ViewModelBase
         NetWorks config = network.Deserialize<NetWorks>()!;
         Add(config);
     }
-    
-    public void AddAll<T>(List<T> list)
+
+    private void Add<T>(T obj) => AddAll([obj]);
+    private void Add(object obj, Type type) => AddAll([obj], type.Name, type);
+    private void AddAll<T>(List<T> list, string? typeName_ = null, Type? type_ = null)
     {
         list.ForEach(f =>
         {
-            string typeName = typeof(T).Name;
+            string typeName;
+            if (typeName_ == null)
+                typeName = typeof(T).Name;
+            else typeName = typeName_;
             ViewModelType? viewType = Types.FirstOrDefault(f => f.Name.Contains(typeName));
             if (viewType is null)
                 return;
-            ConstructorInfo ctorInfo = viewType.GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public, []);
+            ConstructorInfo ctorInfo = viewType.GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public, [])!;
             object viewModelObj;
             try {
-                viewModelObj = ctorInfo.Invoke([]);
+                viewModelObj = ctorInfo!.Invoke([]);
             }
             catch (Exception e) {
                 Loging.Log.Erro(e.Message, e.StackTrace);
@@ -61,7 +79,7 @@ public class ListViewModel : ViewModelBase
         });
     }
 
-    public void Add(NetWorks config)
+    private void Add(NetWorks config)
     {
         AddAll(config.HttpClients);
         AddAll(config.HttpServers);

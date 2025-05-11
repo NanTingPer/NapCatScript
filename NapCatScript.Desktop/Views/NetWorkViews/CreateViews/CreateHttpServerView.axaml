@@ -72,7 +72,7 @@
                     <TextBox Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Text="{Binding Token}" Watermark="请输入"></TextBox>
                 </Grid>
             </Grid>
-            <Button Content="创建"/>
+            <Button Content="创建" Command="{Binding AddNetWorkCommand}"/>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

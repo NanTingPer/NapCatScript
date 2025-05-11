@@ -1,12 +1,14 @@
+using DynamicData.Binding;
 using NapCatScript.Core.NetWork.NetWorkModel;
 using NapCatScript.Desktop.ViewModels.NetWorkModels;
 using ReactiveUI;
+using System;
+using System.Reactive;
 
 namespace NapCatScript.Desktop.ViewModels;
 
 public class NetWorkViewModel : ViewModelBase
 {
-    public static Interaction<HttpServer, HttpServerViewModel> CreateHttpServerInteraction = new ();
     private ViewModelBase _currView;
     public IReactiveCommand OpenNewNetWorkConfigCommand { get; set; }
     public IReactiveCommand OpenWorkListCommand { get; set; }
@@ -41,6 +43,7 @@ public class NetWorkViewModel : ViewModelBase
         CurrView = ListViewModel;
     }
 
+
     /// <summary>
     /// 打开新建网络配置
     /// </summary>
@@ -53,4 +56,12 @@ public class NetWorkViewModel : ViewModelBase
     {
         CurrView = ListViewModel;
     }
+}
+
+public static class NetWorkInteraction
+{
+    /// <summary>
+    /// 此交互用于CreateNetWork通知NetWorkViewModel并返回创建对象
+    /// </summary>
+    public static Interaction<(object, Type), Unit> CreateServerInteraction { get; } = new();
 }

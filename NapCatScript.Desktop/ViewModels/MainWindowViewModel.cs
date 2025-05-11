@@ -31,6 +31,7 @@ namespace NapCatScript.Desktop.ViewModels
             this.WhenAnyValue(f => f.SelectedItem)
                 .WhereNotNull()
                 .Subscribe(ListBoxPropertyChanged);
+            Items.Add("连接");
             Items.Add("聊天");
             Items.Add("日志");
             Items.Add("网络");

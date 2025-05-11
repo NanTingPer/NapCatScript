@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using NapCatScript.Core;
 using NapCatScript.Core.NetWork.NetWorkModel;
 using ReactiveUI;
@@ -19,6 +20,8 @@ public class HttpServerViewModel : ViewModelBase
     private string _token = "";
     private bool _debug = false;
     
+    public IReactiveCommand AddNetWorkCommand { get; set; }
+
     public string Name { get => _name; set => this.RaiseAndSetIfChanged(ref _name, value); } 
     public bool Enable { get => _enable; set => this.RaiseAndSetIfChanged(ref _enable, value); }
     public int Port { get => _port; set => this.RaiseAndSetIfChanged(ref _port, value); }
@@ -29,9 +32,20 @@ public class HttpServerViewModel : ViewModelBase
     public string Token { get => _token; set => this.RaiseAndSetIfChanged(ref _token, value); }
     public bool Debug { get => _debug; set => this.RaiseAndSetIfChanged(ref _debug, value); }
 
-    public HttpServerViewModel(){}
-    public HttpServerViewModel(HttpServer httpServer)
+    public HttpServerViewModel()
+    {
+        AddNetWorkCommand = ReactiveCommand.Create(CreateNetWork);
+    }
+    public HttpServerViewModel(HttpServer httpServer) : this()
     {
         Utils.TypeMap(thisType, httpServerType, this, httpServer);
+    }
+
+    public void CreateNetWork()
+    {
+        HttpServer config = new HttpServer();
+        Type type = config.GetType();
+        Utils.TypeMap(this.GetType(), type, this, config);
+        NetWorkInteraction.CreateServerInteraction.Handle((config, type)).Subscribe();
     }
 }
