@@ -26,27 +26,37 @@ public static class Utils
         return tarGet;
     }
     
-    public static void TypeMap(Type thisType, Type serverType, object thisObject, object serverObject)
+    /// <summary>
+    /// 将viewModelObject的值赋值给serverObject
+    /// </summary>
+    /// <param name="thisType"> viewModel类型 </param>
+    /// <param name="serverType"> server类型 </param>
+    /// <param name="viewModelObject"> viewModel对象 </param>
+    /// <param name="serverObject"> server对象 </param>
+    public static void TypeMap(Type thisType, Type serverType, object viewModelObject, object serverObject)
     {
-        IEnumerable<PropertyInfo> Props1 = thisType.GetProperties();
+        var BIP = BindingFlags.Instance | BindingFlags.Public;
+        IEnumerable<PropertyInfo> viewModelInfos = thisType.GetProperties(BIP);
         HashSet<string> proName = [];
-        foreach (var propertyInfo in Props1) {
+        foreach (var propertyInfo in viewModelInfos) {
             proName.Add(propertyInfo.Name);
         }
-        IEnumerable<PropertyInfo> Props2 = serverType.GetProperties();
-        try {
-            foreach (var thisInfo in Props2) {
-                if (proName.Contains(thisInfo.Name)) {//httpserver有
-                    foreach (var httpInfo in Props1) {
-                        if (httpInfo.Name == thisInfo.Name) {
-                            thisInfo.SetValue(thisObject, httpInfo.GetValue(serverObject));
+        IEnumerable<PropertyInfo> serverInfos  = serverType.GetProperties(BIP);
+        foreach (var serverInfo in serverInfos) { //遍历服务的info
+            if (proName.Contains(serverInfo.Name)) {//ViewModel有这个属性
+                 foreach (var thisInfo in viewModelInfos) { //遍历ViewModel的属性并找到这个属性
+                    if (serverInfo.Name == thisInfo.Name) {
+                        try {
+                            serverInfo.SetValue(serverObject, thisInfo.GetValue(viewModelObject)); //设置serverobject的值为viewmodel
+                            break;
+                        }
+                        catch (Exception e) {
+                            Log.Erro(e.Message, e.StackTrace);
                             break;
                         }
                     }
-                }
+                 }
             }
-        } catch (Exception e) {
-            Log.Erro(e.Message, e.StackTrace);
         }
     }
 }

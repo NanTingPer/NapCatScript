@@ -1,15 +1,23 @@
 using System;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using NapCatScript.Core;
 using NapCatScript.Core.NetWork.NetWorkModel;
+using NapCatScript.Core.Services;
 using ReactiveUI;
 
 namespace NapCatScript.Desktop.ViewModels.NetWorkModels;
 
 public class HttpServerViewModel : ViewModelBase
 {
+    [JsonIgnore]
     private readonly Type _httpServerType = HttpServer.Type;
+    [JsonIgnore]
     public static Type Type { get; } = typeof(HttpServerViewModel);
+    [JsonIgnore]
+    public IReactiveCommand AddNetWorkCommand { get; set; }
     private string _name = "HttpServer";
     private bool _enable = false;
     private int _port = 9998;
@@ -20,8 +28,7 @@ public class HttpServerViewModel : ViewModelBase
     private string _token = "";
     private bool _debug = false;
     
-    public IReactiveCommand AddNetWorkCommand { get; set; }
-
+    
     public string Name { get => _name; set => this.RaiseAndSetIfChanged(ref _name, value); } 
     public bool Enable { get => _enable; set => this.RaiseAndSetIfChanged(ref _enable, value); }
     public int Port { get => _port; set => this.RaiseAndSetIfChanged(ref _port, value); }
@@ -38,14 +45,14 @@ public class HttpServerViewModel : ViewModelBase
     }
     public HttpServerViewModel(HttpServer httpServer) : this()
     {
-        Utils.TypeMap(Type, _httpServerType, this, httpServer);
+        Utils.TypeMap(_httpServerType, Type, httpServer, this);
     }
-
+    
     public void CreateNetWork()
     {
         HttpServer config = new HttpServer();
         Type type = _httpServerType;
-        Utils.TypeMap(Type, type, this, config);
+        Utils.TypeMap(Type, type, this,config);
         NetWorkInteraction.CreateServerInteraction.Handle((config, type)).Subscribe();
     }
 }

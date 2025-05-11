@@ -9,6 +9,10 @@
              x:Class="NapCatScript.Desktop.Views.NetWorkViews.CreateViews.CreateHttpServerView">
     <UserControl.Styles>
         <StyleInclude Source="../../Styles/NetWorkViewStyle.axaml"/>
+        <Style Selector="ToggleSwitch">
+            <Setter Property="OffContent" Value=""/>
+            <Setter Property="OnContent"  Value=""/>
+        </Style>
     </UserControl.Styles>
     <UserControl.Resources>
         <converters:ValueConverter x:Key="ValueConverter"></converters:ValueConverter>
@@ -17,9 +21,9 @@
         <StackPanel>
             <Grid ColumnDefinitions="5*, 5*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto">
                 <Label Content="启用" HorizontalAlignment="Left" Grid.Row="0" Grid.Column="0"/>
-                <Button Content="启用" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="0"/>
+                <ToggleSwitch IsChecked="{Binding Enable}" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="0"/>
                 <Label Content="调试" HorizontalAlignment="Left" Grid.Row="0" Grid.Column="1"/>
-                <Button Content="启用" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="1"/>
+                <ToggleSwitch IsChecked="{Binding Debug}" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="1"/>
                 <!--名称-->
                 <Grid Margin="5" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" ColumnDefinitions="Auto, 5*, Auto" RowDefinitions="Auto, Auto">
                     <Label Grid.Row="0" Grid.Column="1" Content="名称" x:Name="NetName" HorizontalAlignment="Left"/>
@@ -47,14 +51,14 @@
                     <Grid Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="2" RowDefinitions="7*, 3*" ColumnDefinitions="5*, 5*">
                         <Label Grid.Row="0" Grid.Column="0" Content="CORS" x:Name="NetCors" HorizontalAlignment="Left"/>
                         <Label Grid.Row="1" Grid.Column="0" Content="启用跨域请求" Foreground="CornflowerBlue" FontSize="{Binding #NetCors.FontSize, Converter={StaticResource ValueConverter}, ConverterParameter=2}"   HorizontalAlignment="Left"/>
-                        <Button Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Content="启用" HorizontalAlignment="Right"/>
+                        <ToggleSwitch Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" IsChecked="{Binding EnableCors}" HorizontalAlignment="Right"/>
                     </Grid>
                     
                     <!--WebSocket-->
                     <Grid Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Grid.ColumnSpan="2" RowDefinitions="7*, 3*" ColumnDefinitions="5*, 5*">
                         <Label Grid.Row="0" Grid.Column="0" Content="WebSocket" x:Name="NetWebSocket" HorizontalAlignment="Left"/>
                         <Label Grid.Row="1" Grid.Column="0" Content="启用WebSocket" Foreground="CornflowerBlue" FontSize="{Binding #NetWebSocket.FontSize, Converter={StaticResource ValueConverter}, ConverterParameter=2}"   HorizontalAlignment="Left"/>
-                        <Button Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Content="启用" HorizontalAlignment="Right"/>
+                        <ToggleSwitch Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" IsChecked="{Binding EnableWebSocket}" HorizontalAlignment="Right"/>
                     </Grid>
                 </Grid>
                 
@@ -62,7 +66,18 @@
                 <Grid Margin="5" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" ColumnDefinitions="Auto, 5*, Auto" RowDefinitions="Auto, Auto">
                     <Label Grid.Row="0" Grid.Column="1" Content="消息格式" x:Name="NetFormat" HorizontalAlignment="Left"/>
                     <Label Grid.Row="1" Grid.Column="1" Content="设置消息格式" Foreground="CornflowerBlue" FontSize="{Binding #NetFormat.FontSize, Converter={StaticResource ValueConverter}, ConverterParameter=2}"   HorizontalAlignment="Left"/>
-                    <TextBox Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Watermark="请输入"></TextBox>
+                    <ListBox Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" SelectedItem="{Binding MessagePostFormat}">
+                        <MenuItem Header="string"/>
+                        <MenuItem Header="array"/>
+                    </ListBox>
+                    <!--<ToggleSplitButton x:Name="Format" Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Content="{Binding MessagePostFormat}">
+                        <ToggleSplitButton.Flyout>
+                            <MenuFlyout Placement="Bottom">~1~下@1@
+                                <MenuItem Header="string"/>
+                                <MenuItem Header="array"/>
+                            </MenuFlyout>
+                        </ToggleSplitButton.Flyout>
+                    </ToggleSplitButton>-->
                 </Grid>
                 
                 <!--Token-->

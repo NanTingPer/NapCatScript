@@ -22,7 +22,7 @@ public class ListViewModel : ViewModelBase
     [
         typeof(HttpServerViewModel),
     ];
-
+    
     private static List<PropertyInfo> s_netWorksPropInfo = [];
     private NetWorks? _netWorks;
     public ObservableCollection<object> NetWorkConfig { get; set; } = [];
@@ -42,8 +42,8 @@ public class ListViewModel : ViewModelBase
 
     public void ReceiveAddList(IInteractionContext<(object, ServerType), Unit> interaction)
     {
-        //Handel => Êä³ö
-        //RegionHandel => ÊäÈë
+        //Handel => ï¿½ï¿½ï¿½
+        //RegionHandel => ï¿½ï¿½ï¿½ï¿½
         (object obj, ServerType type) input = interaction.Input;
         Add(input.obj, input.type);
         interaction.SetOutput(Unit.Default);
@@ -73,15 +73,15 @@ public class ListViewModel : ViewModelBase
         try {
             _netWorks = network.Deserialize<NetWorks>()!;
         } catch (Exception e) {
-            Loging.Log.Erro("ListViewModel::SetConfig ÍøÂçÅäÖÃÐòÁÐ»¯Ê§°Ü!", e.Message, e.StackTrace);
+            Loging.Log.Erro("ListViewModel::SetConfig ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð»ï¿½Ê§ï¿½ï¿½!", e.Message, e.StackTrace);
             return;
         }
         Add(_netWorks);
     }
 
-    private void Add<T>(T obj) => AddAll([obj]);
-    private void Add(object obj, Type type) => AddAll([obj], type.Name, type);
-    private void AddAll<T>(List<T> list, string? typeName_ = null, ServerType? type_ = null)
+    private void Add(object obj) => AddAll([obj]);
+    private void Add(object obj, Type type) => AddAll([obj], type.Name);
+    private void AddAll<T>(List<T> list, string? typeName_ = null)
     {
         list.ForEach(f =>
         {
@@ -103,8 +103,7 @@ public class ListViewModel : ViewModelBase
                 Loging.Log.Erro(e.Message, e.StackTrace);
                 return;
             }
-            
-            Core.Utils.TypeMap(viewType, typeof(T), viewModelObj, f);
+            Core.Utils.TypeMap(f.GetType(), viewType, f, viewModelObj);
             NetWorkConfig.Add(viewModelObj);
         });
     }
