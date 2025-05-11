@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -42,8 +42,8 @@ public class ListViewModel : ViewModelBase
 
     public void ReceiveAddList(IInteractionContext<(object, ServerType), Unit> interaction)
     {
-        //Handel => ���
-        //RegionHandel => ����
+        //Handel => 发送object
+        //RegionHandel => 接收object
         (object obj, ServerType type) input = interaction.Input;
         Add(input.obj, input.type);
         interaction.SetOutput(Unit.Default);
@@ -73,7 +73,7 @@ public class ListViewModel : ViewModelBase
         try {
             _netWorks = network.Deserialize<NetWorks>()!;
         } catch (Exception e) {
-            Loging.Log.Erro("ListViewModel::SetConfig �����������л�ʧ��!", e.Message, e.StackTrace);
+            Loging.Log.Erro("ListViewModel::SetConfig 网络配置解析失败!", e.Message, e.StackTrace);
             return;
         }
         Add(_netWorks);
