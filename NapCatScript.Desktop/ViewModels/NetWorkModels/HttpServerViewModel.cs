@@ -8,8 +8,8 @@ namespace NapCatScript.Desktop.ViewModels.NetWorkModels;
 
 public class HttpServerViewModel : ViewModelBase
 {
-    private Type httpServerType = typeof(HttpServer);
-    private Type thisType = typeof(HttpServerViewModel);
+    private readonly Type _httpServerType = HttpServer.Type;
+    public static Type Type { get; } = typeof(HttpServerViewModel);
     private string _name = "HttpServer";
     private bool _enable = false;
     private int _port = 9998;
@@ -38,14 +38,14 @@ public class HttpServerViewModel : ViewModelBase
     }
     public HttpServerViewModel(HttpServer httpServer) : this()
     {
-        Utils.TypeMap(thisType, httpServerType, this, httpServer);
+        Utils.TypeMap(Type, _httpServerType, this, httpServer);
     }
 
     public void CreateNetWork()
     {
         HttpServer config = new HttpServer();
-        Type type = config.GetType();
-        Utils.TypeMap(this.GetType(), type, this, config);
+        Type type = _httpServerType;
+        Utils.TypeMap(Type, type, this, config);
         NetWorkInteraction.CreateServerInteraction.Handle((config, type)).Subscribe();
     }
 }

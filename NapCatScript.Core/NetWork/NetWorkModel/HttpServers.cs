@@ -14,6 +14,8 @@
 [Serializable]
 public class HttpServer
 {
+    public static Type Type { get; } = typeof(HttpServer);
+
     [JsonPropertyName("name")]
     public string Name { get; set; } = "HttpServer";
     [JsonPropertyName("enable")]
