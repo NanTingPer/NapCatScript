@@ -3,6 +3,7 @@
              xmlns:vm="clr-namespace:NapCatScript.Desktop.ViewModels.NetWorkModels"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:list="using:NapCatScript.Desktop.Models"
              xmlns:netWorkViews="clr-namespace:NapCatScript.Desktop.Views.NetWorkViews"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="NapCatScript.Desktop.Views.NetWorkViews.CreateViews.NetWorkCreateView"
@@ -19,12 +20,18 @@
     <ScrollViewer>
         <StackPanel>
             <WrapPanel>
-                <ListBox SelectedItem="{Binding SelectItem}" ItemsSource="{Binding CreateList}">
+                <ListBox SelectedItem="{Binding SelectItem}" ItemsSource="{Binding Source={x:Static list:NetSelectModel.NetSelectModels}}">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <WrapPanel></WrapPanel>
+                            <WrapPanel>
+                            </WrapPanel>
                         </ItemsPanelTemplate>
                     </ListBox.ItemsPanel>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Label Content="{Binding Name}"/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
                 </ListBox>
             </WrapPanel>
             <UserControl Content="{Binding CurrentView}"></UserControl>

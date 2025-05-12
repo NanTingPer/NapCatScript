@@ -12,5 +12,6 @@ public partial class ListView : ReactiveUserControl<ListViewModel>
     public ListView()
     {
         InitializeComponent();
+        //this.Resources.Add("SelectList", Models.NetSelectModel.NetSelectModels);
     }
 }

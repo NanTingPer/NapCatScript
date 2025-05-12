@@ -16,6 +16,7 @@ using System.Collections;
 using NapCatScript.Core;
 using System.Threading.Tasks;
 using NapCatScript.Core.MsgHandle;
+using NapCatScript.Desktop.Models;
 
 namespace NapCatScript.Desktop.ViewModels.NetWorkModels;
 
@@ -28,7 +29,8 @@ public class ListViewModel : ViewModelBase
     private string _musicSignUrl = "";
     private bool _enableLocalFile2Url = false;
     private bool _parseMultMsg = false;
-
+    private NetSelectModel? _selectedModel;
+    
     private static List<ViewModelType> s_viewModelTypes =
     [
         HttpServerViewModel.Type,
@@ -41,7 +43,10 @@ public class ListViewModel : ViewModelBase
     private static List<PropertyInfo> s_netWorksPropInfo = [];
     private NetWorks? _netWorks;
     public ObservableCollection<object> NetWorkConfig { get; set; } = [];
-
+    public NetSelectModel? SelectedModel {get => _selectedModel; set => this.RaiseAndSetIfChanged(ref _selectedModel, value); }
+    private ObservableCollection<object> allNetWorkConfig = [];
+    
+    
     public ListViewModel()
     {
         NetWorkInteraction.CreateServerInteraction.RegisterHandler(ReceiveAddList);
