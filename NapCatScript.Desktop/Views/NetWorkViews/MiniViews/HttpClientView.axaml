@@ -13,24 +13,24 @@
     
     <StackPanel>
         <Label FontSize="20" Content="HTTP客户端"/>
-        <WrapPanel>
-            <Label Margin="0 0 60 0" Content="{Binding Name}" />
-            <ToggleSwitch IsChecked="{Binding Enable}" OnContent="" OffContent=""/>
-        </WrapPanel>
+        <Grid ColumnDefinitions="5*, 5*">
+            <Label  HorizontalAlignment="Left" Content="{Binding Name}" />
+            <ToggleSwitch Grid.Column="1" HorizontalAlignment="Right" IsChecked="{Binding Enable}" OnContent="" OffContent=""/>
+        </Grid>
         
-        <WrapPanel>
-            <Label Margin="0" Content="URL" />
-            <TextBox Text="{Binding Url}"/>
-        </WrapPanel>
+        <Grid ColumnDefinitions="5*, 5*">
+            <Label  Content="URL" HorizontalAlignment="Left" />
+            <TextBox Grid.Column="1" HorizontalAlignment="Right" Text="{Binding Url}"/>
+        </Grid>
         
-        <WrapPanel>
-            <Label Margin="0" Content="消息格式" />
-            <ComboBox ItemsSource="{Binding FormatValue}" SelectedItem="{Binding MessagePostFormat}"/>
-        </WrapPanel>
+        <Grid ColumnDefinitions="5*, 5*">
+            <Label HorizontalAlignment="Left"  Content="消息格式" />
+            <ComboBox Grid.Column="1" HorizontalAlignment="Right" ItemsSource="{Binding FormatValue}" SelectedItem="{Binding MessagePostFormat}"/>
+        </Grid>
         
-        <WrapPanel>
-            <Label Margin="0 0 60 0" Content="是否上报自身消息" />
-            <ToggleSwitch IsChecked="{Binding ReportSelfMessage}" OnContent="" OffContent=""/>
-        </WrapPanel>
+        <Grid ColumnDefinitions="5*, 5*">
+            <Label HorizontalAlignment="Left" Margin="0 0 60 0" Content="是否上报自身消息" />
+            <ToggleSwitch Grid.Column="1" HorizontalAlignment="Right" IsChecked="{Binding ReportSelfMessage}" OnContent="" OffContent=""/>
+        </Grid>
     </StackPanel>
 </UserControl>

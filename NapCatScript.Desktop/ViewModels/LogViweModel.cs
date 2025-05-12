@@ -3,10 +3,11 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Threading;
 using static NapCatScript.Core.JsonFormat.Utils;
-using NapCatScript.Core.MsgHandle;
 using ReactiveUI;
 using System.Threading.Tasks;
+using NapCatScript.Core;
 using NapCatScript.Core.Services;
+using Utils = NapCatScript.Core.MsgHandle.Utils;
 
 namespace NapCatScript.Desktop.ViewModels;
 
@@ -35,7 +36,7 @@ public class LogViewModel : ViewModelBase, IDisposable
 
     public async void GetLog()
     {
-        await foreach (string? logc in Utils.GetLoging("http://127.0.0.1:6099", "6099", "napcat")) {
+        await foreach (string? logc in Utils.GetLoging(CoreConfigValueAndObject.HttpUri, "6099", "napcat")) {
             if (logc == null)
                 continue;
             if (string.IsNullOrEmpty(logc))

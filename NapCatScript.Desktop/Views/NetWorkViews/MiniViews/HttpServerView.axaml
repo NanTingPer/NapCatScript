@@ -9,6 +9,11 @@
              x:Class="NapCatScript.Desktop.Views.NetWorkViews.MiniViews.HttpServerView">
     <UserControl.Styles>
         <StyleInclude Source="../../Styles/NetWorkViewStyle.axaml"></StyleInclude>
+        <Style Selector="ToggleSwitch">
+            <Setter Property="OnContent" Value=""/>
+            <Setter Property="OffContent" Value=""/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+        </Style>
     </UserControl.Styles>
     
     <StackPanel>
@@ -17,7 +22,7 @@
             <!--主机 && 端口-->
             <Grid Margin="2" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" ColumnDefinitions="2.5*, 2.5*, 2.5*, 2.5*">
                 <Label Grid.Column="0" Content="{Binding Name}" />
-                <ToggleSwitch Grid.Column="3" IsChecked="{Binding Enable}" OnContent="" OffContent=""/>
+                <ToggleSwitch Grid.Column="3" IsChecked="{Binding Enable}"/>
             </Grid>
             
             
@@ -32,15 +37,15 @@
             <!--消息格式 && CORS-->
             <Grid Margin="2" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" ColumnDefinitions="2.5*, 2.5*, 2.5*, 2.5*">
                 <Label Grid.Column="0" Content="消息格式" />
-                <TextBlock Grid.Column="1" Text="{Binding MessagePostFormat}" />
+                <ComboBox Grid.Row="0" Grid.Column="1" ItemsSource="{Binding FormatValue}" SelectedItem="{Binding MessagePostFormat}"/>
                 <Label Grid.Column="2" Content="CORS" />
-                <TextBlock Grid.Column="3" Text="{Binding EnableCors}" />
+                <ToggleSwitch Grid.Column="3" IsChecked="{Binding EnableCors}" />
             </Grid>
             
             <!--WebSocket-->
             <Grid Margin="2" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3" ColumnDefinitions="2.5*, 2.5*, 2.5*, 2.5*">
                 <Label Grid.Column="0" Content="WS" />
-                <TextBlock Text="{Binding EnableWebSocket}" Grid.Column="1"/>
+                <ToggleSwitch IsChecked="{Binding EnableWebSocket}" Grid.Column="1"/>
             </Grid>
         </Grid>
     </StackPanel>
