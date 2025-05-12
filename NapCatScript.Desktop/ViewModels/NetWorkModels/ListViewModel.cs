@@ -42,17 +42,41 @@ public class ListViewModel : ViewModelBase
     
     private static List<PropertyInfo> s_netWorksPropInfo = [];
     private NetWorks? _netWorks;
-    public ObservableCollection<object> NetWorkConfig { get; set; } = [];
+    public ObservableCollection<object> NetWorkConfig { get; set; } = []; //NetWorkConfig
     public NetSelectModel? SelectedModel {get => _selectedModel; set => this.RaiseAndSetIfChanged(ref _selectedModel, value); }
     private ObservableCollection<object> allNetWorkConfig = [];
     
     
     public ListViewModel()
     {
-        NetWorkInteraction.CreateServerInteraction.RegisterHandler(ReceiveAddList);
         SetConifg();
+        this.WhenAnyValue(@this => @this.SelectedModel)
+            .Subscribe(SelectList);
+        NetWorkInteraction.CreateServerInteraction.RegisterHandler(ReceiveAddList);
     }
 
+    private void SelectList(NetSelectModel? model)
+    {
+        if (model == null) {
+            foreach (var o in allNetWorkConfig) {
+                if(!NetWorkConfig.Contains(o))
+                    NetWorkConfig.Add(o);
+            }
+            return;
+        }
+
+        for (int i = 0; i < allNetWorkConfig.Count; i++) {
+            var currModel = allNetWorkConfig[i];
+            if (currModel.GetType() == model.ViewModelType) {
+                if (!NetWorkConfig.Contains(currModel)) {
+                    NetWorkConfig.Add(currModel);
+                }
+            } else {
+                NetWorkConfig.Remove(currModel);
+            }
+        }
+    }
+    
     static ListViewModel()
     {
         Type type = typeof(NetWorks);
@@ -149,6 +173,7 @@ public class ListViewModel : ViewModelBase
                 return;
             }
             Core.Utils.TypeMap(f.GetType(), viewType, f, viewModelObj);
+            allNetWorkConfig.Add(viewModelObj);
             NetWorkConfig.Add(viewModelObj);
         });
     }
