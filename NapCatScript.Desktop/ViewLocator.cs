@@ -16,8 +16,11 @@ public class ViewLocator : IDataTemplate
 {
     static ViewLocator()
     {
-        ViewModelMap.Add(typeof(HttpServerViewModel), typeof(HttpServerView));
-        ViewModelMap.Add(typeof(HttpClientViewModel), typeof(HttpClientView));
+        ViewModelMap.Add(HttpSseServerViewModel.Type, typeof(HttpSseServerView));
+        ViewModelMap.Add(HttpServerViewModel.Type, typeof(HttpServerView));
+        ViewModelMap.Add(HttpClientViewModel.Type, typeof(HttpClientView));
+        ViewModelMap.Add(WebSocketServerViewModel.Type, typeof(WebSocketServerView));
+        ViewModelMap.Add(WebSocketClientViewModel.Type, typeof(WebSocketClientView));
     }
 
     public static Dictionary<ViewModelType, ViewType> ViewModelMap { get;} = new Dictionary<Type, Type>();

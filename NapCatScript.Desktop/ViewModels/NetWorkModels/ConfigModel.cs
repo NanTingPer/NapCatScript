@@ -5,6 +5,11 @@ using ReactiveUI;
 
 namespace NapCatScript.Desktop.ViewModels.NetWorkModels;
 
+/// <summary>
+/// <para> 网络配置ViewModel基类 </para>
+/// </summary>
+/// <typeparam name="TThis"> 实现类自身 </typeparam>
+/// <typeparam name="TServer"> 此类所使用的<see cref="NetWorkModels"/> </typeparam>
 public abstract class ConfigModel<TThis, TServer> : ViewModelBase where TServer : new()
 {
     protected ConfigModel()

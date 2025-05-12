@@ -49,5 +49,17 @@
       <DependentUpon>HttpClientView.axaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\NetWorkViews\MiniViews\WebSocketServerView.axaml.cs">
+      <DependentUpon>WebSocketServerView.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\NetWorkViews\MiniViews\HttpSseServerView.axaml.cs">
+      <DependentUpon>HttpSseServerView.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\NetWorkViews\MiniViews\WebSocketClientView.axaml.cs">
+      <DependentUpon>WebSocketClientView.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 </Project>

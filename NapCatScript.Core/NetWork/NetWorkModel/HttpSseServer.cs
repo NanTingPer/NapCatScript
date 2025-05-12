@@ -21,7 +21,6 @@ public class HttpSseServer
     public string Token { get; set; } = "";
     [JsonPropertyName("debug")]
     public bool Debug { get; set; } = false;
-
     [JsonPropertyName("reportSelfMessage")]
     public bool ReportSelfMessage { get; set; }
 }

@@ -10,7 +10,7 @@
 //"debug": false,
 //"heartInterval": 5000
 [Serializable]
-public class WebsocketServer
+public class WebSocketServer
 {
     /// <summary>
     /// 名称

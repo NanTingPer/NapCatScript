@@ -19,6 +19,10 @@ using NapCatScript.Core.MsgHandle;
 
 namespace NapCatScript.Desktop.ViewModels.NetWorkModels;
 
+/// <summary>
+/// <para> 如添加了MiniView 需要在这边进行注册 </para>
+/// <para> 如添加了MiniView 需要前往<see cref="ViewLocator"/>注册 </para>
+/// </summary>
 public class ListViewModel : ViewModelBase
 {
     private string _musicSignUrl = "";
@@ -27,8 +31,11 @@ public class ListViewModel : ViewModelBase
 
     private static List<ViewModelType> s_viewModelTypes =
     [
-        typeof(HttpServerViewModel),
-        typeof(HttpClientViewModel)
+        HttpServerViewModel.Type,
+        HttpClientViewModel.Type,
+        WebSocketServerViewModel.Type,
+        HttpSseServerViewModel.Type,
+        WebSocketClientViewModel.Type,
     ];
     
     private static List<PropertyInfo> s_netWorksPropInfo = [];

@@ -15,7 +15,7 @@ public class NetWorks
     public List<HttpClient> HttpClients { get; set; } = [];
 
     [JsonPropertyName("websocketServers")]
-    public List<WebsocketServer> WebSocketServers { get; set; } = [];
+    public List<WebSocketServer> WebSocketServers { get; set; } = [];
 
     [JsonPropertyName("websocketClients")]
     public List<WebSocketClient> WebSocketClients { get; set; } = [];
