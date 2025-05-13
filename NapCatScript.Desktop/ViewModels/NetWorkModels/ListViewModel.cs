@@ -29,8 +29,11 @@ public class ListViewModel : ViewModelBase
     private string _musicSignUrl = "";
     private bool _enableLocalFile2Url = false;
     private bool _parseMultMsg = false;
+    private NetWorks? _netWorks;
     private NetSelectModel? _selectedModel;
+    private ObservableCollection<object> allNetWorkConfig = [];
     
+    private static List<PropertyInfo> s_netWorksPropInfo = [];
     private static List<ViewModelType> s_viewModelTypes =
     [
         HttpServerViewModel.Type,
@@ -40,12 +43,8 @@ public class ListViewModel : ViewModelBase
         WebSocketClientViewModel.Type,
     ];
     
-    private static List<PropertyInfo> s_netWorksPropInfo = [];
-    private NetWorks? _netWorks;
     public ObservableCollection<object> NetWorkConfig { get; set; } = []; //NetWorkConfig
     public NetSelectModel? SelectedModel {get => _selectedModel; set => this.RaiseAndSetIfChanged(ref _selectedModel, value); }
-    private ObservableCollection<object> allNetWorkConfig = [];
-    
     
     public ListViewModel()
     {
@@ -55,28 +54,6 @@ public class ListViewModel : ViewModelBase
         NetWorkInteraction.CreateServerInteraction.RegisterHandler(ReceiveAddList);
     }
 
-    private void SelectList(NetSelectModel? model)
-    {
-        if (model == null) {
-            foreach (var o in allNetWorkConfig) {
-                if(!NetWorkConfig.Contains(o))
-                    NetWorkConfig.Add(o);
-            }
-            return;
-        }
-
-        for (int i = 0; i < allNetWorkConfig.Count; i++) {
-            var currModel = allNetWorkConfig[i];
-            if (currModel.GetType() == model.ViewModelType) {
-                if (!NetWorkConfig.Contains(currModel)) {
-                    NetWorkConfig.Add(currModel);
-                }
-            } else {
-                NetWorkConfig.Remove(currModel);
-            }
-        }
-    }
-    
     static ListViewModel()
     {
         Type type = typeof(NetWorks);
@@ -148,6 +125,29 @@ public class ListViewModel : ViewModelBase
         }
         Add(_netWorks);
     }
+
+    private void SelectList(NetSelectModel? model)
+    {
+        if (model == null) {
+            foreach (var o in allNetWorkConfig) {
+                if (!NetWorkConfig.Contains(o))
+                    NetWorkConfig.Add(o);
+            }
+            return;
+        }
+
+        for (int i = 0; i < allNetWorkConfig.Count; i++) {
+            var currModel = allNetWorkConfig[i];
+            if (currModel.GetType() == model.ViewModelType) {
+                if (!NetWorkConfig.Contains(currModel)) {
+                    NetWorkConfig.Add(currModel);
+                }
+            } else {
+                NetWorkConfig.Remove(currModel);
+            }
+        }
+    }
+
 
     private void Add(object obj) => AddAll([obj]);
     private void Add(object obj, Type type) => AddAll([obj], type.Name);

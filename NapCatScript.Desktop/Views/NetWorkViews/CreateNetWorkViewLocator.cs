@@ -17,8 +17,11 @@ public class CreateNetWorkViewLocator : IDataTemplate
 {
     static CreateNetWorkViewLocator()
     {
+        ViewModelMap.Add(WebSocketClientViewModel.Type, typeof(CreateWebSocketClientView));
+        ViewModelMap.Add(WebSocketServerViewModel.Type, typeof(CreateWebSocketServerView));
+        ViewModelMap.Add(HttpSseServerViewModel.Type, typeof(CreateHttpSseServerView));
         ViewModelMap.Add(HttpClientViewModel.Type, typeof(CreateHttpClientView));
-        ViewModelMap.Add(typeof(HttpServerViewModel), typeof(CreateHttpServerView));
+        ViewModelMap.Add(HttpServerViewModel.Type, typeof(CreateHttpServerView));
         ViewModelMap.Add(typeof(ListViewModel), typeof(ListView));
         ViewModelMap.Add(typeof(NetWorkCreateViewModel), typeof(NetWorkCreateView));
     }

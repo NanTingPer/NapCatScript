@@ -17,6 +17,10 @@ public class WebUIConnectionViewModel : ViewModelBase
     public WebUIConnectionViewModel()
     {
         LoginCommand = ReactiveCommand.Create(Login);
+        #if DEBUG
+        Url = "http://127.0.0.1:6099";
+        Token = "napcat";
+        #endif
     }
     
     private void Login()

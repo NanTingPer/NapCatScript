@@ -13,14 +13,5 @@ public partial class CreateHttpServerView : ReactiveUserControl<HttpServerViewMo
     public CreateHttpServerView()
     {
         InitializeComponent();
-        /*this.WhenActivated(act =>
-        {
-            act.Invoke(HttpServerViewModel.CreateServerInteraction.RegisterHandler(HandelMethod));
-        });*/
     }
-
-    /*private void HandelMethod(IInteractionContext<HttpServerViewModel, HttpServer> interaction)
-    {
-        var r = interaction.Input;
-    }*/
 }

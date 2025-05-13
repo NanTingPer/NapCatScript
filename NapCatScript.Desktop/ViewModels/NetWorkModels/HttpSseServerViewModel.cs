@@ -12,7 +12,7 @@ namespace NapCatScript.Desktop.ViewModels.NetWorkModels;
 
 public class HttpSseServerViewModel : ConfigModel<HttpSseServerViewModel, HttpSseServer>
 {
-    private string _name = "HttpServer";
+    private string _name = "HttpSseServer";
     private bool _enable = false;
     private int _port = 9998;
     private string _host = "127.0.0.1";

@@ -8,9 +8,9 @@ using ReactiveUI;
 
 namespace NapCatScript.Desktop.Views.NetWorkViews.CreateViews;
 
-public partial class CreateHttpClientView : ReactiveUserControl<HttpClientViewModel>
+public partial class CreateWebSocketServerView : ReactiveUserControl<WebSocketServerViewModel>
 {
-    public CreateHttpClientView()
+    public CreateWebSocketServerView()
     {
         InitializeComponent();
     }

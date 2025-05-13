@@ -1,10 +1,12 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Reactive.Linq;
+using System.Reflection;
 using DynamicData.Binding;
 using NapCatScript.Desktop.Models;
 using ReactiveUI;
 using Action = System.Action;
+using BindingFlags = System.Reflection.BindingFlags;
 
 namespace NapCatScript.Desktop.ViewModels.NetWorkModels;
 
@@ -25,10 +27,11 @@ public class NetWorkCreateViewModel : ViewModelBase
 
     private void GotoView(NetSelectModel viewName)
     {
-        if (viewName.Name == "Http服务器") {
-            CurrentView = new HttpServerViewModel();
-        }else if(viewName.Name == "Http客户端") {
-            CurrentView = new HttpClientViewModel();
+        if(viewName == null) return;
+        ConstructorInfo? viewModelCtor = viewName.ViewModelType.GetConstructor(BindingFlags.Instance | BindingFlags.Public, []);
+        if (viewModelCtor is not null)
+        {
+            CurrentView = (ViewModelBase)viewModelCtor.Invoke([]);
         }
     }
         
