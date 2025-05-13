@@ -36,7 +36,7 @@ public class LogViewModel : ViewModelBase, IDisposable
 
     public async void GetLog()
     {
-        await foreach (string? logc in Utils.GetLoging(CoreConfigValueAndObject.HttpUri, "6099", "napcat")) {
+        await foreach (string? logc in Utils.GetWebUILog(ConfigValue.WebUri, ConfigValue.AuthToken)) {
             if (logc == null)
                 continue;
             if (string.IsNullOrEmpty(logc))

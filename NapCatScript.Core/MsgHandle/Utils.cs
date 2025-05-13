@@ -9,6 +9,11 @@ namespace NapCatScript.Core.MsgHandle;
 /// </summary>
 public static class Utils
 {
+    public const string WEBUILOGINGAPI = "/api/auth/login";
+    public const string WEBUILOGAPI = "/api/Log/GetLogRealTime";
+    public const string WEBUIGETCONFIG = "/api/OB11Config/GetConfig";
+    public const string WEBUISETCONFIG = "/api/OB11Config/SetConfig";
+    
     ///<summary>
     ///获取Msg消息URL 基本消息(API访问链接)
     ///<para> uri是原始链接 例如: http://127.0.0.1:6666 </para>
@@ -74,14 +79,26 @@ public static class Utils
     /// <param name="webport"> napcat的web端口 </param>
     /// <param name="token"> web登录密码 </param>
     /// <returns></returns>
-    public static async Task<string> GetAuthentication(string httpUri, string webport, string token)
+    public static Task<string> GetAuthentication(string httpUri, string webport, string token)
     {
         string httpuri = string.Join(":", httpUri.Split(":")[..2]) + $":{webport}";
-        string uri = httpuri + "/api/auth/login";
-        string json = $$"""{"token":"{{token}}"}""";
-        HttpClient client = new HttpClient();
-        var r = await client.PostAsync(uri, new StringContent(json, Encoding.UTF8, "application/json"));
-        string con = await r.Content.ReadAsStringAsync();
+        return GetAuthentication(httpuri, token);
+    }
+
+    public static async Task<string> GetAuthentication(string httpUri, string token)
+    {
+        var r = await WebUILogin(httpUri, token);
+        return await GetAuthentication(r);
+    }
+
+    /// <summary>
+    /// 使用<see cref="WebUILogin"/>的HttpResponseMessage
+    /// </summary>
+    /// <param name="hrm"></param>
+    /// <returns></returns>
+    public static async Task<string> GetAuthentication(HttpResponseMessage hrm)
+    {
+        string con = await hrm.Content.ReadAsStringAsync();
         if (con.GetJsonElement(out var je)) {
             if (je.TryGetPropertyValue("Credential", out je)) {
                 return je.GetString()!;
@@ -89,17 +106,51 @@ public static class Utils
         }
         return "";
     }
-
-    public static async IAsyncEnumerable<string?> GetLoging(string httpUri, string webPort, string webToken)
+    
+    /// <summary>
+    /// 获取登录WebUI的返回,message="success"则成功，code=0
+    /// </summary>
+    /// <param name="httpUri"> http://127.0.0.1:8888/ or http://127.0.0.1:8888 </param>
+    /// <param name="token"> webUi登录密钥 </param>
+    /// <returns></returns>
+    public static Task<HttpResponseMessage> WebUILogin(string httpUri, string token)
+    {
+        httpUri = httpUri.DelEnd();
+        var requUri = httpUri + WEBUILOGINGAPI;
+        string json = $$"""{"token":"{{token}}"}""";
+        HttpClient client = new HttpClient();
+        return client.PostAsync(requUri, new StringContent(json, Encoding.UTF8, "application/json"));
+    }
+    
+    /// <summary>
+    /// 获取WebUI的Log
+    /// <para> 需要端口的原因是因为在Core中的公共配置含有HTTP配置 </para>
+    /// </summary>
+    /// <param name="httpUri"> WebUI的连接地址 : http://127.0.0.1:9999 </param>
+    /// <param name="webPort"> WebUI的连接端口: 6099 </param>
+    /// <param name="webToken"> WebUI的登录Token : napcat </param>
+    /// <returns></returns>
+    public static async IAsyncEnumerable<string?> GetWebUILog(string httpUri, string webPort, string webToken)
     {
         string httpuri = string.Join(":", httpUri.Split(":")[..2]) + $":{webPort}";
-        string rquUri = httpuri + "/api/Log/GetLogRealTime";
         string aut = await GetAuthentication(httpuri, webPort, webToken);
-        
+        await foreach (var se in GetWebUILog(httpuri, aut))
+        {
+            yield return se;
+        }
+    }
+
+    /// <summary>
+    /// 获取WebUI的Log
+    /// </summary>
+    /// <param name="httpUri"> 用于登录WebUI的链接 : http://127.0.0.1:6099 </param>
+    /// <param name="aut"> 密钥 可以使用<see cref="GetAuthentication(string,string)"/> </param>
+    public static async IAsyncEnumerable<string?> GetWebUILog(string httpUri, string aut)
+    {
+        string rquUri = httpUri + WEBUILOGAPI;
         var hc = new HttpClient();
         hc.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("text/event-stream"));
         hc.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", aut);
-        
         var r = await hc.GetAsync(rquUri, HttpCompletionOption.ResponseHeadersRead);
         var stream = new StreamReader(r.Content.ReadAsStream());
         string? getStr;
@@ -109,15 +160,19 @@ public static class Utils
         }
     }
 
-    public static async Task<string> GetNetWorkConfig(string webPort, string webToken)
+    /// <summary>
+    /// 获取网络配置
+    /// </summary>
+    /// <param name="httpUrl"> WebUI的URL ： http://127.0.0.1:6099 </param>
+    /// <param name="aut"> <see cref="GetAuthentication(string,string)"/> </param>
+    /// <returns></returns>
+    public static async Task<string> GetNetWorkConfig(string httpUrl, string aut)
     {
-        // http://127.0.0.1:6099/api/OB11Config/GetConfig
-        string aut = await GetAuthentication(CoreConfigValueAndObject.HttpUri, webPort, webToken);
-        if(aut.Length < 40)
-            return "";
+        httpUrl = httpUrl.DelEnd() + WEBUIGETCONFIG;
+        
         var hc = new HttpClient();
         hc.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", aut);
-        var result = await hc.PostAsync(CoreConfigValueAndObject.HttpUri.JoinUrlProtApi(webPort, "/api/OB11Config/GetConfig"), null);
+        var result = await hc.PostAsync(httpUrl, null);
         try {
             return await result.Content.ReadAsStringAsync();
         }
@@ -125,18 +180,20 @@ public static class Utils
             Log.Erro(e.Message, e.StackTrace);
             return e.Message;
         }
-        
     }
-
+    
+    private static string DelEnd(this string url)
+    {
+        if (url.EndsWith('/')) {
+            return url.Substring(0, url.Length - 1);
+        }
+        return url;
+    }
     private static string JoinUrlProtApi(this string url, string port, string api)
     {
         string httpuri = string.Join(":", url.Split(":")[..2]) + $":{port}";
         return httpuri + api;
     }
 
-    public static string JoinUrlProtAPI(string url, string port, string api)
-    {
-        string httpuri = string.Join(":", url.Split(":")[..2]) + $":{port}";
-        return httpuri + api;
-    }
+    public static string JoinUrlProtAPI(string url, string port, string api) => url.JoinUrlProtApi(port, api);
 }

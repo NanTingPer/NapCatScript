@@ -115,9 +115,10 @@ public class ListViewModel : ViewModelBase
         };
         var json = new NetWorkSetConf() { Config = JsonSerializer.Serialize(confJsonValue) };
 
-        string api = Core.MsgHandle.Utils.JoinUrlProtAPI(CoreConfigValueAndObject.HttpUri, "6099", "/api/OB11Config/SetConfig");
+        //string api = Core.MsgHandle.Utils.JoinUrlProtAPI(CoreConfigValueAndObject.HttpUri, "6099", "/api/OB11Config/SetConfig");
+        string api = ConfigValue.WebUri + Core.MsgHandle.Utils.WEBUISETCONFIG;
         System.Net.Http.HttpClient hc = new System.Net.Http.HttpClient();
-        hc.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", await Core.MsgHandle.Utils.GetAuthentication(CoreConfigValueAndObject.HttpUri, "6099", "napcat"));
+        hc.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", ConfigValue.AuthToken);
         var jsonValue = JsonSerializer.Serialize(json);
         var r = await SendMsg.PostSend(hc, api, jsonValue, null);
         var requStr = r.Content.ReadAsStringAsync();
@@ -125,7 +126,7 @@ public class ListViewModel : ViewModelBase
 
     public async void SetConifg()
     {
-        string s = await Core.MsgHandle.Utils.GetNetWorkConfig("6099", "napcat");
+        string s = await Core.MsgHandle.Utils.GetNetWorkConfig(ConfigValue.WebUri, ConfigValue.AuthToken);
         if(!s.GetJsonElement(out var netWorkJson))
             return;
         if(!netWorkJson.TryGetPropertyValue("network", out var network))
