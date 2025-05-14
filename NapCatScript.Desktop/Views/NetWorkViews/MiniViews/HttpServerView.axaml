@@ -19,9 +19,9 @@
     <StackPanel>
         <Label FontSize="20" Content="HTTP服务器"></Label>
         <Grid ColumnDefinitions="5*, 5*" RowDefinitions="4*, 2*, 2*, 2*">
-            <!--主机 && 端口-->
+            <!--名称 && 启用-->
             <Grid Margin="2" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" ColumnDefinitions="2.5*, 2.5*, 2.5*, 2.5*">
-                <Label Grid.Column="0" Content="{Binding Name}" />
+                <TextBox Grid.Column="0" Text="{Binding Name}" IsReadOnly="True" />
                 <ToggleSwitch Grid.Column="3" IsChecked="{Binding Enable}"/>
             </Grid>
             

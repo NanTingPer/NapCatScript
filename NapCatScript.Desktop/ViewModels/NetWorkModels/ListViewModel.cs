@@ -78,13 +78,14 @@ public class ListViewModel : ViewModelBase
     /// </summary>
     /// <param name="obj"></param>
     /// <param name="type"></param>
-    public async Task AddToNetWorkListAndUpdateWebUiNetWorkConfig(object obj, ServerType type)
+    private async Task AddToNetWorkListAndUpdateWebUiNetWorkConfig(ServerObject obj, ServerType type)
     {
         if (_netWorks is null) GetWebUiNetWorkConfig();
         if (_netWorks is null) return;
 
-        var netWorkList = GetNetWorksList(type);
+        var netWorkList = GetNetWorkList(type);
         if (netWorkList is null) return;
+
         netWorkList.Add(obj);
         UpdateWebUiNetWorkConfig();
     }
@@ -136,32 +137,65 @@ public class ListViewModel : ViewModelBase
         ServerObject obj = input.obj;
         iicontext.SetOutput(Unit.Default);
         
-        var netWorkList = GetNetWorksList(type);
-        var nameInfo = type.GetProperty("Name");
-        if(nameInfo is null) return;
-        var newConfigName = (string?)nameInfo.GetValue(obj);
+        var netWorkList = GetNetWorkList(type);
+        var eqNameObj = GetExistNameNetWork(netWorkList, obj);
+        if(eqNameObj is null) return;
         
-        foreach (ServerObject o in netWorkList) { 
-            var oldConfigName = (string?)nameInfo.GetValue(o);
-            if(string.IsNullOrEmpty(oldConfigName) || string.IsNullOrEmpty(newConfigName))
-                continue;
-            
-            if (oldConfigName == newConfigName) {
-                netWorkList.Remove(o);
-                netWorkList.Add(obj);
-                break;
-            }
-        }
+        netWorkList.Remove(eqNameObj);
+        netWorkList.Add(obj);
         
         UpdateWebUiNetWorkConfig();
     }
 
     /// <summary>
+    /// 判断给定对象是否与现有配置同名，如果是的话会更改此对象的名称
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <param name="type"></param>
+    private void IsExistNameAndEdit(ServerObject obj, ServerType type)
+    {
+        var nameInfo = type.GetProperty("Name");
+        if (nameInfo == null) return;
+        
+        var oldNetWork = GetExistNameNetWork(GetNetWorkList(type), obj);
+        if(oldNetWork is null) return;
+        
+        var oldName = nameInfo.GetValue(obj) as string;
+        var newName = oldName + Environment.TickCount;
+        nameInfo.SetValue(obj, newName);
+    }
+
+    /// <summary>
+    /// 从给定<see cref="GetNetWorkList"/>集合判断是否存在与obj同名的对象
+    /// </summary>
+    /// <param name="netWorkList"></param>
+    /// <returns>存在返回<see cref="object"/>, 不存在返回<see cref="Nullable"/></returns>
+    private object? GetExistNameNetWork(IList netWorkList, ServerObject obj)
+    {
+        if(netWorkList == null || netWorkList.Count == 0) return null;
+        ServerType type = netWorkList[0]!.GetType();
+        
+        var nameInfo = type.GetProperty("Name");
+        if(nameInfo is null) return null;
+        var newConfigName = (string?)nameInfo.GetValue(obj);
+        foreach (ServerObject o in netWorkList) { 
+            var oldConfigName = (string?)nameInfo.GetValue(o);
+            if(string.IsNullOrEmpty(oldConfigName) || string.IsNullOrEmpty(newConfigName))
+                continue;
+    
+            if (oldConfigName == newConfigName) {
+                return o;
+            }
+        }
+        return null;
+    }
+    
+    /// <summary>
     /// 从 <see cref="_netWorks"/> 中获取此类型的<see cref="IList"/>
     /// </summary>
     /// <param name="type">网络类型</param>
     /// <returns></returns>
-    private IList? GetNetWorksList(ServerType type)
+    private IList? GetNetWorkList(ServerType type)
     {
         PropertyInfo? targetInfo = s_netWorksPropInfo.FirstOrDefault(f => f.Name.Contains(type.Name));
         if (targetInfo is null) return null;
@@ -226,9 +260,11 @@ public class ListViewModel : ViewModelBase
         //Handel => 发送object
         //RegionHandel => 接收object
         (object obj, ServerType type) input = interaction.Input;
-        Add(input.obj, input.type);
+        IsExistNameAndEdit(input.obj, input.type); //检查名称并更改
+        Add(input.obj, input.type); //添加到显示列表
         interaction.SetOutput(Unit.Default);
 
+        //将配置添加到与Web交互的对象中，并更新Web网络配置
         _ = AddToNetWorkListAndUpdateWebUiNetWorkConfig(input.obj, input.type);
     }
     
