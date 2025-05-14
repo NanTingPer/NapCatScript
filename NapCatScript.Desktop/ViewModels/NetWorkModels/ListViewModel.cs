@@ -64,6 +64,7 @@ public class ListViewModel : ViewModelBase
 
         NetWorkInteraction.UpdateServerInteraction.RegisterHandler(UpdateNetWorksConfigAndWebUiNetWorkConfig);
         NetWorkInteraction.CreateServerInteraction.RegisterHandler(ReceiveAddList);
+        NetWorkInteraction.DeleteServerInteraction.RegisterHandler(DeleteNetWrokConfig);
     }
 
     static ListViewModel()
@@ -127,6 +128,30 @@ public class ListViewModel : ViewModelBase
         return JsonSerializer.Serialize(jsonObject);
     }
 
+    private void DeleteNetWrokConfig(IInteractionContext<(ServerObject, ServerType), bool> interaction)
+    {
+        (ServerObject obj, ServerType type) = interaction.Input;
+        IList? netWorkList = GetNetWorkList(type);
+        interaction.SetOutput(true);
+        if (netWorkList is null) return;
+        
+        ServerObject? removeObj = GetExistNameNetWork(netWorkList, obj, out string? name);
+        netWorkList.Remove(removeObj);
+
+        var delObj = allNetWorkConfig
+                .FirstOrDefault(f =>
+                {
+                    var nameInfo = f.GetType().GetProperty("Name");
+                    if(nameInfo == null) return false;
+
+                    return name!.Equals(nameInfo.GetValue(f));
+                });
+        
+        allNetWorkConfig.Remove(delObj);
+        NetWorkConfig.Remove(delObj);
+        UpdateWebUiNetWorkConfig();
+    }
+    
     /// <summary>
     /// 更新<see cref="_netWorks"/> 中的网络配置
     /// </summary>
@@ -170,8 +195,9 @@ public class ListViewModel : ViewModelBase
     /// </summary>
     /// <param name="netWorkList"></param>
     /// <returns>存在返回<see cref="object"/>, 不存在返回<see cref="Nullable"/></returns>
-    private object? GetExistNameNetWork(IList netWorkList, ServerObject obj)
+    private object? GetExistNameNetWork(IList netWorkList, ServerObject obj, out string? name)
     {
+        name = null;
         if(netWorkList == null || netWorkList.Count == 0) return null;
         ServerType type = netWorkList[0]!.GetType();
         
@@ -180,15 +206,19 @@ public class ListViewModel : ViewModelBase
         var newConfigName = (string?)nameInfo.GetValue(obj);
         foreach (ServerObject o in netWorkList) { 
             var oldConfigName = (string?)nameInfo.GetValue(o);
-            if(string.IsNullOrEmpty(oldConfigName) || string.IsNullOrEmpty(newConfigName))
+            if(string.IsNullOrEmpty(oldConfigName) || 
+               string.IsNullOrEmpty(newConfigName))
                 continue;
     
             if (oldConfigName == newConfigName) {
+                name = oldConfigName;
                 return o;
             }
         }
         return null;
     }
+
+    private object? GetExistNameNetWork(IList netWorkList, ServerObject obj) => GetExistNameNetWork(netWorkList, obj, out _);
     
     /// <summary>
     /// 从 <see cref="_netWorks"/> 中获取此类型的<see cref="IList"/>
@@ -197,7 +227,9 @@ public class ListViewModel : ViewModelBase
     /// <returns></returns>
     private IList? GetNetWorkList(ServerType type)
     {
-        PropertyInfo? targetInfo = s_netWorksPropInfo.FirstOrDefault(f => f.Name.Contains(type.Name));
+        PropertyInfo? targetInfo = s_netWorksPropInfo
+                .FirstOrDefault(f => f.Name.Contains(type.Name));
+        
         if (targetInfo is null) return null;
         return (IList?)targetInfo.GetValue(_netWorks);
     }
@@ -207,7 +239,9 @@ public class ListViewModel : ViewModelBase
     /// </summary>
     private async void GetWebUiNetWorkConfig()
     {
-        string s = await Core.MsgHandle.Utils.GetNetWorkConfig(ConfigValue.WebUri, ConfigValue.AuthToken);
+        string s = await Core.MsgHandle.Utils
+                .GetNetWorkConfig(ConfigValue.WebUri, ConfigValue.AuthToken);
+        
         if(!s.GetJsonElement(out var netWorkJson))
             return;
         if(!netWorkJson.TryGetPropertyValue("network", out var network))
@@ -279,11 +313,15 @@ public class ListViewModel : ViewModelBase
                 typeName = typeof(T).Name;
             else typeName = typeName_;
 
-            ViewModelType? viewType = s_viewModelTypes.FirstOrDefault(f => f.Name.Contains(typeName));
+            ViewModelType? viewType = s_viewModelTypes
+                    .FirstOrDefault(f => f.Name.Contains(typeName));
+            
             if (viewType is null)
                 return;
 
-            ConstructorInfo ctorInfo = viewType.GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public, [])!;
+            BindingFlags BINP = BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public;
+            ConstructorInfo ctorInfo = viewType.GetConstructor(BINP, [])!;
+            
             object viewModelObj;
             try {
                 viewModelObj = ctorInfo!.Invoke([]);

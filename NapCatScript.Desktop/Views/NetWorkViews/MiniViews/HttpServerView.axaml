@@ -48,5 +48,6 @@
                 <ToggleSwitch IsChecked="{Binding EnableWebSocket}" Grid.Column="1"/>
             </Grid>
         </Grid>
+        <Button Content="删除" Command="{Binding DeleteNetWorkCommand}"/>
     </StackPanel>
 </UserControl>

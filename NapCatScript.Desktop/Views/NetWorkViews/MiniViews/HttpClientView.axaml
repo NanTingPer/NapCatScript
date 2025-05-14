@@ -32,5 +32,6 @@
             <Label HorizontalAlignment="Left" Margin="0 0 60 0" Content="是否上报自身消息" />
             <ToggleSwitch Grid.Column="1" HorizontalAlignment="Right" IsChecked="{Binding ReportSelfMessage}" OnContent="" OffContent=""/>
         </Grid>
+        <Button Content="删除" Command="{Binding DeleteNetWorkCommand}"/>
     </StackPanel>
 </UserControl>
