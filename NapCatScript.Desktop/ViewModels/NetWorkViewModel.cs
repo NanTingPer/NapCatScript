@@ -69,4 +69,9 @@ public static class NetWorkInteraction
     /// 此交互用于将MiniView中的更新通知ListView并更新
     /// </summary>
     public static Interaction<(object, Type), Unit> UpdateServerInteraction { get; } = new();
+    
+    /// <summary>
+    /// 此交互用于处理MiniView中的删除
+    /// </summary>
+    public static Interaction<(object, Type), bool> DeleteServerInteraction { get; } = new();
 }
