@@ -64,4 +64,9 @@ public static class NetWorkInteraction
     /// 此交互用于CreateNetWork通知NetWorkViewModel并返回创建对象
     /// </summary>
     public static Interaction<(object, Type), Unit> CreateServerInteraction { get; } = new();
+    
+    /// <summary>
+    /// 此交互用于将MiniView中的更新通知ListView并更新
+    /// </summary>
+    public static Interaction<(object, Type), Unit> UpdateServerInteraction { get; } = new();
 }

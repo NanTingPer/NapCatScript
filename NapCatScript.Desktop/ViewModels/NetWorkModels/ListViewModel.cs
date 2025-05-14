@@ -18,6 +18,7 @@ using NapCatScript.Core.MsgHandle;
 using NapCatScript.Desktop.Models;
 
 using ViewModelObject = System.Object;
+using ServerObject = System.Object;
 
 namespace NapCatScript.Desktop.ViewModels.NetWorkModels;
 
@@ -60,6 +61,8 @@ public class ListViewModel : ViewModelBase
         GetWebUiNetWorkConfig(); //从WebUI拉取配置
         this.WhenAnyValue(@this => @this.SelectedModel)
             .Subscribe(SelectList);
+
+        NetWorkInteraction.UpdateServerInteraction.RegisterHandler(UpdateNetWorksConfigAndWebUiNetWorkConfig);
         NetWorkInteraction.CreateServerInteraction.RegisterHandler(ReceiveAddList);
     }
 
@@ -80,9 +83,7 @@ public class ListViewModel : ViewModelBase
         if (_netWorks is null) GetWebUiNetWorkConfig();
         if (_netWorks is null) return;
 
-        PropertyInfo? targetInfo = s_netWorksPropInfo.FirstOrDefault(f => f.Name.Contains(type.Name));
-        if (targetInfo is null) return;
-        IList? netWorkList = (IList?)targetInfo.GetValue(_netWorks);
+        var netWorkList = GetNetWorksList(type);
         if (netWorkList is null) return;
         netWorkList.Add(obj);
         UpdateWebUiNetWorkConfig();
@@ -123,6 +124,48 @@ public class ListViewModel : ViewModelBase
         };
         var jsonObject = new NetWorkSetConf() { Config = JsonSerializer.Serialize(confJsonValue) };
         return JsonSerializer.Serialize(jsonObject);
+    }
+
+    /// <summary>
+    /// 更新<see cref="_netWorks"/> 中的网络配置
+    /// </summary>
+    private void UpdateNetWorksConfigAndWebUiNetWorkConfig(IInteractionContext<(ServerObject obj, ServerType type), Unit> iicontext)
+    {
+        var input = iicontext.Input;
+        ServerType type = input.type;
+        ServerObject obj = input.obj;
+        iicontext.SetOutput(Unit.Default);
+        
+        var netWorkList = GetNetWorksList(type);
+        var nameInfo = type.GetProperty("Name");
+        if(nameInfo is null) return;
+        var newConfigName = (string?)nameInfo.GetValue(obj);
+        
+        foreach (ServerObject o in netWorkList) { 
+            var oldConfigName = (string?)nameInfo.GetValue(o);
+            if(string.IsNullOrEmpty(oldConfigName) || string.IsNullOrEmpty(newConfigName))
+                continue;
+            
+            if (oldConfigName == newConfigName) {
+                netWorkList.Remove(o);
+                netWorkList.Add(obj);
+                break;
+            }
+        }
+        
+        UpdateWebUiNetWorkConfig();
+    }
+
+    /// <summary>
+    /// 从 <see cref="_netWorks"/> 中获取此类型的<see cref="IList"/>
+    /// </summary>
+    /// <param name="type">网络类型</param>
+    /// <returns></returns>
+    private IList? GetNetWorksList(ServerType type)
+    {
+        PropertyInfo? targetInfo = s_netWorksPropInfo.FirstOrDefault(f => f.Name.Contains(type.Name));
+        if (targetInfo is null) return null;
+        return (IList?)targetInfo.GetValue(_netWorks);
     }
     
     /// <summary>

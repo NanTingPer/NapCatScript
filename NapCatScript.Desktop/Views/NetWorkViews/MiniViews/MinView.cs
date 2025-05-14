@@ -8,12 +8,13 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Avalonia.ReactiveUI;
 using NapCatScript.Desktop.ViewModels;
+using NapCatScript.Desktop.ViewModels.NetWorkModels;
 using ReactiveUI;
 
 namespace NapCatScript.Desktop.Views.NetWorkViews.MiniViews;
 
 public abstract class MinView<TViewModel> : ReactiveUserControl<TViewModel>
-    where TViewModel : ViewModelBase
+    where TViewModel : ViewModelBase, ICofnigModel 
 {
     private bool _isInitialized = false;
     protected MinView()
@@ -61,6 +62,8 @@ public abstract class MinView<TViewModel> : ReactiveUserControl<TViewModel>
     /// </summary>
     protected virtual void WhenAnyProperty()
     {
+        object obj = ViewModel.GetNetWork();
+        NetWorkInteraction.UpdateServerInteraction.Handle((obj, obj.GetType())).Subscribe();
     }
 
     private void WhenAnyMethod(object? o1)
