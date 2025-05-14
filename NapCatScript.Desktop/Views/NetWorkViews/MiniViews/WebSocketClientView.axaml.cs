@@ -3,9 +3,9 @@ using NapCatScript.Desktop.ViewModels.NetWorkModels;
 
 namespace NapCatScript.Desktop.Views.NetWorkViews.MiniViews;
 
-public partial class WebSocketClientView : ReactiveUserControl<WebSocketServerViewModel>
+public partial class WebSocketClientView : MinView<WebSocketServerViewModel>
 {
-    public WebSocketClientView()
+    public WebSocketClientView()   
     {
         InitializeComponent();
     }

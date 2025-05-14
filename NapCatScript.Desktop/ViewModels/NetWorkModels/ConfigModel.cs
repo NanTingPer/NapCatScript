@@ -1,6 +1,9 @@
 ﻿using NapCatScript.Core.NetWork.NetWorkModel;
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Linq.Expressions;
+using System.Reflection;
 using ReactiveUI;
 
 namespace NapCatScript.Desktop.ViewModels.NetWorkModels;
@@ -10,7 +13,9 @@ namespace NapCatScript.Desktop.ViewModels.NetWorkModels;
 /// </summary>
 /// <typeparam name="TThis"> 实现类自身 </typeparam>
 /// <typeparam name="TServer"> 此类所使用的<see cref="NetWorkModels"/> </typeparam>
-public abstract class ConfigModel<TThis, TServer> : ViewModelBase where TServer : new()
+public abstract class ConfigModel<TThis, TServer> : ViewModelBase 
+    where TServer : new()
+    where TThis : ViewModelBase
 {
     protected ConfigModel()
     {
@@ -26,6 +31,7 @@ public abstract class ConfigModel<TThis, TServer> : ViewModelBase where TServer 
 
     public void CreateNetWork()
     {
+        this.WhenAnyValue(@this => @this.AddNetWorkCommand);
         TServer config = new TServer();
         Core.Utils.TypeMap(Type, ServerType, this, config);
         NetWorkInteraction.CreateServerInteraction.Handle((config, ServerType)).Subscribe();

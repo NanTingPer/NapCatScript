@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using NapCatScript.Desktop.ViewModels;
@@ -7,6 +8,7 @@ using NapCatScript.Desktop.ViewModels.NetWorkModels;
 using NapCatScript.Desktop.Views;
 using NapCatScript.Desktop.Views.NetWorkViews;
 using NapCatScript.Desktop.Views.NetWorkViews.MiniViews;
+using BindingFlags = System.Reflection.BindingFlags;
 using ViewType = System.Type;
 using ViewModelType = System.Type;
 
@@ -30,7 +32,13 @@ public class ViewLocator : IDataTemplate
             return null;
         ViewType viewType = param.GetType();
         if (ViewModelMap.TryGetValue(viewType, out var view)) {
-            return (Control)Activator.CreateInstance(view)!;
+            //ConstructorInfo ctor = view.GetConstructor(BindingFlags.Instance | BindingFlags.Public, []);
+            //var obje = ctor.Invoke([]);
+            
+            var obj = Activator.CreateInstance(view)!;
+            //var obj = (object)new HttpClientView();
+            
+            return (Control)obj;
         }
         
         var name = viewType.FullName!.Replace("ViewModel", "View", StringComparison.Ordinal);

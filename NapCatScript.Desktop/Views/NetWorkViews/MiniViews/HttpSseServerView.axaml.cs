@@ -3,7 +3,7 @@ using NapCatScript.Desktop.ViewModels.NetWorkModels;
 
 namespace NapCatScript.Desktop.Views.NetWorkViews.MiniViews;
 
-public partial class HttpSseServerView : ReactiveUserControl<HttpSseServerViewModel>
+public partial class HttpSseServerView : MinView<HttpSseServerViewModel>
 {
     public HttpSseServerView()
     {
