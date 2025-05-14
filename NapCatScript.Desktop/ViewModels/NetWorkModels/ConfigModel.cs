@@ -29,11 +29,20 @@ public abstract class ConfigModel<TThis, TServer> : ViewModelBase
     public static Type Type { get; } = typeof(TThis);
     protected static Type ServerType { get; } = typeof(TServer);
 
-    public void CreateNetWork()
+    private void CreateNetWork()
     {
-        this.WhenAnyValue(@this => @this.AddNetWorkCommand);
+        //this.WhenAnyValue(@this => @this.AddNetWorkCommand);
+        TServer config = GetNetWork();
+        NetWorkInteraction.CreateServerInteraction.Handle((config!, ServerType)).Subscribe();
+    }
+
+    /// <summary>
+    /// 获取此ViewModel可生成的<see cref="TServer"/>对象
+    /// </summary>
+    public TServer GetNetWork()
+    {
         TServer config = new TServer();
         Core.Utils.TypeMap(Type, ServerType, this, config);
-        NetWorkInteraction.CreateServerInteraction.Handle((config, ServerType)).Subscribe();
+        return config;
     }
 }

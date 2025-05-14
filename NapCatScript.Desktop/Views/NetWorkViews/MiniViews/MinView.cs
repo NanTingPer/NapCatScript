@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reactive.Disposables;
@@ -57,9 +56,16 @@ public abstract class MinView<TViewModel> : ReactiveUserControl<TViewModel>
         _isInitialized = true;
     }
 
-    protected void WhenAnyMethod(object? o1)
+    /// <summary>
+    /// 每当所属<see cref="TViewModel"/>的值属性(含<see cref="string"/>)发生变化时，调用此方法
+    /// </summary>
+    protected virtual void WhenAnyProperty()
+    {
+    }
+
+    private void WhenAnyMethod(object? o1)
     {
         if(_isInitialized)
-            Debug.WriteLine("UpDate: " + o1.ToString());
+            WhenAnyProperty();
     }
 }
