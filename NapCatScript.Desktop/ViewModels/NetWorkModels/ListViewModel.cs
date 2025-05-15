@@ -237,7 +237,7 @@ public class ListViewModel : ViewModelBase
     /// <summary>
     /// 从WebUI拉取网络配置
     /// </summary>
-    private async void GetWebUiNetWorkConfig()
+    public async void GetWebUiNetWorkConfig()
     {
         string s = await Core.MsgHandle.Utils
                 .GetNetWorkConfig(ConfigValue.WebUri, ConfigValue.AuthToken);

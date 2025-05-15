@@ -18,9 +18,18 @@ public class SQLiteService
         Connection = new SQLiteAsyncConnection(DataBasePath);
     }
 
+    /// <summary>
+    /// Path是基于运行目录的相对路径
+    /// </summary>
+    /// <param name="dataBasePath"></param>
     public SQLiteService(string dataBasePath)
     {
-        Connection = new SQLiteAsyncConnection(dataBasePath);
+        string path = Path.Combine(Environment.CurrentDirectory, dataBasePath);
+        string directorPath = Path.GetDirectoryName(path);
+        if(!Directory.Exists(directorPath))
+            Directory.CreateDirectory(directorPath);
+        
+        Connection = new SQLiteAsyncConnection(path);
     }
 
     /// <summary>
