@@ -43,7 +43,7 @@ public class MainWindowViewModel : ViewModelBase
             .WhereNotNull()
             .Subscribe(ListBoxPropertyChanged);
 
-        Interactions.WebUIConnectionEvent.RegisterHandler(WebUILoginEvent);
+        Interactions.WebUIConnectionInteraction.RegisterHandler(WebUILoginEvent);
         Items.Add("连接");
         Items.Add("聊天");
         Items.Add("日志");
