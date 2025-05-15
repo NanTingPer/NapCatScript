@@ -10,5 +10,18 @@
         <TextBox Text="{Binding Url}" Watermark="请输入URL : http://127.0.0.1:6099"/>
         <TextBox Text="{Binding Token}" Watermark="请输入Token"/>
         <Button Content="尝试连接" Command="{Binding LoginCommand}"/>
+        <ItemsControl ItemsSource="{Binding WebUiLoginInfos}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Margin="5"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemContainerTheme>
+                <!--ContentPresenter 单个控件项-->
+                <ControlTheme TargetType="ContentPresenter">
+                    <Setter Property="Margin" Value="8"/>
+                </ControlTheme>
+            </ItemsControl.ItemContainerTheme>
+        </ItemsControl>
     </StackPanel>
 </UserControl>
