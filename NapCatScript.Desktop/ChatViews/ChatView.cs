@@ -1,3 +1,5 @@
+using System;
+using System.Runtime.CompilerServices;
 using Avalonia.ReactiveUI;
 using NapCatScript.Desktop.ViewModels;
 
@@ -9,6 +11,9 @@ public abstract class ChatView<TSelf ,TViewModel> : ReactiveUserControl<TViewMod
 {
     static ChatView()
     {
-        ViewLocator.ViewModelMap.Add(typeof(TViewModel), typeof(TSelf));
+        Type viewModelType = typeof(TViewModel);
+        if (!ViewLocator.ViewModelMap.TryGetValue(viewModelType, out _)) {
+            ViewLocator.ViewModelMap.Add(viewModelType, typeof(TSelf));
+        }
     }
 }
