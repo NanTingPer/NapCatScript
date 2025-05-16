@@ -79,7 +79,7 @@ public class ListViewModel : ViewModelBase
     /// </summary>
     /// <param name="obj"></param>
     /// <param name="type"></param>
-    private async Task AddToNetWorkListAndUpdateWebUiNetWorkConfig(ServerObject obj, ServerType type)
+    private void AddToNetWorkListAndUpdateWebUiNetWorkConfig(ServerObject obj, ServerType type)
     {
         if (_netWorks is null) GetWebUiNetWorkConfig();
         if (_netWorks is null) return;
@@ -299,7 +299,7 @@ public class ListViewModel : ViewModelBase
         interaction.SetOutput(Unit.Default);
 
         //将配置添加到与Web交互的对象中，并更新Web网络配置
-        _ = AddToNetWorkListAndUpdateWebUiNetWorkConfig(input.obj, input.type);
+        AddToNetWorkListAndUpdateWebUiNetWorkConfig(input.obj, input.type);
     }
     
     private void Add(object obj) => AddAll([obj]);

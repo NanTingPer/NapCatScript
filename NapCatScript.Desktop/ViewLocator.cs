@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Reflection;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
+using NapCatScript.Desktop.NetWorkViews;
+using NapCatScript.Desktop.NetWorkViews.MiniViews;
 using NapCatScript.Desktop.ViewModels;
 using NapCatScript.Desktop.ViewModels.NetWorkModels;
 using NapCatScript.Desktop.Views;
@@ -19,6 +21,7 @@ public class ViewLocator : IDataTemplate
 {
     static ViewLocator()
     {
+        ViewModelMap.Add(typeof(NetWorkViewModel), typeof(NetWorkView));
         ViewModelMap.Add(typeof(WebUiLoginInfo), typeof(WebUiLoginView));
         ViewModelMap.Add(HttpSseServerViewModel.Type, typeof(HttpSseServerView));
         ViewModelMap.Add(HttpServerViewModel.Type, typeof(HttpServerView));

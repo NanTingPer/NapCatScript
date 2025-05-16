@@ -1,0 +1,82 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:mv="clr-namespace:NapCatScript.Desktop.ViewModels.NetWorkModels"
+             xmlns:converters="clr-namespace:NapCatScript.Desktop.Converters"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="mv:HttpServerViewModel"
+             x:Class="NapCatScript.Desktop.NetWorkViews.CreateViews.CreateHttpServerView">
+    <UserControl.Styles>
+        <StyleInclude Source="/Styles/NetWorkViewStyle.axaml"/>
+        <Style Selector="ToggleSwitch">
+            <Setter Property="OffContent" Value=""/>
+            <Setter Property="OnContent"  Value=""/>
+        </Style>
+    </UserControl.Styles>
+    <UserControl.Resources>
+        <converters:ValueConverter x:Key="ValueConverter"></converters:ValueConverter>
+    </UserControl.Resources>
+    <ScrollViewer>
+        <StackPanel>
+            <Grid ColumnDefinitions="5*, 5*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+                <Label Content="启用" HorizontalAlignment="Left" Grid.Row="0" Grid.Column="0"/>
+                <ToggleSwitch IsChecked="{Binding Enable}" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="0"/>
+                <Label Content="调试" HorizontalAlignment="Left" Grid.Row="0" Grid.Column="1"/>
+                <ToggleSwitch IsChecked="{Binding Debug}" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="1"/>
+                <!--名称-->
+                <Grid Margin="5" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" ColumnDefinitions="Auto, 5*, Auto" RowDefinitions="Auto, Auto">
+                    <Label Grid.Row="0" Grid.Column="1" Content="名称" x:Name="NetName" HorizontalAlignment="Left"/>
+                    <Label Grid.Row="1" Grid.Column="1" Content="设置配置的名称" Foreground="CornflowerBlue" FontSize="{Binding #NetName.FontSize, Converter={StaticResource ValueConverter}, ConverterParameter=2}"  HorizontalAlignment="Left"/>
+                    <TextBox Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Text="{Binding Name}" Watermark="请输入"></TextBox>
+                </Grid>
+                
+                <!--Host-->
+                <Grid Margin="5" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" ColumnDefinitions="Auto, 5*, Auto" RowDefinitions="Auto, Auto">
+                    <Label Grid.Row="0" Grid.Column="1" Content="Host" x:Name="NetHost" HorizontalAlignment="Left"/>
+                    <Label Grid.Row="1" Grid.Column="1" Content="设置主机地址" Foreground="CornflowerBlue" FontSize="{Binding #NetHost.FontSize, Converter={StaticResource ValueConverter}, ConverterParameter=2}"   HorizontalAlignment="Left"/>
+                    <TextBox Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Text="{Binding Host}" Watermark="请输入"></TextBox>
+                </Grid>
+                
+                <!--Port-->
+                <Grid Margin="5" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" ColumnDefinitions="Auto, 5*, Auto" RowDefinitions="Auto, Auto">
+                    <Label Grid.Row="0" Grid.Column="1" Content="Port" x:Name="NetPort" HorizontalAlignment="Left"/>
+                    <Label Grid.Row="1" Grid.Column="1" Content="设置端口号" Foreground="CornflowerBlue" FontSize="{Binding #NetPort.FontSize, Converter={StaticResource ValueConverter}, ConverterParameter=2}"   HorizontalAlignment="Left"/>
+                    <TextBox Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Text="{Binding Port}" Watermark="请输入"></TextBox>
+                </Grid>
+                
+                <!--CORS WebSocket-->
+                <Grid Margin="5" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" ColumnDefinitions="2.5*, 2.5*, 2.5*, 2.5*" RowDefinitions="Auto, Auto">
+                    <!--CORS-->
+                    <Grid Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="2" RowDefinitions="7*, 3*" ColumnDefinitions="5*, 5*">
+                        <Label Grid.Row="0" Grid.Column="0" Content="CORS" x:Name="NetCors" HorizontalAlignment="Left"/>
+                        <Label Grid.Row="1" Grid.Column="0" Content="启用跨域请求" Foreground="CornflowerBlue" FontSize="{Binding #NetCors.FontSize, Converter={StaticResource ValueConverter}, ConverterParameter=2}"   HorizontalAlignment="Left"/>
+                        <ToggleSwitch Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" IsChecked="{Binding EnableCors}" HorizontalAlignment="Right"/>
+                    </Grid>
+                    
+                    <!--WebSocket-->
+                    <Grid Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Grid.ColumnSpan="2" RowDefinitions="7*, 3*" ColumnDefinitions="5*, 5*">
+                        <Label Grid.Row="0" Grid.Column="0" Content="WebSocket" x:Name="NetWebSocket" HorizontalAlignment="Left"/>
+                        <Label Grid.Row="1" Grid.Column="0" Content="启用WebSocket" Foreground="CornflowerBlue" FontSize="{Binding #NetWebSocket.FontSize, Converter={StaticResource ValueConverter}, ConverterParameter=2}"   HorizontalAlignment="Left"/>
+                        <ToggleSwitch Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" IsChecked="{Binding EnableWebSocket}" HorizontalAlignment="Right"/>
+                    </Grid>
+                </Grid>
+                
+                <!--Message Post Format-->
+                <Grid Margin="5" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" ColumnDefinitions="Auto, 5*, Auto" RowDefinitions="Auto, Auto">
+                    <Label Grid.Row="0" Grid.Column="1" Content="消息格式" x:Name="NetFormat" HorizontalAlignment="Left"/>
+                    <Label Grid.Row="1" Grid.Column="1" Content="设置消息格式" Foreground="CornflowerBlue" FontSize="{Binding #NetFormat.FontSize, Converter={StaticResource ValueConverter}, ConverterParameter=2}"   HorizontalAlignment="Left"/>
+                    <ComboBox Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" ItemsSource="{Binding FormatValue}" SelectedItem="{Binding MessagePostFormat}"/>
+                </Grid>
+                
+                <!--Token-->
+                <Grid Margin="5" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" ColumnDefinitions="Auto, 5*, Auto" RowDefinitions="Auto, Auto">
+                    <Label Grid.Row="0" Grid.Column="1" Content="Token" x:Name="NetToken" HorizontalAlignment="Left"/>
+                    <Label Grid.Row="1" Grid.Column="1" Content="设置连接Token" Foreground="CornflowerBlue" FontSize="{Binding #NetToken.FontSize, Converter={StaticResource ValueConverter}, ConverterParameter=2}"   HorizontalAlignment="Left"/>
+                    <TextBox Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Text="{Binding Token}" Watermark="请输入"></TextBox>
+                </Grid>
+            </Grid>
+            <Button Content="创建" Command="{Binding AddNetWorkCommand}"/>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

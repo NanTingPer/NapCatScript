@@ -30,40 +30,23 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Views\NetWorkViews\CreateViews\CreateHttpClientView.axaml.cs">
-      <DependentUpon>CreateHttpClientView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\NetWorkViews\MiniViews\HttpServerView.axaml.cs">
-      <DependentUpon>HttpServerView.axaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\NetWorkViews\NetWorkView.axaml.cs">
-      <DependentUpon>NetWorkView.axaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\NetWorkViews\MiniViews\HttpClientView.axaml.cs">
-      <DependentUpon>HttpClientView.axaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\NetWorkViews\MiniViews\WebSocketServerView.axaml.cs">
-      <DependentUpon>WebSocketServerView.axaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\NetWorkViews\MiniViews\HttpSseServerView.axaml.cs">
-      <DependentUpon>HttpSseServerView.axaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\NetWorkViews\MiniViews\WebSocketClientView.axaml.cs">
-      <DependentUpon>WebSocketClientView.axaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\NetWorkViews\CreateViews\CreateWebSocketServerView.axaml.cs">
-      <DependentUpon>CreateWebSocketServerView.axaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\NetWorkViews\CreateViews\CreateWebSocketClientView.axaml.cs">
-      <DependentUpon>CreateWebSocketClientView.axaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
+    <AdditionalFiles Include="NetWorkViews\CreateViews\CreateHttpClientView.axaml" />
+    <AdditionalFiles Include="NetWorkViews\CreateViews\CreateHttpServerView.axaml" />
+    <AdditionalFiles Include="NetWorkViews\CreateViews\CreateHttpSseServerView.axaml" />
+    <AdditionalFiles Include="NetWorkViews\CreateViews\CreateWebSocketClientView.axaml" />
+    <AdditionalFiles Include="NetWorkViews\CreateViews\CreateWebSocketServerView.axaml" />
+    <AdditionalFiles Include="NetWorkViews\CreateViews\NetWorkCreateView.axaml" />
+    <AdditionalFiles Include="NetWorkViews\ListView.axaml" />
+    <AdditionalFiles Include="NetWorkViews\MiniViews\HttpClientView.axaml" />
+    <AdditionalFiles Include="NetWorkViews\MiniViews\HttpServerView.axaml" />
+    <AdditionalFiles Include="NetWorkViews\MiniViews\HttpSseServerView.axaml" />
+    <AdditionalFiles Include="NetWorkViews\MiniViews\WebSocketClientView.axaml" />
+    <AdditionalFiles Include="NetWorkViews\MiniViews\WebSocketServerView.axaml" />
+    <AdditionalFiles Include="NetWorkViews\NetWorkView.axaml" />
+    <AdditionalFiles Include="Styles\NetWorkViewStyle.axaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Styles\NetWorkViewStyle.axaml" />
   </ItemGroup>
 </Project>

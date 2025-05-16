@@ -5,6 +5,7 @@ using System.Net;
 using System.Reactive;
 using System.Threading.Tasks;
 using NapCatScript.Core.JsonFormat;
+using NapCatScript.Desktop.ViewModels.ChatViewModels;
 using static NapCatScript.Core.MsgHandle.Utils;
 
 namespace NapCatScript.Desktop.ViewModels;
@@ -18,11 +19,14 @@ public class MainWindowViewModel : ViewModelBase
     public IReactiveCommand ListBoxPropertyChangedCommand { get; private set; }
     private ViewModelBase? _logViewModel;
     private ViewModelBase? _netWorkModel;
-    private ViewModelBase? _webUIConnectionViewModel;
+    private ViewModelBase? _webUiConnectionViewModel;
+    private ViewModelBase? _chatViewModel;
     public ViewModelBase LogViewModel => _logViewModel ??= new LogViewModel();
     public ViewModelBase NetWorkModel => _netWorkModel ??= new NetWorkViewModel();
-    public ViewModelBase WebUIConnectionViewModel => _webUIConnectionViewModel ??= new WebUIConnectionViewModel();
-
+    public ViewModelBase WebUiConnectionViewModel => _webUiConnectionViewModel ??= new WebUIConnectionViewModel();
+    public ViewModelBase ChatViewModel => _chatViewModel ??= new ChatMainViewModel();
+    
+    
     public ObservableCollection<string> Items { get; } = [];
 
     public string SelectedItem
@@ -48,7 +52,7 @@ public class MainWindowViewModel : ViewModelBase
         Items.Add("聊天");
         Items.Add("日志");
         Items.Add("网络");
-        CurrView = WebUIConnectionViewModel;
+        CurrView = WebUiConnectionViewModel;
     }
 
     private void ListBoxPropertyChanged(string str)
@@ -57,7 +61,8 @@ public class MainWindowViewModel : ViewModelBase
             return;
         if (str == "网络") CurrView = NetWorkModel;
         if (str == "日志") CurrView = LogViewModel;
-        if (str == "连接") CurrView = WebUIConnectionViewModel;
+        if (str == "连接") CurrView = WebUiConnectionViewModel;
+        if (str == "聊天") CurrView = ChatViewModel;
     }
 
     private async Task WebUILoginEvent(IInteractionContext<(string, string), bool> interaction)
