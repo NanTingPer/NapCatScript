@@ -66,7 +66,22 @@ public static class ReceiveMsg
             if (sender.TryGetProperty("nickname", out JsonElement value))
                 user_name = value.GetString();
         }
-        return new MsgInfo() { MessageContent = message.GetString()!, MessageType = message_type.GetString()!, UserId = user_id.GetUInt64().ToString(), GroupId = group_id_bool ? group_id.GetUInt64().ToString() : string.Empty, UserName = user_name is null ? "" : user_name };
+
+        JsonElement time;
+        double d1 = 0d;
+        if (json.TryGetProperty("time", out time)) {
+            d1 = time.GetDouble();
+        }
+        
+        return new MsgInfo()
+        {
+            MessageContent = message.GetString()!, 
+            MessageType = message_type.GetString()!, 
+            UserId = user_id.GetUInt64().ToString(), 
+            GroupId = group_id_bool ? group_id.GetUInt64().ToString() : string.Empty, 
+            UserName = user_name ?? "",
+            Time = d1
+        };
     }
 
 

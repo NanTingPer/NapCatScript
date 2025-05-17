@@ -18,6 +18,7 @@ namespace NapCatScript.Desktop.ViewModels.ChatViewModels;
 
 public class ChatSocketSelectedViewModel : ViewModelBase
 {
+    private bool _isSelected;
     private NetWorkSetConfigValue? _netWorkConfig;
     private object? _selectedServer;
     //private static  InteractionHandlerObject
@@ -36,14 +37,27 @@ public class ChatSocketSelectedViewModel : ViewModelBase
     private async void YesServer()
     {
         if(SelectedServer is null) return;
-        bool value = await LinkWebSocketServerInteraction
-            .Handle((WebSocketServer)((WebSocketServerViewModel)SelectedServer).GetNetWork());
-        if(value != true)
-            return;
-        
-        CurrentServerSelectedList.Clear();
-        foreach (var o in HttpServerSelectedList) {
-            CurrentServerSelectedList.Add(o);
+        if (!_isSelected) {
+            bool value = await LinkWebSocketServerInteraction
+                    .Handle((WebSocketServer)((WebSocketServerViewModel)SelectedServer).GetNetWork());
+            
+            if(value != true)
+                return;
+            
+            CurrentServerSelectedList.Clear();
+            foreach (var o in HttpServerSelectedList) {
+                CurrentServerSelectedList.Add(o);
+            }
+            _isSelected = !_isSelected;
+            
+        } else {
+            bool value = await LinkHttpServerInteraction
+                    .Handle((HttpServer)((HttpServerViewModel)SelectedServer).GetNetWork());
+            
+            if(value != true)
+                return;
+            
+            
         }
     }
     
