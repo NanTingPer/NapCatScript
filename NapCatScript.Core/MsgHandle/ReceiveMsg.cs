@@ -3,7 +3,7 @@ using NapCatScript.Core.Model;
 using System.Buffers;
 
 namespace NapCatScript.Core.MsgHandle;
-public static class ReceiveMesg
+public static class ReceiveMsg
 {
     public static async Task<MsgInfo?> Receive(this ClientWebSocket socket, CancellationToken CToken)
     {

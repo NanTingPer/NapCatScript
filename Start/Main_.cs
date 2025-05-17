@@ -1,5 +1,5 @@
 ﻿using System.Net.WebSockets;
-using static NapCatScript.Core.MsgHandle.ReceiveMesg;
+using static NapCatScript.Core.MsgHandle.ReceiveMsg;
 using static NapCatScript.Core.MsgHandle.Utils;
 using System.Net.Http.Headers;
 using Config = NapCatScript.Core.Services.Config;

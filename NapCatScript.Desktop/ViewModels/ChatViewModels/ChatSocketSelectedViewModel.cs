@@ -1,6 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
-using System.Reactive;
+using System.Reactive.Linq;
 using System.Text.Json;
 using NapCatScript.Core.JsonFormat;
 using NapCatScript.Core.NetWork.NetWorkModel;
@@ -12,23 +12,15 @@ using static NapCatScript.Core.Utils;
 using static NapCatScript.Core.MsgHandle.Utils;
 using static NapCatScript.Desktop.ConfigValue;
 
+using static NapCatScript.Desktop.ViewModels.ChatViewModels.InteractionHandler;
+
 namespace NapCatScript.Desktop.ViewModels.ChatViewModels;
 
 public class ChatSocketSelectedViewModel : ViewModelBase
 {
-    /// <summary>
-    /// 用于连接WebSocketServer. 此连接用于接收消息
-    /// </summary>
-    public static readonly Interaction<WebSocketServer, bool> LinkWebSocketServerInteraction = new();
-    
-    /// <summary>
-    /// 用于连接HttpServer. 此连接用于发送消息
-    /// </summary>
-    public static readonly Interaction<HttpServer, bool> LinkHttpServerInteraction = new();
-
     private NetWorkSetConfigValue? _netWorkConfig;
     private object? _selectedServer;
-
+    //private static  InteractionHandlerObject
     public ObservableCollection<object> CurrentServerSelectedList { get; } = [];
     public ObservableCollection<object> WebSocketServerSelectedList { get; } = [];
     public ObservableCollection<object> HttpServerSelectedList { get; } = [];
@@ -41,8 +33,14 @@ public class ChatSocketSelectedViewModel : ViewModelBase
         YesServerCommand = ReactiveCommand.Create(YesServer);
     }
 
-    private void YesServer()
+    private async void YesServer()
     {
+        if(SelectedServer is null) return;
+        bool value = await LinkWebSocketServerInteraction
+            .Handle((WebSocketServer)((WebSocketServerViewModel)SelectedServer).GetNetWork());
+        if(value != true)
+            return;
+        
         CurrentServerSelectedList.Clear();
         foreach (var o in HttpServerSelectedList) {
             CurrentServerSelectedList.Add(o);
