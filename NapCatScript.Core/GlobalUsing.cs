@@ -13,7 +13,7 @@ global using NapCatScript.Core.JsonFormat.JsonModel;
 global using NapCatScript.Core.JsonFormat;
 global using NapCatScript.Core.JsonFormat.Msgs;
 
-global using static NapCatScript.Core.Services.Loging;
+global using static NapCatScript.Core.Services.Log;
 global using static NapCatScript.Core.Utils;
 global using static NapCatScript.Core.JsonFormat.Utils;
 global using static NapCatScript.Core.MsgHandle.Utils;

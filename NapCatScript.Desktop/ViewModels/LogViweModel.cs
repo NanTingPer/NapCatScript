@@ -60,7 +60,7 @@ public class LogViewModel : ViewModelBase, IDisposable
                     }
                 }
             } catch (Exception e) {
-                Loging.Log.Erro(e.Message, e.StackTrace);
+                Core.Services.Log.InstanceLog.Erro(e.Message, e.StackTrace);
             }
         }
     }

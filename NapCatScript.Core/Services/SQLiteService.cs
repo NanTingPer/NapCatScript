@@ -65,7 +65,7 @@ public class SQLiteService
         try {
             oldData = await Get<T?>(keyValue!.ToString());
         } catch (Exception e) {
-            Log.Erro(e.Message, e.StackTrace);
+            InstanceLog.Erro(e.Message, e.StackTrace);
             return;
         }
 
@@ -98,7 +98,7 @@ public class SQLiteService
             try {
                 await Delete<T>(propty.GetValue(obj));
             } catch (Exception e) {
-                Log.Erro(e.Message, e.StackTrace);
+                InstanceLog.Erro(e.Message, e.StackTrace);
             }
         }
     }
@@ -131,7 +131,7 @@ public class SQLiteService
                 await Update(obj);
             }
         } catch (Exception ex) {
-            Log.Erro(ex.Message, ex.StackTrace);
+            InstanceLog.Erro(ex.Message, ex.StackTrace);
         }
 
         //try {

@@ -1,0 +1,14 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:vm="clr-namespace:NapCatScript.Desktop.ViewModels.NetWorkModels"
+             x:DataType="vm:HttpServerViewModel"
+             x:Class="NapCatScript.Desktop.ChatViews.LinkHttpServerView">
+    <WrapPanel>
+        <Label Margin="5" Content="{Binding Name}"/>
+        <Label Margin="5" Content="{Binding Host}"/>
+        <Label Margin="5" Content="{Binding Port}"/>
+    </WrapPanel>
+</UserControl>

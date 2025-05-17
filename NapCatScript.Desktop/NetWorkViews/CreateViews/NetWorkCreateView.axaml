@@ -10,7 +10,7 @@
              x:Class="NapCatScript.Desktop.NetWorkViews.CreateViews.NetWorkCreateView"
              x:DataType="vm:NetWorkCreateViewModel">
     <UserControl.Resources>
-        <netWorkViews1:CreateNetWorkViewLocator x:Key="ViewLocator"></netWorkViews1:CreateNetWorkViewLocator>
+        <netWorkViews1:CreateNetWorkViewLocator x:Key="ViewLocator"/>
     </UserControl.Resources>
     <UserControl.Styles>
             <StyleInclude Source="/Styles/NetWorkViewStyle.axaml"></StyleInclude>

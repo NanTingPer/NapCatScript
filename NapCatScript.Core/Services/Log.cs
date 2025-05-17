@@ -1,15 +1,15 @@
 ﻿namespace NapCatScript.Core.Services;
 
-public class Loging
+public class Log
 {
     private static string logPath = Path.Combine(Environment.CurrentDirectory, "log.log");
     private static StreamWriter Writer { get; set; }
-    static Loging()
+    static Log()
     {
         Writer = File.CreateText(logPath);
     }
 
-    public static Loging Log { get; set; } = new Loging();
+    public static Log InstanceLog { get; set; } = new Log();
 
     public void Info(params object[] content)
     {

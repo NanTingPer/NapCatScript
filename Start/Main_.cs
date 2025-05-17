@@ -56,7 +56,7 @@ public class Main_
                 _ = Console.ReadLine();
             }
         } catch (Exception e) {
-            Log.Erro(e.Message + "\r\n" + e.StackTrace);
+            InstanceLog.Erro(e.Message + "\r\n" + e.StackTrace);
         }
     }
 
@@ -75,7 +75,7 @@ public class Main_
                     //Console.WriteLine(mesg);
                 }
             } catch (Exception e) {
-                Log.Erro("消息接收发生错误: ", e.Message, e.StackTrace);
+                InstanceLog.Erro("消息接收发生错误: ", e.Message, e.StackTrace);
             }
 
         }
@@ -94,13 +94,13 @@ public class Main_
             MsgInfo mesg = NoPMesgList.First();
             //interfaceTest(sned); // Test
             NoPMesgList.RemoveAt(0);
-            Log.Info(mesg);
+            InstanceLog.Info(mesg);
             MService.SetAsync(mesg);
             foreach (var pType in Plugins) {
                 try {
                     _ = pType.Run(mesg, HttpUri);
                 } catch (Exception e) {
-                    Log.Erro($"插件:{pType.GetType().FullName}", e.Message, e.StackTrace);
+                    InstanceLog.Erro($"插件:{pType.GetType().FullName}", e.Message, e.StackTrace);
                 }
             }
         }
@@ -137,7 +137,7 @@ public class Main_
             Console.WriteLine("连接成功");
             IsConnection = true;
         } catch (Exception e){
-            Log.Erro("建立连接: 请检查URI是否有效，服务是否正常可访问", e.Message, e.StackTrace);
+            InstanceLog.Erro("建立连接: 请检查URI是否有效，服务是否正常可访问", e.Message, e.StackTrace);
             Environment.Exit(0);
         }
         SetConf(URI, uri);

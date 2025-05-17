@@ -28,7 +28,7 @@ public static class SendMsg
             }
             return await hrm.Content.ReadAsStringAsync(ctoken);
         } catch (Exception e) {
-            Log.Erro(e.Message + "\r\n" + e.StackTrace);
+            InstanceLog.Erro(e.Message + "\r\n" + e.StackTrace);
             return "Erro";
         }
         

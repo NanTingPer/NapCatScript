@@ -49,7 +49,7 @@ public class PluginLoad : AssemblyLoadContext
         string[] plugins = Directory.GetDirectories(pluginDirectory); //给的是绝对路径
         foreach (var pluginPath in plugins) {
             string pluginName = new DirectoryInfo(pluginPath).Name;
-            Log.Info("加载插件: " + pluginName);
+            InstanceLog.Info("加载插件: " + pluginName);
             string pluginDllPath = Path.Combine(pluginPath, pluginName + ".dll");
             PluginLoad plugin = new PluginLoad(pluginDllPath);
             Assembly ass = plugin.LoadFromAssemblyPath(pluginDllPath); //加载插件程序集
@@ -57,7 +57,7 @@ public class PluginLoad : AssemblyLoadContext
             IEnumerable<Type> pluginStartTypes = ass.GetTypes().Where(f => typeof(PluginType) == f.BaseType);
             foreach (var pluginStartType in pluginStartTypes) {
                 ConstructorInfo? pluginConstructor = pluginStartType.GetConstructors().FirstOrDefault(f => f.GetParameters().Length == 0);
-                Log.Info("创建实例: " + pluginStartType.FullName ?? pluginStartType.FullName + "没有无参构造，无法实例化！");
+                InstanceLog.Info("创建实例: " + pluginStartType.FullName ?? pluginStartType.FullName + "没有无参构造，无法实例化！");
                 if (pluginConstructor is null) return;
                 PluginType obj = (PluginType)pluginConstructor.Invoke(null);
                 obj.Init();

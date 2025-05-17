@@ -33,7 +33,7 @@ public class ConfigService
                 await sql.Insert(conf);
                 return true;
             } catch (Exception e) {
-                Log.Erro(e.Message, e.StackTrace);
+                InstanceLog.Erro(e.Message, e.StackTrace);
                 return false;
             }
         }
@@ -42,7 +42,7 @@ public class ConfigService
             await sql.Update(conf);
             return true;
         }catch (Exception e) {
-            Log.Erro(e.Message, e.StackTrace);
+            InstanceLog.Erro(e.Message, e.StackTrace);
             return false;
         }
     }
@@ -64,7 +64,7 @@ public class ConfigService
         string notBarkString = Regex.Replace(line, @"\s", "");
         string[] conf = notBarkString.Split(":");
         if(conf.Length != 2) {
-            Log.Waring(line, "无效配置");
+            InstanceLog.Waring(line, "无效配置");
             return string.Empty;
         }
         ConfigModel confm = new ConfigModel() { Name = conf[0], Content = conf[1] };

@@ -21,12 +21,12 @@ public static class CoreConfigValueAndObject
     public static List<PluginType> Plugins { get; } = [];
     static CoreConfigValueAndObject()
     {
-        Log.Info("加载核心配置!");
+        InstanceLog.Info("加载核心配置!");
         string? useUri = GetConf(URI);
         string? httpUri = GetConf(HttpURI);
         BotId = GetConf(BootId) ?? "";
         if (string.IsNullOrEmpty(useUri) || string.IsNullOrEmpty(httpUri)) {
-            Log.Waring("配置文件已生成，请检查Uri配置");
+            InstanceLog.Waring("配置文件已生成，请检查Uri配置");
             Console.ReadLine();
             Environment.Exit(0);
         }

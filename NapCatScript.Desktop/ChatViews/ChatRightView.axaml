@@ -6,5 +6,5 @@
              xmlns:vm="clr-namespace:NapCatScript.Desktop.ViewModels.ChatViewModels"
              x:DataType="vm:ChatRightViewModel"
              x:Class="NapCatScript.Desktop.ChatViews.ChatRightView">
-    Welcome to Avalonia!
+    <UserControl Content="{Binding CurrentViewModel}"/>
 </UserControl>

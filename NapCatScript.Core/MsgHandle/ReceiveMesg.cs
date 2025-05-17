@@ -37,7 +37,7 @@ public static class ReceiveMesg
             }
             return null;
         } catch (Exception e) {
-            Log.Erro(e.Message, e.StackTrace);
+            InstanceLog.Erro(e.Message, e.StackTrace);
             if(memResult is not null) {
                 memResult.Dispose();
                 memResult.Close();

@@ -1,0 +1,32 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:vm="clr-namespace:NapCatScript.Desktop.ViewModels.ChatViewModels"
+             xmlns:vl="using:NapCatScript.Desktop.ChatViews"
+             x:DataType="vm:ChatSocketSelectedViewModel"
+             x:Class="NapCatScript.Desktop.ChatViews.ChatSocketSelectedView">
+    <UserControl.Resources>
+        <vl:SelectedLinkViewLocator x:Key="Locator"/>
+    </UserControl.Resources>
+    <UserControl.Styles>
+        <Style Selector="ContentControl">
+            <Setter Property="ContentTemplate" Value="{StaticResource Locator}"/>
+        </Style>
+        
+        <Style Selector="ItemsControl">
+            <Setter Property="ItemTemplate" Value="{StaticResource Locator}"/>
+        </Style>
+        
+        <Style Selector="ListBox">
+            <Setter Property="ItemTemplate" Value="{StaticResource Locator}"/>
+        </Style>
+    </UserControl.Styles>
+    <StackPanel>
+        <ListBox ItemsSource="{Binding CurrentServerSelectedList}" SelectedItem="{Binding SelectedServer}">
+            <ListBox.ItemsPanel/>
+        </ListBox>
+        <Button Content="确定" Command="{Binding YesServerCommand}"/>
+    </StackPanel>
+</UserControl>

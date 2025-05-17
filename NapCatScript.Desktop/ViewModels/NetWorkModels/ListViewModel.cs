@@ -142,9 +142,8 @@ public class ListViewModel : ViewModelBase
                 .FirstOrDefault(f =>
                 {
                     var nameInfo = f.GetType().GetProperty("Name");
-                    if(nameInfo == null) return false;
-
-                    return name!.Equals(nameInfo.GetValue(f));
+                    return nameInfo != null && 
+                           name!.Equals(nameInfo.GetValue(f));
                 });
         
         allNetWorkConfig.Remove(delObj);
@@ -239,9 +238,9 @@ public class ListViewModel : ViewModelBase
     /// </summary>
     public async void GetWebUiNetWorkConfig()
     {
-        string s = await Core.MsgHandle.Utils
-                .GetNetWorkConfig(ConfigValue.WebUri, ConfigValue.AuthToken);
-        
+        string? s = await Core.MsgHandle.Utils
+                .GetWebUiNetWorkConfig(ConfigValue.WebUri, ConfigValue.AuthToken);
+        if(s is null) return;
         if(!s.GetJsonElement(out var netWorkJson))
             return;
         if(!netWorkJson.TryGetPropertyValue("network", out var network))
@@ -257,7 +256,7 @@ public class ListViewModel : ViewModelBase
         try {
             _netWorks = network.Deserialize<NetWorks>()!;
         } catch (Exception e) {
-            Loging.Log.Erro("ListViewModel::SetConfig 网络配置解析失败!", e.Message, e.StackTrace);
+            Log.InstanceLog.Erro("ListViewModel::SetConfig 网络配置解析失败!", e.Message, e.StackTrace);
             return;
         }
         Add(_netWorks);
@@ -327,7 +326,7 @@ public class ListViewModel : ViewModelBase
                 viewModelObj = ctorInfo!.Invoke([]);
             }
             catch (Exception e) {
-                Loging.Log.Erro(e.Message, e.StackTrace);
+                Log.InstanceLog.Erro(e.Message, e.StackTrace);
                 return;
             }
             Core.Utils.TypeMap(f.GetType(), viewType, f, viewModelObj);

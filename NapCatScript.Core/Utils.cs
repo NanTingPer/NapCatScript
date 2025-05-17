@@ -51,7 +51,7 @@ public static class Utils
                             break;
                         }
                         catch (Exception e) {
-                            Log.Erro(e.Message, e.StackTrace);
+                            InstanceLog.Erro(e.Message, e.StackTrace);
                             break;
                         }
                     }

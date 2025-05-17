@@ -1,6 +1,8 @@
 ﻿using NapCatScript.Core.Model;
 using System.Net.Http.Headers;
+using NapCatScript.Core.NetWork.NetWorkModel;
 using NapCatScript.Core.Services;
+using HttpClient = System.Net.Http.HttpClient;
 
 namespace NapCatScript.Core.MsgHandle;
 /// <summary>
@@ -13,6 +15,32 @@ public static class Utils
     public const string WEBUILOGAPI = "/api/Log/GetLogRealTime";
     public const string WEBUIGETCONFIG = "/api/OB11Config/GetConfig";
     public const string WEBUISETCONFIG = "/api/OB11Config/SetConfig";
+
+    #region WebUi
+    
+    /// <summary>
+    /// 获取网络配置
+    /// </summary>
+    /// <param name="httpUrl"> WebUI的URL ： http://127.0.0.1:6099 </param>
+    /// <param name="aut"> <see cref="GetAuthentication(string,string)"/> </param>
+    /// <returns></returns>
+    public static async Task<string?> GetWebUiNetWorkConfig(string httpUrl, string aut)
+    {
+        httpUrl = httpUrl.DelEnd() + WEBUIGETCONFIG;
+        
+        var hc = new HttpClient();
+        hc.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", aut);
+        var result = await hc.PostAsync(httpUrl, null);
+        try {
+            return await result.Content.ReadAsStringAsync();
+        }
+        catch (Exception e) {
+            InstanceLog.Erro(e.Message, e.StackTrace);
+            return null;
+        }
+    }
+    
+    #endregion
     
     ///<summary>
     ///获取Msg消息URL 基本消息(API访问链接)
@@ -160,27 +188,6 @@ public static class Utils
         }
     }
 
-    /// <summary>
-    /// 获取网络配置
-    /// </summary>
-    /// <param name="httpUrl"> WebUI的URL ： http://127.0.0.1:6099 </param>
-    /// <param name="aut"> <see cref="GetAuthentication(string,string)"/> </param>
-    /// <returns></returns>
-    public static async Task<string> GetNetWorkConfig(string httpUrl, string aut)
-    {
-        httpUrl = httpUrl.DelEnd() + WEBUIGETCONFIG;
-        
-        var hc = new HttpClient();
-        hc.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", aut);
-        var result = await hc.PostAsync(httpUrl, null);
-        try {
-            return await result.Content.ReadAsStringAsync();
-        }
-        catch (Exception e) {
-            Log.Erro(e.Message, e.StackTrace);
-            return e.Message;
-        }
-    }
     
     private static string DelEnd(this string url)
     {
