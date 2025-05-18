@@ -62,10 +62,10 @@ public class Send
     public MsgTo GetMesgTo(MsgInfo mesginfo, out string id)
     {
         if (mesginfo.MessageType == "group") {
-            id = mesginfo.GroupId;
+            id = mesginfo.GroupId.ToString();
             return MsgTo.group;
         } else {
-            id = mesginfo.UserId;
+            id = mesginfo.UserId.ToString();
             return MsgTo.user;
         }
     }
@@ -275,7 +275,7 @@ public class Send
     /// <summary>
     /// 给info中的UserId点赞
     /// </summary>
-    public async void SendLike(MsgInfo info, int num) => await SendLikeAsync(info.UserId, num);
+    public async void SendLike(MsgInfo info, int num) => await SendLikeAsync(info.UserId.ToString(), num);
     #endregion
 
     #region 获取群列表 get_group_list
@@ -511,8 +511,8 @@ public class Send
     public async void SendMarkDown(string id, string content, MsgInfo mesg, MsgTo type)
     {
         var MarkDownJson = new MarkDownJson(content);
-        var 二级转发消息 = new TwoForwardJson(mesg.UserId, mesg.UserName, MarkDownJson);
-        var 一级转发消息 = new ForwardData(mesg.UserId, mesg.UserName, 二级转发消息);
+        var 二级转发消息 = new TwoForwardJson(mesg.UserId.ToString(), mesg.UserName, MarkDownJson);
+        var 一级转发消息 = new ForwardData(mesg.UserId.ToString(), mesg.UserName, 二级转发消息);
         ForwardMsgJson postContent = new ForwardMsgJson(id, 一级转发消息, type);
         string postContents = JsonSerializer.Serialize(postContent);
 
@@ -552,7 +552,7 @@ public class Send
     {
         List<ForwardData> fd = new List<ForwardData>();
         foreach (var json in msgs) {
-            fd.Add(new ForwardData(mesgInfo.UserId, mesgInfo.UserName, json));
+            fd.Add(new ForwardData(mesgInfo.UserId.ToString(), mesgInfo.UserName, json));
         }
         var fmj = new ForwardMsgJson(id, fd, mesgTo);
         string RequtContent = JsonSerializer.Serialize(fmj);
@@ -648,6 +648,7 @@ public class Send
         _ = PostSend(HttpClient, GroupBanAPI, json.JsonText);
     }
 
+    public void GroupBan(long groupId, long userId, double time) => GroupBan(groupId.ToString(), userId.ToString(), time);
     /// <summary>
     /// 群禁言，info是谁就禁谁。单位 秒
     /// </summary>
@@ -670,6 +671,7 @@ public class Send
         _ = PostSend(HttpClient, GroupKickAPI, json.JsonText);
     }
 
+    public void GroupTick(long groupid, long userid) => GroupTick(groupid.ToString(), userid.ToString());
     /// <summary>
     /// 群踢人，使用info中的信息
     /// </summary>
@@ -689,6 +691,8 @@ public class Send
             return false;
         return true;
     }
+
+    private static bool TrueGroupMsg(long groupid) => TrueGroupMsg(groupid.ToString());
     #endregion
 
     #region 戳一戳
@@ -716,6 +720,7 @@ public class Send
         }
     }
 
+    public void Poke(long groupid, long userId, int @for = 1) => Poke(groupid.ToString(), userId.ToString(), @for);
     public void Poke(MsgInfo info, int @for = 1)
     {
         if (TrueGroupMsg(info.GroupId)) {

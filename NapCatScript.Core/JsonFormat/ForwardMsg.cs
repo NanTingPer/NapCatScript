@@ -147,6 +147,11 @@ public class ForwardData
     {
         Content = [content];
     }
+    
+    public ForwardData(long user_id, string nickname, MsgJson content) : this(user_id.ToString(), nickname)
+    {
+        Content = [content];
+    }
 
     /// <summary>
     /// 本消息带有多种类型

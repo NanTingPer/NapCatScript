@@ -78,7 +78,7 @@ public static class ReceiveMsg
             MessageContent = message.GetString()!, 
             MessageType = message_type.GetString()!, 
             UserId = user_id.GetUInt64().ToString(), 
-            GroupId = group_id_bool ? group_id.GetUInt64().ToString() : string.Empty, 
+            GroupId = group_id_bool ? group_id.GetInt64().ToString() : /*default*/string.Empty, 
             UserName = user_name ?? "",
             Time = d1
         };

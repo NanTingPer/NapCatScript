@@ -5,7 +5,7 @@
 public class MsgInfo
 {
     [SQLite.PrimaryKey, SQLite.AutoIncrement, SQLite.Column("Key")]
-    public double Key { get; set; }
+    public long Key { get; set; }
     
     /// <summary>
     /// 用户ID
@@ -45,9 +45,9 @@ public class MsgInfo
         //if (UserId != string.Empty) return UserId;
         //else return GroupId;
         if (MessageType == "group")
-            return GroupId;
+            return GroupId.ToString();
         else
-            return UserId;
+            return UserId.ToString();
     }
 
     public override string ToString()

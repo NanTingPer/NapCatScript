@@ -66,9 +66,10 @@ public static class Utils
     /// </summary>
     public static string GetUserId(MsgInfo mesg)
     {
-        if (mesg.GroupId != string.Empty)
-            return mesg.GroupId;
-        return mesg.UserId;
+        if (mesg.GroupId.ToString() != string.Empty &&
+            mesg.GroupId != default)
+            return mesg.GroupId.ToString();
+        return mesg.UserId.ToString();
     }
 
     public static MsgTo GetMsgTo(this MsgInfo info)

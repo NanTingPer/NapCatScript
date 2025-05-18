@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using ReactiveUI;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Net;
 using System.Reactive;
 using System.Threading.Tasks;
 using NapCatScript.Core.JsonFormat;
+using NapCatScript.Core.Model;
+using NapCatScript.Core.Services;
 using NapCatScript.Desktop.ViewModels.ChatViewModels;
 using static NapCatScript.Core.MsgHandle.Utils;
 
@@ -41,8 +45,23 @@ public class MainWindowViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref currView, value);
     }
 
+    private async void test()
+    {
+        var r = new SQLiteHelper<MsgInfo>(Path.Combine("Desktop", "helloInfo.data"));
+        await r.CreateTableAsync("a245");
+        await r.InsertAsync("a245" ,new MsgInfo
+        {
+            UserId = "1", 
+            GroupId = "1", 
+            MessageContent = "Hello{}awf';;:\""
+        });
+        List<MsgInfo> k = await r.QueryAsync("a245", "select * from a245");
+
+    }
+    
     public MainWindowViewModel()
     {
+        test();
         this.WhenAnyValue(f => f.SelectedItem)
             .WhereNotNull()
             .Subscribe(ListBoxPropertyChanged);

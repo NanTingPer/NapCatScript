@@ -10,12 +10,22 @@ public class TwoForwardJson : MsgJson
         JsonText = JsonSerializer.Serialize(this);
     }
 
+    public TwoForwardJson(long user_id, string nickname, List<MsgJson> contents) :
+        this (user_id.ToString(), nickname, contents)
+    {
+        
+    }
+    
     public TwoForwardJson(string user_id, string nickname, List<MsgJson> contents)
     {
         Data = new TwoForawrdData(user_id, nickname, contents);
         JsonText = JsonSerializer.Serialize(this);
     }
 
+    public TwoForwardJson(long user_id, string nickname, MsgJson contents) : 
+        this(user_id.ToString(), nickname, contents)
+    {}
+    
     public TwoForwardJson(string user_id, string nickname, MsgJson contents)
     {
         Data = new TwoForawrdData(user_id, nickname, [contents]);
