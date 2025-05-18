@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Net.WebSockets;
 using System.Reactive;
+using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using NapCatScript.Core.Model;
@@ -25,6 +26,8 @@ public class ChatLeftViewModel : ViewModelBase
     public static CancellationToken CToken => CTS.Token;
     public static SQLiteHelper<MsgInfo> SQLiteHelper { get; } = new (Path.Combine("Desktop", "MsgInfo.data"));
 
+    private ChatSelectedMiniViewModel? _currentMiniViewModel;
+    
     /// <summary>
     /// Key => 群号, ViewModel => 展示内容
     /// </summary>
@@ -37,10 +40,18 @@ public class ChatLeftViewModel : ViewModelBase
 
     public ObservableCollection<ChatSelectedMiniViewModel> GroupViews { get; } = [];
     public ObservableCollection<ChatSelectedMiniViewModel> PrivateViews { get; } = [];
+
+    public ChatSelectedMiniViewModel? CurrentMiniViewModel { get => _currentMiniViewModel; set => this.RaiseAndSetIfChanged(ref _currentMiniViewModel, value); }
     
     public ChatLeftViewModel()
     {
-        InteractionHandler.NoticeLeftHttpServerInteraction.RegisterHandler(HttpServerInteractionHandler);
+        this.WhenAnyValue(@this => @this.CurrentMiniViewModel)
+            .Where(f => f != null)
+            .Subscribe(f =>
+            {
+                InteractionHandler.NoticeRightGoToChatInteraction.Handle(f).Subscribe();
+            });
+        InteractionHandler.NoticeHttpServerInteraction.RegisterHandler(HttpServerInteractionHandler);
         InteractionHandler.NoticeLeftWebSocketServerInteraction.RegisterHandler(WebSocketServerInteractionHandler);
     }
 
@@ -64,9 +75,13 @@ public class ChatLeftViewModel : ViewModelBase
         //创建表 初始化列表
         foreach (var groupInfo in list) {
             await SQLiteHelper.CreateTableAsync("g" + groupInfo.GroupId);
-            
-            if(GroupViewMap.TryGetValue(groupInfo.GroupId, out _))
+
+            if (GroupViewMap.TryGetValue(groupInfo.GroupId, out var f)) {
+                f.GroupName = groupInfo.GroupName;
+                f.GroupRemark = groupInfo.GroupRemark;
                 continue;
+            }
+                
             
             GroupViewMap[groupInfo.GroupId] = new ChatSelectedMiniViewModel()
             {
@@ -103,6 +118,9 @@ public class ChatLeftViewModel : ViewModelBase
                 break; 
             MsgInfo? info = await Ws.Receive(CTS.Token);
             if (info != null) {
+                if(CurrentMiniViewModel != null)
+                    await InteractionHandler.NoticeRightNewMsgInteraction.Handle(info);
+                    
                 _ = SQLiteHelper.InsertAsync("g" + info.GroupId, info);
                 if(!long.TryParse(info.GroupId, out var groupId))
                     continue;

@@ -7,7 +7,7 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:ChatLeftViewModel"
              x:Class="NapCatScript.Desktop.ChatViews.ChatLeftView">
-    <ListBox ItemsSource="{Binding GroupViews}">
+    <ListBox ItemsSource="{Binding GroupViews}" SelectedItem="{Binding CurrentMiniViewModel}">
         <ListBox.ItemTemplate>
             <DataTemplate>
                 <local:ChatSelectedMiniView/>

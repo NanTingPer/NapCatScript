@@ -1,0 +1,34 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:vm="using:NapCatScript.Desktop.ViewModels.ChatViewModels"
+             x:DataType="vm:ChatRightMsgViewModel"
+             x:Class="NapCatScript.Desktop.ChatViews.ChatRightMsgView">
+    <Grid RowDefinitions="8.5*, 1.3*, 0.2*">
+        <ScrollViewer Grid.Row="0" IsVisible="{Binding ExistsSelect}">
+            <!-- 内容主体 -->
+            <ItemsControl ItemsSource="{Binding Msgs}" Margin="5">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                
+                <ItemsControl.ItemContainerTheme>
+                    <ControlTheme TargetType="ContentPresenter">
+                        <Setter Property="Margin" Value="4"/>
+                    </ControlTheme>
+                </ItemsControl.ItemContainerTheme>
+            </ItemsControl>
+        </ScrollViewer>
+        
+        <!-- 消息 -->
+        <TextBox Grid.Row="1" Watermark="输入内容..." IsVisible="{Binding ExistsSelect}" />
+        
+        <!-- 发送 -->
+        <Button Grid.Row="2" Content="发送" IsVisible="{Binding ExistsSelect}" />
+        
+    </Grid>
+</UserControl>

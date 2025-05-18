@@ -5,6 +5,7 @@ using System.Reactive;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
+using NapCatScript.Core.Model;
 using NapCatScript.Core.NetWork.NetWorkModel;
 using NapCatScript.Core.Services;
 using ReactiveUI;
@@ -40,13 +41,25 @@ public static class InteractionHandler
     /// 如果连接正确, 通知 <see cref="ChatLeftViewModel"/>
     /// </summary>
     
-    public static readonly Interaction<HttpServer, Unit> NoticeLeftHttpServerInteraction = new();
+    public static readonly Interaction<HttpServer, Unit> NoticeHttpServerInteraction = new();
     
     /// <summary>
     /// 如果连接正确, 通知 <see cref="ChatLeftViewModel"/>
     /// </summary>
     
     public static readonly Interaction<WebSocketServer, Unit> NoticeLeftWebSocketServerInteraction = new();
+
+    /// <summary>
+    /// 告知 <see cref="ChatRightMsgViewModel"/> 切换聊天
+    /// <para> 由 <see cref="ChatLeftViewModel"/> 发起 </para>
+    /// </summary>
+    public static readonly Interaction<ChatSelectedMiniViewModel, Unit> NoticeRightGoToChatInteraction = new();
+    
+    /// <summary>
+    /// 告知 <see cref="ChatRightViewModel"/> 来新消息了
+    /// <para> 由 <see cref="ChatLeftViewModel"/> 发起 </para>
+    /// </summary>
+    public static readonly Interaction<MsgInfo, Unit> NoticeRightNewMsgInteraction = new();
     
     private static ClientWebSocket? _sSocket = null;
 
@@ -64,11 +77,9 @@ public static class InteractionHandler
             interaction.SetOutput(false);
             return;
         }
-        
-        
         interaction.SetOutput(true);
         
-        NoticeLeftHttpServerInteraction.Handle(input).Subscribe();
+        NoticeHttpServerInteraction.Handle(input).Subscribe();
     }
     
     private static async Task LinkWebSocketServerInteractionHandler(IInteractionContext<WebSocketServer, bool> interaction)
