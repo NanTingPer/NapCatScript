@@ -1,6 +1,11 @@
+using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Reactive;
+using System.Reactive.Linq;
+using Avalonia.Threading;
+using NapCatScript.Core.JsonFormat;
+using NapCatScript.Core.JsonFormat.Msgs;
 using NapCatScript.Core.Model;
 using ReactiveUI;
 
@@ -8,18 +13,34 @@ namespace NapCatScript.Desktop.ViewModels.ChatViewModels;
 
 public class ChatRightMsgViewModel : ViewModelBase
 {
+    public Interaction<Unit, Unit> ToEndInteraction { get; } = new();
+    
     private bool _existsSelect = false;
+    private string _textMsg = "";
     public bool ExistsSelect { get => _existsSelect; set => this.RaiseAndSetIfChanged(ref _existsSelect, value); }
-
+    public string TextMsg { get => _textMsg; set => this.RaiseAndSetIfChanged(ref _textMsg, value); }
+    
     private string currentGroupId = "";
     public ObservableCollection<ChatMsgViewModel> Msgs { get; set; } = [];
+    public long time = 0L;
+    
+    public IReactiveCommand SendMsgCommand { get; set; }
     
     public ChatRightMsgViewModel()
     {
+        SendMsgCommand = ReactiveCommand.Create(SendMsg);
         InteractionHandler.NoticeRightGoToChatInteraction.RegisterHandler(GotoChatHandler);
         InteractionHandler.NoticeRightNewMsgInteraction.RegisterHandler(UpdateMsgList);
     }
 
+    private void SendMsg()
+    {
+        ChatLeftViewModel.Send!.SendMsg(
+            currentGroupId, 
+            MsgTo.group, 
+            new TextJson(TextMsg));
+    }
+    
     private void UpdateMsgList(IInteractionContext<MsgInfo, Unit> interaction)
     {
         var msgInfo = interaction.Input;
@@ -33,7 +54,10 @@ public class ChatRightMsgViewModel : ViewModelBase
             MsgId = msgInfo.MessageId.ToString(),
             NikeId = msgInfo.UserId,
             NikeName = msgInfo.UserName
-        }); 
+        });
+        time = DateTime.Now.Ticks;
+        
+        ToEndInteraction.Handle(Unit.Default).Subscribe();
     }
     
     private async void GotoChatHandler(IInteractionContext<ChatSelectedMiniViewModel, Unit> inter)

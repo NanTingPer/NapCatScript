@@ -7,7 +7,7 @@
              x:DataType="vm:ChatRightMsgViewModel"
              x:Class="NapCatScript.Desktop.ChatViews.ChatRightMsgView">
     <Grid RowDefinitions="8.5*, 1.3*, 0.2*">
-        <ScrollViewer Grid.Row="0" IsVisible="{Binding ExistsSelect}">
+        <ScrollViewer Grid.Row="0" IsVisible="{Binding ExistsSelect}" Name="MsgList">
             <!-- 内容主体 -->
             <ItemsControl ItemsSource="{Binding Msgs}" Margin="5">
                 <ItemsControl.ItemsPanel>
@@ -25,10 +25,10 @@
         </ScrollViewer>
         
         <!-- 消息 -->
-        <TextBox Grid.Row="1" Watermark="输入内容..." IsVisible="{Binding ExistsSelect}" />
+        <TextBox Grid.Row="1" Watermark="输入内容..." Text="{Binding TextMsg}" IsVisible="{Binding ExistsSelect}" />
         
         <!-- 发送 -->
-        <Button Grid.Row="2" Content="发送" IsVisible="{Binding ExistsSelect}" />
+        <Button Grid.Row="2" Content="发送" Command="{Binding SendMsgCommand}" IsVisible="{Binding ExistsSelect}" />
         
     </Grid>
 </UserControl>
