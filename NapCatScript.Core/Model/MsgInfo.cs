@@ -40,6 +40,9 @@ public class MsgInfo
     [SQLite.Column("time")]
     public double Time { get; set; }
     
+    [SQLite.Column("message_id")]
+    public long MessageId { get; set; }
+    
     public string GetId()
     {
         //if (UserId != string.Empty) return UserId;

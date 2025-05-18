@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Net.WebSockets;
 using System.Reactive;
@@ -20,8 +22,21 @@ public class ChatLeftViewModel : ViewModelBase
     public static ClientWebSocket? Ws { get; private set; }
 
     public static CancellationTokenSource CTS = new CancellationTokenSource();
-    
     public static CancellationToken CToken => CTS.Token;
+    public static SQLiteHelper<MsgInfo> SQLiteHelper { get; } = new (Path.Combine("Desktop", "MsgInfo.data"));
+
+    /// <summary>
+    /// Key => 群号, ViewModel => 展示内容
+    /// </summary>
+    public Dictionary<long, ChatSelectedMiniViewModel> GroupViewMap { get; } = [];
+
+    /// <summary>
+    /// Key => 好友id, ViewModel => 展示内容
+    /// </summary>
+    public Dictionary<long, ChatSelectedMiniViewModel> PrivateViewMap { get; } = [];
+
+    public ObservableCollection<ChatSelectedMiniViewModel> GroupViews { get; } = [];
+    public ObservableCollection<ChatSelectedMiniViewModel> PrivateViews { get; } = [];
     
     public ChatLeftViewModel()
     {
@@ -29,16 +44,42 @@ public class ChatLeftViewModel : ViewModelBase
         InteractionHandler.NoticeLeftWebSocketServerInteraction.RegisterHandler(WebSocketServerInteractionHandler);
     }
 
-    private async void HttpServerInteractionHandler(IInteractionContext<HttpServer, Unit> interaction)
+    private void HttpServerInteractionHandler(IInteractionContext<HttpServer, Unit> interaction)
     {
         var input = interaction.Input;
         CurrentHttpUri = "http://" + ConfigValue.WebUriHostNotPort/*input.Host*/ + ":" + input.Port;
         interaction.SetOutput(Unit.Default);
         Send = new Send(CurrentHttpUri, input.Token);
+        InitGroupList();
+    }
+
+    /// <summary>
+    /// 初始化群组列表, 并创建对应的消息数据库
+    /// </summary>
+    private async void InitGroupList()
+    {
         var list = await Send.GetGroupList();
+        if(list is null) return;
+        
+        //创建表 初始化列表
+        foreach (var groupInfo in list) {
+            await SQLiteHelper.CreateTableAsync("g" + groupInfo.GroupId);
+            
+            if(GroupViewMap.TryGetValue(groupInfo.GroupId, out _))
+                continue;
+            
+            GroupViewMap[groupInfo.GroupId] = new ChatSelectedMiniViewModel()
+            {
+                GroupId = groupInfo.GroupId,
+                GroupName = groupInfo.GroupName,
+                GroupRemark = groupInfo.GroupRemark
+            };
+            
+            GroupViews.Add(GroupViewMap[groupInfo.GroupId]);
+        }
     }
     
-    private void WebSocketServerInteractionHandler(IInteractionContext<WebSocketServer, Unit> interaction)
+    private async void WebSocketServerInteractionHandler(IInteractionContext<WebSocketServer, Unit> interaction)
     {
         CTS.Cancel();
         var ws = interaction.Input;
@@ -48,15 +89,36 @@ public class ChatLeftViewModel : ViewModelBase
         Ws = new ClientWebSocket();
         Ws.Options.SetRequestHeader("Authorization", "Bearer " + ws.Token);
         CTS = new CancellationTokenSource();
-        _ = Task.Run(async () =>
-        {
-            while (true) {
-                if(CTS.Token.IsCancellationRequested)
-                    return; 
-                MsgInfo? info = await Ws.Receive(CTS.Token);
+        await Ws.ConnectAsync(new Uri(CurrentWebSocketUri), CTS.Token);
+        _ = Task.Run(MsgReceive);
+    }
+
+    /// <summary>
+    /// 接收消息, 存入数据库, 更新GroupViewMap
+    /// </summary>
+    private async void MsgReceive()
+    {
+        while (true) {
+            if(CTS.Token.IsCancellationRequested)
+                break; 
+            MsgInfo? info = await Ws.Receive(CTS.Token);
+            if (info != null) {
+                _ = SQLiteHelper.InsertAsync("g" + info.GroupId, info);
+                if(!long.TryParse(info.GroupId, out var groupId))
+                    continue;
+
+                if (!GroupViewMap.TryGetValue(groupId, out var view)) {
+                    GroupViewMap[groupId] = new ChatSelectedMiniViewModel()
+                    {
+                        GroupId = groupId,
+                        NewMsg = info.MessageContent
+                    };
+                    GroupViews.Add(GroupViewMap[groupId]);
+                    continue;
+                }
+                
+                view.NewMsg = info.MessageContent;
             }
-        });
-
-
+        }
     }
 }

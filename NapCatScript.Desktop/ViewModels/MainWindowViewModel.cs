@@ -44,24 +44,9 @@ public class MainWindowViewModel : ViewModelBase
         get => currView;
         set => this.RaiseAndSetIfChanged(ref currView, value);
     }
-
-    private async void test()
-    {
-        var r = new SQLiteHelper<MsgInfo>(Path.Combine("Desktop", "helloInfo.data"));
-        await r.CreateTableAsync("a245");
-        await r.InsertAsync("a245" ,new MsgInfo
-        {
-            UserId = "1", 
-            GroupId = "1", 
-            MessageContent = "Hello{}awf';;:\""
-        });
-        List<MsgInfo> k = await r.QueryAsync("a245", "select * from a245");
-
-    }
     
     public MainWindowViewModel()
     {
-        test();
         this.WhenAnyValue(f => f.SelectedItem)
             .WhereNotNull()
             .Subscribe(ListBoxPropertyChanged);

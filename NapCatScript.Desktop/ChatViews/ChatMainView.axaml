@@ -6,8 +6,8 @@
              xmlns:vm="clr-namespace:NapCatScript.Desktop.ViewModels.ChatViewModels"
              x:DataType="vm:ChatMainViewModel"
              x:Class="NapCatScript.Desktop.ChatViews.ChatMainView">
-    <WrapPanel>
-        <UserControl Content="{Binding LeftViewModel}"/>
-        <UserControl Content="{Binding RightViewModel }"/>
-    </WrapPanel>
+    <Grid ColumnDefinitions="1.5*, 8.5*">
+        <UserControl Grid.Column="0" Content="{Binding LeftViewModel}"/>
+        <UserControl Grid.Column="1" Content="{Binding RightViewModel }"/>
+    </Grid>
 </UserControl>

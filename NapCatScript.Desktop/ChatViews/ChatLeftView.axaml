@@ -1,10 +1,18 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="using:NapCatScript.Desktop.ChatViews"
              xmlns:vm="clr-namespace:NapCatScript.Desktop.ViewModels.ChatViewModels"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:ChatLeftViewModel"
              x:Class="NapCatScript.Desktop.ChatViews.ChatLeftView">
-    Welcome to Avalonia!
+    <ListBox ItemsSource="{Binding GroupViews}">
+        <ListBox.ItemTemplate>
+            <DataTemplate>
+                <local:ChatSelectedMiniView/>
+                <!--<UserControl DataContext="{vm:ChatSelectedMiniViewModel}"/>-->
+            </DataTemplate>
+        </ListBox.ItemTemplate>
+    </ListBox>
 </UserControl>

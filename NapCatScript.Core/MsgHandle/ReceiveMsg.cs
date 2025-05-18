@@ -73,6 +73,12 @@ public static class ReceiveMsg
             d1 = time.GetDouble();
         }
         
+        JsonElement message_id;
+        long msgid = 0L;
+        if (json.TryGetProperty("message_id", out message_id)) {
+            msgid = message_id.GetInt64();
+        }
+        
         return new MsgInfo()
         {
             MessageContent = message.GetString()!, 
@@ -80,7 +86,8 @@ public static class ReceiveMsg
             UserId = user_id.GetUInt64().ToString(), 
             GroupId = group_id_bool ? group_id.GetInt64().ToString() : /*default*/string.Empty, 
             UserName = user_name ?? "",
-            Time = d1
+            Time = d1,
+            MessageId = msgid
         };
     }
 

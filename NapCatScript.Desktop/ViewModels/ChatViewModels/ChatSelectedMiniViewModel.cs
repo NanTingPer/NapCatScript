@@ -13,7 +13,16 @@ public class ChatSelectedMiniViewModel : ViewModelBase
     
     public double GroupId { get => _groupId; set => this.RaiseAndSetIfChanged(ref _groupId, value); }
     public string GroupName { get => _groupName; set => this.RaiseAndSetIfChanged(ref _groupName, value); }
-    public string GroupRemark { get => _groupRemark; set => this.RaiseAndSetIfChanged(ref _groupRemark, value); }
+
+    public string GroupRemark
+    {
+        get
+        {
+            if(!string.IsNullOrEmpty(_groupRemark))
+                return _groupRemark;
+            return _groupName;
+        } set => this.RaiseAndSetIfChanged(ref _groupRemark, value);
+    }
 
     public string NewMsg
     {

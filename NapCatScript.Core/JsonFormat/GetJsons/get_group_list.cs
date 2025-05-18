@@ -62,5 +62,5 @@ public class GroupInfo
     /// 群号
     /// </summary>
     [JsonPropertyName("group_id")]
-    public double GroupId { get; set; }
+    public long GroupId { get; set; }
 }

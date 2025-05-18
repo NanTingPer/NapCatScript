@@ -57,11 +57,15 @@ public static class InteractionHandler
         tmpHc.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", input.Token);
         string url = "http://" + input.Host + ":" + input.Port;
         var r = await tmpHc.GetAsync(url);
-        
-        if ((int)r.StatusCode != 200) {
+
+        string str = await r.Content.ReadAsStringAsync();
+        /*if ((int)r.StatusCode != 200) {*/
+         if(!string.IsNullOrEmpty(str)){
             interaction.SetOutput(false);
             return;
-        } 
+        }
+        
+        
         interaction.SetOutput(true);
         
         NoticeLeftHttpServerInteraction.Handle(input).Subscribe();
