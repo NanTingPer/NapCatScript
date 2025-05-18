@@ -72,8 +72,8 @@ public class ChatRightMsgViewModel : ViewModelBase
         msgInfos.Sort((up, down) =>
         {
             if(up.Time > down.Time)
-                return -1;
-            return up.Time < down.Time ? 1 : 0;
+                return 1;
+            return up.Time < down.Time ? -1 : 0;
         });
         foreach (var msgInfo in msgInfos) {
             Msgs.Add(new ChatMsgViewModel()
