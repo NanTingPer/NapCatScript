@@ -1,4 +1,5 @@
 using System;
+using System.Net;
 using System.Net.Http.Headers;
 using System.Net.WebSockets;
 using System.Reactive;
@@ -73,7 +74,7 @@ public static class InteractionHandler
 
         string str = await r.Content.ReadAsStringAsync();
         /*if ((int)r.StatusCode != 200) {*/
-         if(!string.IsNullOrEmpty(str)){
+         if(!string.IsNullOrEmpty(str) && r.StatusCode != HttpStatusCode.OK){
             interaction.SetOutput(false);
             return;
         }

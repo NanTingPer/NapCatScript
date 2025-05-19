@@ -57,7 +57,7 @@ public class SQLiteHelper<TModel> where TModel : new()
         valueBuild.Append(" VALUES ( ");
         colBuild.Append(" ( ");
 
-        int lenght = Columns.Length;
+        int lenght = Columns?.Length ?? 0;
         int currIndex = 0;
         foreach (var col in Columns!) {
             currIndex++;
