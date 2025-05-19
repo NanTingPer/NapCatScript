@@ -49,4 +49,35 @@
   <ItemGroup>
     <UpToDateCheckInput Remove="Views\Styles\NetWorkViewStyle.axaml" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="ChatViews\ChatMain\ChatLeftView.axaml.cs">
+      <DependentUpon>ChatLeftView.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="ChatViews\ChatMain\ChatMainView.axaml.cs">
+      <DependentUpon>ChatMainView.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="ChatViews\ChatMain\ChatMsgView.axaml.cs">
+      <DependentUpon>ChatMsgView.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="ChatViews\ChatMain\ChatRightMsgView.axaml.cs">
+      <DependentUpon>ChatRightMsgView.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="ChatViews\ChatMain\ChatRightView.axaml.cs">
+      <DependentUpon>ChatRightView.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="ChatViews\ChatMain\ChatSelectedMiniView.axaml.cs">
+      <DependentUpon>ChatSelectedMiniView.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="ChatViews\ChatMain\ChatSocketSelectedView.axaml.cs">
+      <DependentUpon>ChatSocketSelectedView.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
 </Project>

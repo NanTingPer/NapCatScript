@@ -1,15 +1,9 @@
-using System;
 using System.Reactive;
 using System.Threading.Tasks;
-using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
-using DynamicData.Binding;
-using NapCatScript.Desktop.ViewModels.ChatViewModels;
 using ReactiveUI;
 
-namespace NapCatScript.Desktop.ChatViews;
+namespace NapCatScript.Desktop.ChatViews.ChatMain;
 
 public partial class ChatRightMsgView : ChatView<ChatRightMsgView, ChatRightMsgViewModel>
 {

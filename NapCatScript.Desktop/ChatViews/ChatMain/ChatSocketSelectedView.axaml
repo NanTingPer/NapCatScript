@@ -3,10 +3,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             xmlns:vm="clr-namespace:NapCatScript.Desktop.ViewModels.ChatViewModels"
              xmlns:vl="using:NapCatScript.Desktop.ChatViews"
-             x:DataType="vm:ChatSocketSelectedViewModel"
-             x:Class="NapCatScript.Desktop.ChatViews.ChatSocketSelectedView">
+             xmlns:chatMain="clr-namespace:NapCatScript.Desktop.ChatViews.ChatMain"
+             x:DataType="chatMain:ChatSocketSelectedViewModel"
+             x:Class="NapCatScript.Desktop.ChatViews.ChatMain.ChatSocketSelectedView">
     <UserControl.Resources>
         <vl:SelectedLinkViewLocator x:Key="Locator"/>
     </UserControl.Resources>

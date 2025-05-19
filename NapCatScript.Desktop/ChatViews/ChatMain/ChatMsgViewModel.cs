@@ -1,6 +1,7 @@
+using NapCatScript.Desktop.ViewModels;
 using ReactiveUI;
 
-namespace NapCatScript.Desktop.ViewModels.ChatViewModels;
+namespace NapCatScript.Desktop.ChatViews.ChatMain;
 
 public class ChatMsgViewModel : ViewModelBase
 {

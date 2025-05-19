@@ -3,9 +3,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             xmlns:vm="using:NapCatScript.Desktop.ViewModels.ChatViewModels"
-             x:DataType="vm:ChatSelectedMiniViewModel"
-             x:Class="NapCatScript.Desktop.ChatViews.ChatSelectedMiniView">
+             xmlns:chatViews="clr-namespace:NapCatScript.Desktop.ChatViews"
+             xmlns:chatMain="clr-namespace:NapCatScript.Desktop.ChatViews.ChatMain"
+             x:DataType="chatMain:ChatSelectedMiniViewModel"
+             x:Class="NapCatScript.Desktop.ChatViews.ChatMain.ChatSelectedMiniView">
     <Grid ColumnDefinitions="2*, 6*, 2*" RowDefinitions="5*, 5*">
         <Image Grid.Column="0" Grid.Row="0" Grid.RowSpan="2"/>
         <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding GroupRemark}"/>

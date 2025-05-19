@@ -1,14 +1,13 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
-using NapCatScript.Desktop.ViewModels.ChatViewModels;
+using NapCatScript.Desktop.ChatViews.ChatMain;
 
 namespace NapCatScript.Desktop.ChatViews;
 
-public partial class ChatMsgView : ChatView<ChatMsgView, ChatMsgViewModel>
+public partial class ChatMainView : ChatView<ChatMainView, ChatMainViewModel>
 {
-
-    public ChatMsgView()
+    public ChatMainView()
     {
         InitializeComponent();
     }

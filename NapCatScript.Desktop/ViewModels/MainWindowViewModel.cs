@@ -9,7 +9,8 @@ using System.Threading.Tasks;
 using NapCatScript.Core.JsonFormat;
 using NapCatScript.Core.Model;
 using NapCatScript.Core.Services;
-using NapCatScript.Desktop.ViewModels.ChatViewModels;
+using NapCatScript.Desktop.ChatViews;
+using NapCatScript.Desktop.ChatViews.ChatMain;
 using static NapCatScript.Core.MsgHandle.Utils;
 
 namespace NapCatScript.Desktop.ViewModels;

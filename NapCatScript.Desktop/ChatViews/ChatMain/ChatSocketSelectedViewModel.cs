@@ -5,16 +5,16 @@ using System.Text.Json;
 using NapCatScript.Core.JsonFormat;
 using NapCatScript.Core.NetWork.NetWorkModel;
 using NapCatScript.Core.Services;
+using NapCatScript.Desktop.ViewModels;
 using NapCatScript.Desktop.ViewModels.NetWorkModels;
 using ReactiveUI;
-
 using static NapCatScript.Core.Utils;
 using static NapCatScript.Core.MsgHandle.Utils;
 using static NapCatScript.Desktop.ConfigValue;
 
-using static NapCatScript.Desktop.ViewModels.ChatViewModels.InteractionHandler;
+using static NapCatScript.Desktop.ChatViews.InteractionHandler;
 
-namespace NapCatScript.Desktop.ViewModels.ChatViewModels;
+namespace NapCatScript.Desktop.ChatViews.ChatMain;
 
 public class ChatSocketSelectedViewModel : ViewModelBase
 {

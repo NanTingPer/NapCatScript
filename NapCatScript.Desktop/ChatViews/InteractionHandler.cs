@@ -8,12 +8,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using NapCatScript.Core.Model;
 using NapCatScript.Core.NetWork.NetWorkModel;
-using NapCatScript.Core.Services;
+using NapCatScript.Desktop.ChatViews.ChatMain;
 using ReactiveUI;
 
-using static NapCatScript.Core.MsgHandle.ReceiveMsg;
-
-namespace NapCatScript.Desktop.ViewModels.ChatViewModels;
+namespace NapCatScript.Desktop.ChatViews;
 
 public static class InteractionHandler
 {

@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
-using NapCatScript.Desktop.NetWorkViews;
-using NapCatScript.Desktop.NetWorkViews.CreateViews;
 using NapCatScript.Desktop.ViewModels;
 using NapCatScript.Desktop.ViewModels.NetWorkModels;
 using ViewType = System.Type;

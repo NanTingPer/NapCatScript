@@ -1,15 +1,13 @@
 using System;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Reactive;
-using System.Reactive.Linq;
-using Avalonia.Threading;
 using NapCatScript.Core.JsonFormat;
 using NapCatScript.Core.JsonFormat.Msgs;
 using NapCatScript.Core.Model;
+using NapCatScript.Desktop.ViewModels;
 using ReactiveUI;
 
-namespace NapCatScript.Desktop.ViewModels.ChatViewModels;
+namespace NapCatScript.Desktop.ChatViews.ChatMain;
 
 public class ChatRightMsgViewModel : ViewModelBase
 {

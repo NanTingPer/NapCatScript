@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using NapCatScript.Desktop.ChatViews;
+using NapCatScript.Desktop.ViewModels;
 
-namespace NapCatScript.Desktop.ViewModels.ChatViewModels;
+namespace NapCatScript.Desktop.ChatViews.ChatMain;
 
 public class ChatMainViewModel : ViewModelBase
 {

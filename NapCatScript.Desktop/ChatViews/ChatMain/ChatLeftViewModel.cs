@@ -11,9 +11,10 @@ using NapCatScript.Core.Model;
 using NapCatScript.Core.MsgHandle;
 using NapCatScript.Core.NetWork.NetWorkModel;
 using NapCatScript.Core.Services;
+using NapCatScript.Desktop.ViewModels;
 using ReactiveUI;
 
-namespace NapCatScript.Desktop.ViewModels.ChatViewModels;
+namespace NapCatScript.Desktop.ChatViews.ChatMain;
 
 public class ChatLeftViewModel : ViewModelBase
 {

@@ -2,15 +2,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="using:NapCatScript.Desktop.ChatViews"
-             xmlns:vm="clr-namespace:NapCatScript.Desktop.ViewModels.ChatViewModels"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:chatViewModels="clr-namespace:NapCatScript.Desktop.ChatViews.ChatMain"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:DataType="vm:ChatLeftViewModel"
+             x:DataType="chatViewModels:ChatLeftViewModel"
              x:Class="NapCatScript.Desktop.ChatViews.ChatLeftView">
     <ListBox ItemsSource="{Binding GroupViews}" SelectedItem="{Binding CurrentMiniViewModel}">
         <ListBox.ItemTemplate>
             <DataTemplate>
-                <local:ChatSelectedMiniView/>
+                <chatViewModels:ChatSelectedMiniView/>
                 <!--<UserControl DataContext="{vm:ChatSelectedMiniViewModel}"/>-->
             </DataTemplate>
         </ListBox.ItemTemplate>
