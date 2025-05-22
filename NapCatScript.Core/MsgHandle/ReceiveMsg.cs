@@ -5,7 +5,7 @@ using System.Buffers;
 namespace NapCatScript.Core.MsgHandle;
 public static class ReceiveMsg
 {
-    public static async Task<MsgInfo?> Receive(this ClientWebSocket socket, CancellationToken CToken)
+    public static async Task<(MsgInfo?, string)?> ReceiveMsgInfo(this ClientWebSocket socket)
     {
         if (socket.State != WebSocketState.Open)
             return null;
@@ -16,7 +16,7 @@ public static class ReceiveMsg
         try {
             bytes = new ArraySegment<byte>(new byte[1024 * 200]);  //创建分片数组
             memResult = new MemoryStream();    //创建内存流
-            result = await socket.ReceiveAsync(bytes.Value, CToken); //使用分片数组存储消息 每次调用。分片数组的内容会被重置
+            result = await socket.ReceiveAsync(bytes.Value, CancellationToken.None); //使用分片数组存储消息 每次调用。分片数组的内容会被重置
             do {
                 memResult.Write(bytes.Value.Array, bytes.Value.Offset, result.Count); //写入
             } while (!result.EndOfMessage);
@@ -28,12 +28,8 @@ public static class ReceiveMsg
             fStream.Close();
             memResult.Dispose();
             memResult.Close();
-            if (mesgString.Contains("发送小花")) {
-                Console.WriteLine(mesgString);
-                int a = 0;
-            }
             if (ValidData(mesgString, out var json)) {
-                return json?.GetMesgInfo()/*?.ToString()*/;
+                return (json?.GetMesgInfo(), mesgString)/*?.ToString()*/;
             }
             return null;
         } catch (Exception e) {
@@ -44,8 +40,38 @@ public static class ReceiveMsg
             }
             return null;
         }
+
+    }
+    
+    public static async Task<MsgInfo?> Receive(this ClientWebSocket socket, CancellationToken CToken)
+    {
+        (MsgInfo? msgInfo, string msgString)? msg = await socket.ReceiveMsgInfo();
+        if(msg is null)
+            return null;
+        
+        return msg.Value.msgInfo;
     }
 
+    public static async Task<(MsgInfo?, ArrayMsg?)?> ReceiveMsgInfoAndJson(this ClientWebSocket socket)
+    {
+        (MsgInfo? msgInfo, string msgString)? info = await socket.ReceiveMsgInfo();
+        if (info is null)
+            return null;
+
+        var value = info.Value;
+        
+        if(value.msgInfo is null) return null;
+        ArrayMsg? msg;
+        try {
+            msg = JsonSerializer.Deserialize<ArrayMsg>(value.msgString);
+        }
+        catch (Exception e) {
+            msg = null;
+        }
+        
+        return (value.msgInfo, msg);
+    }
+    
     /// <summary>
     /// 使用已经过滤的Json主体，获取MesgInfo
     /// </summary>

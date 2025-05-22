@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NapCatScript.Core", "NapCat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NapCatScript.Desktop", "NapCatScript.Desktop\NapCatScript.Desktop.csproj", "{75F198D3-D852-44A8-BE74-B25658E4B182}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{1FF9EC98-6490-4626-B766-F5F9C2DD0396}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +34,10 @@ Global
 		{75F198D3-D852-44A8-BE74-B25658E4B182}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{75F198D3-D852-44A8-BE74-B25658E4B182}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{75F198D3-D852-44A8-BE74-B25658E4B182}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1FF9EC98-6490-4626-B766-F5F9C2DD0396}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FF9EC98-6490-4626-B766-F5F9C2DD0396}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1FF9EC98-6490-4626-B766-F5F9C2DD0396}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1FF9EC98-6490-4626-B766-F5F9C2DD0396}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
