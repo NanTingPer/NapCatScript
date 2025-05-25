@@ -27,5 +27,5 @@ namespace NapCatScript.Core.JsonFormat;
 public abstract class MsgJson
 {
     [JsonIgnore]
-    public abstract string JsonText { get; set; }
+    public virtual string JsonText { get => JsonSerializer.Serialize(this); }
 }

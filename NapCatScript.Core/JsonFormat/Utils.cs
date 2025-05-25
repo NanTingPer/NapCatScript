@@ -29,9 +29,7 @@ public static class Utils
                 element = jsonDoc.RootElement;
                 return true;
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             return false;
         }
         return false;

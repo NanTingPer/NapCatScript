@@ -8,13 +8,11 @@ public class MarkDownJson : MsgJson
     public MarkDownJson(MarkDownJsonData data)
     {
         Data = data;
-        JsonText = JsonSerializer.Serialize(this);
     }
 
     public MarkDownJson(string content)
     {
         Data = new MarkDownJsonData(content);
-        JsonText = JsonSerializer.Serialize(this);
     }
 
 
@@ -23,9 +21,6 @@ public class MarkDownJson : MsgJson
 
     [JsonPropertyName("data")]
     public MarkDownJsonData Data { get; set; } = new MarkDownJsonData();
-
-    [JsonIgnore]
-    public override string JsonText { get; set; }
 
     public class MarkDownJsonData
     {

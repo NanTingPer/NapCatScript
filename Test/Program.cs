@@ -2,8 +2,8 @@
 
 using System.Text.Json;
 using NapCatScript.Core.JsonFormat;
+using Test;
 
-string json = """
-              """;
-var jsonObject = JsonSerializer.Deserialize<ArrayMsg>(json);
-Console.WriteLine(jsonObject);
+JsonHandel.ArrayMsgParse();
+JsonHandel.ArrayMsgParseMessages();
+JsonHandel.ArrayMsgParseToMsgJson();

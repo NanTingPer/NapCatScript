@@ -2,12 +2,21 @@
 
 public class RecordJson : MsgJson
 {
+    #region ctor
+    
+    [JsonConstructor]
+    private RecordJson()
+    {
+        
+    }
+    
     public RecordJson(RecordMsgData data)
     {
         Data = data;
-        JsonText = JsonSerializer.Serialize(this);
     }
 
+    #endregion
+    
     /// <summary>
     /// 
     /// </summary>
@@ -15,7 +24,6 @@ public class RecordJson : MsgJson
     public RecordJson(string filePath)
     {
         Data = new RecordMsgData(filePath);
-        JsonText = JsonSerializer.Serialize(this);
     }
 
     [JsonPropertyName("type")]
@@ -23,10 +31,15 @@ public class RecordJson : MsgJson
 
     [JsonPropertyName("data")]
     public RecordMsgData Data { get; set; }
-    public override string JsonText { get; set; }
 
     public class RecordMsgData
     {
+        [JsonConstructor]
+        private RecordMsgData()
+        {
+            
+        }
+        
         public RecordMsgData(string content)
         {
             file = content;

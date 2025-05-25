@@ -1,4 +1,6 @@
-﻿namespace NapCatScript.Core.JsonFormat.Msgs;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace NapCatScript.Core.JsonFormat.Msgs;
 
 //message
 /// <summary>
@@ -6,22 +8,26 @@
 /// </summary>
 public class ImageJson : MsgJson
 {
-    public static string ToBase64(string filePath)
+    #region ctor
+
+    [JsonConstructor]
+    private ImageJson()
     {
-        byte[] imageBytes = File.ReadAllBytes(filePath);
-        return Convert.ToBase64String(imageBytes);
+        
     }
+
     public ImageJson(ImageJsonData imageData)
     {
         Data = imageData;
-        JsonText = JsonSerializer.Serialize(this);
     }
 
     public ImageJson(string imageBase64)
     {
         Data = new ImageJsonData(imageBase64);
-        JsonText = JsonSerializer.Serialize(this);
     }
+
+
+    #endregion
 
     /// <summary>
     /// 使用文件路径创建ImageJson
@@ -29,9 +35,12 @@ public class ImageJson : MsgJson
     /// <param name="filePath"></param>
     /// <returns></returns>
     public static ImageJson Create(string filePath) => new ImageJson(ImageToBase64(filePath));
-
-    [JsonIgnore]
-    public override string JsonText { get; set; }
+    
+    public static string ToBase64(string filePath)
+    {
+        byte[] imageBytes = File.ReadAllBytes(filePath);
+        return Convert.ToBase64String(imageBytes);
+    }
 
     [JsonPropertyName("type")]
     public string Type { get; } = "image";
@@ -41,10 +50,17 @@ public class ImageJson : MsgJson
 
     public class ImageJsonData
     {
+        [JsonConstructor]
+        private ImageJsonData()
+        {
+            
+        }
+        
         public ImageJsonData(string fileBase64)
         {
             File = "base64://" + fileBase64;
         }
+        
         public ImageJsonData(string fileBase64, string summary)
         {
             File = "base64://" + fileBase64;

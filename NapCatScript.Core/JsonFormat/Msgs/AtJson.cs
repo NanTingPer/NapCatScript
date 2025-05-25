@@ -1,37 +1,53 @@
-﻿namespace NapCatScript.Core.JsonFormat.Msgs;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace NapCatScript.Core.JsonFormat.Msgs;
 
 /// <summary>
 /// at消息的json
 /// </summary>
 public class AtJson : MsgJson
 {
-    [JsonIgnore]
-    public override string JsonText { get; set; }
+    #region ctor
+
+    [JsonConstructor]
+    private AtJson()
+    {
+        
+    }
+    
     public AtJson(string qqid)
     {
         Data = new AtMsgData(qqid);
-        JsonText = JsonSerializer.Serialize(this);
     }
 
     public AtJson(string name, string qqid)
     {
         Data = new AtMsgData(name, qqid);
-        JsonText = JsonSerializer.Serialize(this);
     }
 
+    #endregion
+    
     [JsonPropertyName("data")]
     public AtMsgData Data { get; set; }
 
     [JsonPropertyName("type")]
-    public string Type { get; set; } = MsgType.at.ToString();
+    public string Type { get; set; } = nameof(MsgType.at);
 
     public class AtMsgData
     {
+        [JsonConstructor]
+        private AtMsgData()
+        {
+            
+        }
+        
+        [SetsRequiredMembers]
         public AtMsgData(string qqid)
         {
             QQ = qqid;
         }
-
+        
+        [SetsRequiredMembers]
         public AtMsgData(string name, string qqid)
         {
             Name = name;
@@ -43,7 +59,7 @@ public class AtJson : MsgJson
         public string? Name { get; set; } = null;
 
         [JsonPropertyName("qq")]
-        public string QQ { get; set; }
+        public required string QQ { get; set; }
     }
 }
 

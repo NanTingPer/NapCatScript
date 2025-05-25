@@ -7,7 +7,6 @@ public class TwoForwardJson : MsgJson
     public TwoForwardJson(TwoForawrdData data)
     {
         Data = data;
-        JsonText = JsonSerializer.Serialize(this);
     }
 
     public TwoForwardJson(long user_id, string nickname, List<MsgJson> contents) :
@@ -19,7 +18,6 @@ public class TwoForwardJson : MsgJson
     public TwoForwardJson(string user_id, string nickname, List<MsgJson> contents)
     {
         Data = new TwoForawrdData(user_id, nickname, contents);
-        JsonText = JsonSerializer.Serialize(this);
     }
 
     public TwoForwardJson(long user_id, string nickname, MsgJson contents) : 
@@ -29,14 +27,12 @@ public class TwoForwardJson : MsgJson
     public TwoForwardJson(string user_id, string nickname, MsgJson contents)
     {
         Data = new TwoForawrdData(user_id, nickname, [contents]);
-        JsonText = JsonSerializer.Serialize(this);
     }
 
 
     public TwoForwardJson(MsgJson content)
     {
         Data = new TwoForawrdData(content);
-        JsonText = JsonSerializer.Serialize(this);
     }
 
     /// <summary>
@@ -50,8 +46,6 @@ public class TwoForwardJson : MsgJson
     /// </summary>
     [JsonPropertyName("data")]
     public TwoForawrdData Data { get; set; }
-    [JsonIgnore]
-    public override string JsonText { get; set; }
 }
 
 /// <summary>

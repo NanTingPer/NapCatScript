@@ -1,7 +1,16 @@
+using System.Reflection;
+
 namespace NapCatScript.Core.JsonFormat;
 
 public class ArrayMsg
 {
+    private static List<Type> _types = 
+        Assembly
+            .GetAssembly(typeof(TextJson))!
+            .GetTypes()
+            .Where(f => f.Namespace!.StartsWith(typeof(TextJson).Namespace))
+            .ToList();
+    
     [JsonPropertyName("self_id")]
     public long SelfId { get; set; }
 
@@ -49,6 +58,30 @@ public class ArrayMsg
 
     [JsonPropertyName("group_id")]
     public long? GroupId { get; set; }
+
+    public List<(MsgJson, Type)> GetMsgJsons()
+    {
+        List<(MsgJson, Type)> list = [];
+        
+        foreach (var message in Messages) {
+            if (!(message is JsonElement element))
+                continue;
+            element.TryGetPropertyValue("type", out var type);
+            string typeStr = type.GetString()!;
+            
+            foreach (var msgType in _types) {
+                if (!msgType.Name.ToLower().Contains(typeStr) && msgType.Name.EndsWith("Json"))
+                    continue;
+
+                var msgJson = (MsgJson)element.Deserialize(msgType)!;
+                list.Add((msgJson, msgType)); 
+                break;
+            }
+        }
+
+        return list;
+    }
+    
     /*public MsgType GetMessageType()
     {
         return (MsgType)Enum.Parse(typeof(MsgType), MessageType);

@@ -1,17 +1,26 @@
-﻿namespace NapCatScript.Core.JsonFormat.Msgs;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace NapCatScript.Core.JsonFormat.Msgs;
 
 /// <summary>
 /// Json消息的Json对象
 /// </summary>
 public class JsonJson : MsgJson
 {
-    [JsonIgnore]
-    public override string JsonText { get; set; }
+    #region ctor
+
+    [JsonConstructor]
+    private JsonJson()
+    {
+        
+    }
+    
     public JsonJson(JsonMsgData data)
     {
         Data = data;
-        JsonText = JsonSerializer.Serialize(this);
     }
+
+    #endregion
 
     [JsonPropertyName("type")]
     public MsgType Type { get; set; } = MsgType.json;
@@ -22,6 +31,12 @@ public class JsonJson : MsgJson
     //JsonClass
     public class JsonMsgData
     {
+        [JsonConstructor]
+        private JsonMsgData()
+        {
+            
+        }
+        
         public JsonMsgData(string content)
         {
             data = content;

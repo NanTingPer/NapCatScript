@@ -5,30 +5,39 @@
 /// </summary>
 public class TextJson : MsgJson
 {
+    #region ctor
+
+    [JsonConstructor]
+    private TextJson()
+    {
+        
+    }
+    
     public TextJson(TextMsgData data, string type = "text")
     {
         Data = data;
         Type = type;
-        JsonText = JsonSerializer.Serialize(this);
     }
 
     public TextJson(string data, string type = "text")
     {
         Data = new TextMsgData(data);
         Type = type;
-        JsonText = JsonSerializer.Serialize(this);
     }
 
+    #endregion
+    
     [JsonPropertyName("type")]
     public string Type { get; set; } = "text";
 
     [JsonPropertyName("data")]
     public TextMsgData Data { get; set; } = new TextMsgData();
-    [JsonIgnore]
-    public override string JsonText { get; set; }
 
     public class TextMsgData
     {
+        [JsonConstructor]
+        private TextMsgData() { }
+        
         public TextMsgData(string text = "unll")
         {
             Text = text;

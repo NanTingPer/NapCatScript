@@ -4,7 +4,7 @@
 /// <para> 群聊 私聊通用 </para>
 /// </summary>
 public enum MsgType
-{
+{   
     /// <summary>
     /// 文本
     /// </summary>
@@ -64,8 +64,6 @@ public enum MsgType
     /// 合并
     /// </summary>
     node,
-
-
 }
 
 public enum MsgTo
