@@ -119,6 +119,8 @@ public class SQLiteService
     {
         try {
             await CreateTable<T>();
+            Type type = typeof(T);
+            var pros = type.GetProperties();
             var keyProperty = typeof(T).GetProperty(keyName);
             if (keyProperty == null) {
                 return;

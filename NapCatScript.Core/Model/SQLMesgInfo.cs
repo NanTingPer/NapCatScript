@@ -6,6 +6,7 @@ namespace NapCatScript.Core.Model;
 /// </summary>
 public class SQLMesgInfo : MsgInfo
 {
+    public readonly static string KeyName = nameof(SQLMesgKey);
     [PrimaryKey]
-    public string Key { get; set; } = string.Empty;
+    public string SQLMesgKey { get; set; } = string.Empty;
 }

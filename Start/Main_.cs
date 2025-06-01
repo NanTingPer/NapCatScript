@@ -40,6 +40,8 @@ public class Main_
     /// ws状态
     /// </summary>
     public static ConnectionState state = ConnectionState.Open;
+
+    private static ManualResetEvent _reset = new ManualResetEvent(false);
     static void Main(string[] args)
     {
         try {
@@ -52,9 +54,7 @@ public class Main_
             //心跳
             _ = Task.Run(LifeCycle);
 
-            while (true) {
-                _ = Console.ReadLine();
-            }
+            _reset.WaitOne();
         } catch (Exception e) {
             InstanceLog.Erro(e.Message + "\r\n" + e.StackTrace);
         }

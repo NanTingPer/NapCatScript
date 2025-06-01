@@ -11,7 +11,7 @@ public class MessagesService
 
     public async void SetAsync(MsgInfo mesg)
     {
-        await sql.Insert(mesg.ToMesgInfo());
+        await sql.Insert(mesg.ToMesgInfo(), SQLMesgInfo.KeyName);
     }
 
     public async Task<List<SQLMesgInfo>> Get(Expression<Func<SQLMesgInfo, bool>> expr)
@@ -25,7 +25,7 @@ static class MesgExt
     public static SQLMesgInfo ToMesgInfo(this MsgInfo mesg)
     {
         var obj = new SQLMesgInfo();
-        obj.Key = Guid.NewGuid().ToString("N");
+        obj.SQLMesgKey = Guid.NewGuid().ToString("N");
         return TypeMap(mesg, obj);
     }
 }
