@@ -41,7 +41,7 @@ public class SQLiteHelper<TModel> where TModel : new()
         //var sql = new StringBuilder();
         //sql.Append($" SELECT * FROM {tableName} ");
 
-        return await SQLite.QueryAsync<TModel>(query);
+        return await SQLite.QueryAsync<TModel>(query, param);
     }
 
     public async Task InsertAsync(string tableName, TModel model)
@@ -121,13 +121,13 @@ public class SQLiteHelper<TModel> where TModel : new()
         _ = SQLite.CloseAsync();
     }
     
-    private bool IsKey(PropertyInfo info, out bool isAutoIncrement)
+    private bool IsKey(Column info, out bool isAutoIncrement)
     {
         isAutoIncrement = info.GetCustomAttribute(typeof(AutoIncrementAttribute), false) != null;
         return info.GetCustomAttribute(typeof(PrimaryKeyAttribute), false) != null;
     }
 
-    private string? GetColName(PropertyInfo info)
+    private string? GetColName(Column info)
     {
         ColumnAttribute? column = (ColumnAttribute?)info.GetCustomAttribute(typeof(ColumnAttribute), false);
         if(column == null) return null;
