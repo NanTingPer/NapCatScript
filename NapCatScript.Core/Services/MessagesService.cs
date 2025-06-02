@@ -2,7 +2,7 @@
 
 namespace NapCatScript.Core.Services;
 
-public class MessagesService
+/*public class MessagesService
 {
     private static SQLiteService sql { get; } = SQLiteService.SQLService;
     public static MessagesService MService { get; } = new MessagesService();
@@ -19,13 +19,14 @@ public class MessagesService
         return await sql.Get(expr);
     }
 }
-
+*/
 static class MesgExt
 {
     public static SQLMesgInfo ToMesgInfo(this MsgInfo mesg)
     {
         var obj = new SQLMesgInfo();
         obj.SQLMesgKey = Guid.NewGuid().ToString("N");
-        return TypeMap(mesg, obj);
+        TypeMap(typeof(MsgInfo), typeof(SQLMesgInfo), mesg, obj);
+        return obj;
     }
 }

@@ -1,6 +1,6 @@
 ﻿global using static NapCatScript.Core.Services.Config;
 global using static NapCatScript.Core.Services.Log;
-global using static NapCatScript.Core.Services.MessagesService;
+//global using static NapCatScript.Core.Services.MessagesService;
 global using static NapCatScript.Core.Services.SQLiteService;
 
 global using NapCatScript.Core.Model;

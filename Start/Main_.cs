@@ -95,7 +95,7 @@ public class Main_
             //interfaceTest(sned); // Test
             NoPMesgList.RemoveAt(0);
             InstanceLog.Info(mesg);
-            MService.SetAsync(mesg);
+            //MService.SetAsync(mesg);
             foreach (var pType in Plugins) {
                 try {
                     _ = pType.Run(mesg, HttpUri);

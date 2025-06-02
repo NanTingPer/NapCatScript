@@ -1,4 +1,5 @@
 ﻿using NapCatScript.Core;
+using NapCatScript.Core.Services;
 using System.ComponentModel;
 using System.Reflection;
 using System.Runtime.Loader;
@@ -56,12 +57,16 @@ public class PluginLoad : AssemblyLoadContext
             #region 初始化插件的全部PluginType
             IEnumerable<Type> pluginStartTypes = ass.GetTypes().Where(f => typeof(PluginType) == f.BaseType);
             foreach (var pluginStartType in pluginStartTypes) {
-                ConstructorInfo? pluginConstructor = pluginStartType.GetConstructors().FirstOrDefault(f => f.GetParameters().Length == 0);
-                InstanceLog.Info("创建实例: " + pluginStartType.FullName ?? pluginStartType.FullName + "没有无参构造，无法实例化！");
-                if (pluginConstructor is null) return;
-                PluginType obj = (PluginType)pluginConstructor.Invoke(null);
-                obj.Init();
-                ps.Add(obj);
+                try {
+                    ConstructorInfo? pluginConstructor = pluginStartType.GetConstructors().FirstOrDefault(f => f.GetParameters().Length == 0);
+                    InstanceLog.Info("创建实例: " + pluginStartType.FullName ?? pluginStartType.FullName + "没有无参构造，无法实例化！");
+                    if (pluginConstructor is null) return;
+                    PluginType obj = (PluginType)pluginConstructor.Invoke(null);
+                    obj.Init();
+                    ps.Add(obj);
+                } catch (Exception e) {
+                    InstanceLog.Erro($"插件{pluginStartType.FullName} 创建失败！", e.Message, e.StackTrace);
+                }
             }
             #endregion
         }

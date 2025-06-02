@@ -9,6 +9,7 @@ public static class Utils
     /// <para> 将源对象的属性值覆盖给目标对象，会覆盖传入对象的状态 </para>
     /// </summary>
     /// <returns>返回修改后的对象</returns>
+    [Obsolete]
     public static TarGet TypeMap<Source, TarGet>(Source source, TarGet tarGet)
         where TarGet : Source
     {
