@@ -49,8 +49,7 @@ public class SQLiteHelper<TModel> where TModel : new()
         var cols = await SQLite.GetTableInfoAsync(tableName);
         if(cols.Count == 0)
             await CreateTableAsync(tableName);
-        
-        var sql = new StringBuilder($" INSERT INTO {tableName} ");
+
         var valueBuild = new StringBuilder();
         var colBuild = new StringBuilder();
         List<object> par = new List<object>();
@@ -79,6 +78,8 @@ public class SQLiteHelper<TModel> where TModel : new()
        
         valueBuild.Append(" ) ");
         colBuild.Append(" ) ");
+
+        var sql = new StringBuilder($" INSERT INTO {tableName} ");
         sql.Append(colBuild.ToString());
         sql.Append(valueBuild.ToString());
         sql.Append(" ; ");
@@ -97,7 +98,7 @@ public class SQLiteHelper<TModel> where TModel : new()
 
         var createTableSql = new StringBuilder();
         createTableSql.Append($"CREATE TABLE IF NOT EXISTS {tableName} (");
-        int lenght = Columns.Length;
+        
         int currIndex = 0;
         foreach (var info in Columns) {
             currIndex++;
@@ -109,7 +110,9 @@ public class SQLiteHelper<TModel> where TModel : new()
                 createTableSql.Append(" PRIMARY KEY ");
             if(isAutoIncrement)
                 createTableSql.Append(" AUTOINCREMENT ");
-            if(currIndex < lenght)
+
+            int lenght = Columns.Length;
+            if (currIndex < lenght)
                 createTableSql.Append(",");
         }
         createTableSql.Append(")");

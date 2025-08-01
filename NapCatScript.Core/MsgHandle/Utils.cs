@@ -3,6 +3,7 @@ using System.Net.Http.Headers;
 using NapCatScript.Core.NetWork.NetWorkModel;
 using NapCatScript.Core.Services;
 using HttpClient = System.Net.Http.HttpClient;
+using System.Security.Cryptography;
 
 namespace NapCatScript.Core.MsgHandle;
 /// <summary>
@@ -146,9 +147,18 @@ public static class Utils
     {
         httpUri = httpUri.DelEnd();
         var requUri = httpUri + WEBUILOGINGAPI;
-        string json = $$"""{"token":"{{token}}"}""";
+        string json = $$"""{"token":"{{GetHash(token)}}"}""";
         HttpClient client = new HttpClient();
         return client.PostAsync(requUri, new StringContent(json, Encoding.UTF8, "application/json"));
+    }
+
+    private static string GetHash(string token)
+    {
+        string saltedPassword = token + ".napcat";
+        using SHA256 sha256 = SHA256.Create();
+        byte[] bytes = Encoding.UTF8.GetBytes(saltedPassword);
+        byte[] hashBytes = sha256.ComputeHash(bytes);
+        return BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
     }
     
     /// <summary>

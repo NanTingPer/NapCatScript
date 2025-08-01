@@ -135,17 +135,5 @@ public class SQLiteService
         } catch (Exception ex) {
             InstanceLog.Erro(ex.Message, ex.StackTrace);
         }
-
-        //try {
-        //    await CreateTable<T>();
-        //} catch {
-        //    Console.WriteLine("创表失败");
-        //    return;
-        //}
-        //try {
-        //    await Connection.GetAsync<T>(obj);
-        //} catch {
-        //    await Connection.InsertAsync(obj, typeof(T));
-        //}
     }
 }

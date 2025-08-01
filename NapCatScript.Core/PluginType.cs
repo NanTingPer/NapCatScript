@@ -7,6 +7,6 @@ public abstract class PluginType
 {
     protected Log Log = Log.InstanceLog;
     public Send Send { get; } = CoreConfigValueAndObject.SendObject;
-    public abstract void Init();
+    public virtual void Init() { }
     public abstract Task Run(MsgInfo msg, string httpUri);
 }
