@@ -85,7 +85,7 @@ public static class Config
     {
         LoadConf();
         string? conf = GetConf(confName);
-        if (conf is null || conf == string.Empty) {
+        if (conf is null || conf == string.Empty && !AConfig.ContainsKey(confName)) {
             AConfig.Add(confName, confValue);
             WriteFile();
         } else {
