@@ -1,7 +1,6 @@
 ﻿#pragma warning disable CA2255
 using NapCatScript.Core.MsgHandle;
 using NapCatScript.Core.Services;
-using NapCatScript.Start;
 using System.Runtime.CompilerServices;
 using static NapCatScript.Core.Services.Config;
 namespace NapCatScript.Core;

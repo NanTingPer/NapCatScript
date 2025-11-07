@@ -56,8 +56,6 @@ public class ChatSocketSelectedViewModel : ViewModelBase
             
             if(value != true)
                 return;
-            
-            
         }
     }
     

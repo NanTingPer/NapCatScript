@@ -1,10 +1,7 @@
-﻿using NapCatScript.Core;
-using NapCatScript.Core.Services;
-using System.ComponentModel;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Runtime.Loader;
 
-namespace NapCatScript.Start;
+namespace NapCatScript.Core;
 public class PluginLoad : AssemblyLoadContext
 {
     private AssemblyDependencyResolver resolver;

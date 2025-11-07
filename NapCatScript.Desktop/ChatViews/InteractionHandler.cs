@@ -28,7 +28,7 @@ public static class InteractionHandler
     /// 用于连接WebSocketServer. 此连接用于接收消息
     /// <para> Handler提供者 <see cref="ChatSocketSelectedViewModel"/> </para>
     /// </summary>
-    public static readonly Interaction<WebSocketServer, bool> LinkWebSocketServerInteraction = new();
+    public static Interaction<WebSocketServer, bool> LinkWebSocketServerInteraction { get; } = new();
     
     /// <summary>
     /// 用于连接HttpServer. 此连接用于发送消息
@@ -58,7 +58,7 @@ public static class InteractionHandler
     /// 告知 <see cref="ChatRightViewModel"/> 来新消息了
     /// <para> 由 <see cref="ChatLeftViewModel"/> 发起 </para>
     /// </summary>
-    public static readonly Interaction<MsgInfo, Unit> NoticeRightNewMsgInteraction = new();
+    public static Interaction<MsgInfo, Unit> NoticeRightNewMsgInteraction { get; } = new();
     
     private static ClientWebSocket? _sSocket = null;
 
@@ -72,7 +72,7 @@ public static class InteractionHandler
 
         string str = await r.Content.ReadAsStringAsync();
         /*if ((int)r.StatusCode != 200) {*/
-         if(!string.IsNullOrEmpty(str) && r.StatusCode != HttpStatusCode.OK){
+        if (!string.IsNullOrEmpty(str) && r.StatusCode != HttpStatusCode.OK) {
             interaction.SetOutput(false);
             return;
         }

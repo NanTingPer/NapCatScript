@@ -11,7 +11,7 @@ public class SQLiteHelper<TModel> where TModel : new()
     public SQLiteAsyncConnection SQLite { get; set; }
     
     public StringBuilder QuerySQL = new StringBuilder();
-    public Column[]? Columns { get; private set; }
+    public Column[]? Columns { get; private set; } = [];
 
     /// <summary>
     /// 基于程序运行目录的相对路径 使用<see cref="Path"/>

@@ -143,13 +143,23 @@ public static class Utils
     /// <param name="httpUri"> http://127.0.0.1:8888/ or http://127.0.0.1:8888 </param>
     /// <param name="token"> webUi登录密钥 </param>
     /// <returns></returns>
-    public static Task<HttpResponseMessage> WebUILogin(string httpUri, string token)
+    public static async Task<HttpResponseMessage> WebUILogin(string httpUri, string token)
     {
         httpUri = httpUri.DelEnd();
         var requUri = httpUri + WEBUILOGINGAPI;
-        string json = $$"""{"token":"{{GetHash(token)}}"}""";
+        //string json = $$"""{"token":"{{GetHash(token)}}"}""";
+        string json = $$"""{"hash":"{{GetHash(token)}}"}""";
+
         HttpClient client = new HttpClient();
-        return client.PostAsync(requUri, new StringContent(json, Encoding.UTF8, "application/json"));
+        HttpResponseMessage? response = null;
+        try {
+            response = await client.PostAsync(requUri, new StringContent(json, Encoding.UTF8, "application/json"));
+        } catch(Exception e) {
+            
+        } finally {
+            _ = 1;
+        }
+        return response!;
     }
 
     private static string GetHash(string token)
